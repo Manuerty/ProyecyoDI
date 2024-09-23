@@ -2,7 +2,7 @@ from ventPrincipal import *
 import sys
 
 class Main(QtWidgets.QMainWindow):
-git
+
     def __init__(self):
         super(Main, self).__init__()
         self.ui = Ui_ventPrincipal()
