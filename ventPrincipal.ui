@@ -6,56 +6,322 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1232</width>
-    <height>727</height>
+    <width>1024</width>
+    <height>768</height>
    </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>InmoTeis</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QTabWidget" name="panPrincipal">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>90</y>
-      <width>80</width>
-      <height>25</height>
+      <x>20</x>
+      <y>30</y>
+      <width>970</width>
+      <height>670</height>
      </rect>
     </property>
-    <property name="minimumSize">
-     <size>
-      <width>80</width>
-      <height>25</height>
-     </size>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
-    <property name="maximumSize">
-     <size>
-      <width>80</width>
-      <height>25</height>
-     </size>
+    <property name="currentIndex">
+     <number>0</number>
     </property>
-    <property name="text">
-     <string>Aceptar</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="ibTitulo">
-    <property name="geometry">
-     <rect>
-      <x>510</x>
-      <y>60</y>
-      <width>221</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Empresa Inmobiliaria de Teis</string>
-    </property>
+    <widget class="QWidget" name="tabClientes">
+     <attribute name="title">
+      <string>Clientes</string>
+     </attribute>
+     <widget class="Line" name="line">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>210</y>
+        <width>931</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblDniCli">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>30</y>
+        <width>51</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>DNI/CIF</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtDniCli">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>30</y>
+        <width>120</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>120</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(251, 255, 205);</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblApelCli">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>70</y>
+        <width>51</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Apellidos:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtApelCli">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>70</y>
+        <width>300</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>300</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(250, 255, 203);</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblNomCli">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>70</y>
+        <width>51</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Nombre:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtDNomCli">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>70</y>
+        <width>300</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>300</width>
+        <height>0</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblEmailCli">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>100</y>
+        <width>51</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Email:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtEmailCli">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>100</y>
+        <width>300</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>300</width>
+        <height>0</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblMovilCli">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>100</y>
+        <width>51</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Móvil:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtMovilCli">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>100</y>
+        <width>120</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>120</width>
+        <height>0</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblDirCLi">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>140</y>
+        <width>51</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Dirección:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtDirCli">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>140</y>
+        <width>400</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>400</width>
+        <height>0</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblProCli">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>140</y>
+        <width>51</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Provincia:</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="cmbProCli">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>140</y>
+        <width>120</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>120</width>
+        <height>0</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblMuniCli">
+      <property name="geometry">
+       <rect>
+        <x>720</x>
+        <y>140</y>
+        <width>51</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Municipio:</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="cmbMuniCli">
+      <property name="geometry">
+       <rect>
+        <x>770</x>
+        <y>140</y>
+        <width>180</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>180</width>
+        <height>0</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkHistoriaCli">
+      <property name="geometry">
+       <rect>
+        <x>820</x>
+        <y>70</y>
+        <width>70</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Histórico</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tabConstruccin">
+     <attribute name="title">
+      <string>Tab 2</string>
+     </attribute>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>390</x>
+        <y>280</y>
+        <width>121</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Panel en construcción</string>
+      </property>
+     </widget>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -63,7 +329,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1232</width>
+     <width>1024</width>
      <height>21</height>
     </rect>
    </property>
