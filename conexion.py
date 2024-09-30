@@ -39,3 +39,26 @@ class Conexion:
             QtWidgets.QMessageBox.critical(None, 'Error', 'No se pudo abrir la base de datos.',
                                            QtWidgets.QMessageBox.StandardButton.Cancel)
             return False
+
+
+
+    @staticmethod
+    def listaProv(self):
+        listaprov = []
+        query = QtSql.QSqlQuery()
+        query.prepare("SELECT * FROM provincias")
+        if query.exec():
+            while query.next():
+                listaprov.append(query.value(1))
+        return listaprov
+
+    @staticmethod
+    def listaMuni(self):
+        query = QtSql.QSqlQuery()
+        query.prepare("SELECT * FROM municipios"
+                        " WHERE fk_idprov = (SELECT idprov from provincias) ")
+        listaprov = []
+        if query.exec():
+            while query.next():
+                listaprov.append(query.value(1))
+        return listaprov

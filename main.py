@@ -13,6 +13,8 @@ class Main(QtWidgets.QMainWindow):
         var.ui.setupUi(self)
         self.setStyleSheet(style.load_stylesheet())
         conexion.Conexion.db_conexion(self)
+        eventos.Eventos.cargarProvincias(self)
+        eventos.Eventos.cargarMunicipios(self)
 
         '''
         Zona de eventos del menuBar
