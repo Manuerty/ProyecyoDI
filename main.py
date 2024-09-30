@@ -1,6 +1,6 @@
-
-
+import conexion
 import eventos
+import style
 from ventPrincipal import *
 import sys
 import var
@@ -11,6 +11,8 @@ class Main(QtWidgets.QMainWindow):
         super(Main, self).__init__()
         var.ui = Ui_ventPrincipal()
         var.ui.setupUi(self)
+        self.setStyleSheet(style.load_stylesheet())
+        conexion.Conexion.db_conexion(self)
 
         '''
         Zona de eventos del menuBar
