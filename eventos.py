@@ -50,12 +50,8 @@ class Eventos():
                 if len(dni) == len([n for n in dni if n in numeros]) and tabla[int(dni) % 23] == dig_control:
                     return True
                 else:
-                    var.ui.txtDniCli.setStyleSheet('background-color:#FFC0CB;')  # y si no un aspa en color rojo
-                    var.ui.txtDniCli.setText(None)
-                    var.ui.txtDniCli.setFocus()
+                    return False
             else:
-                var.ui.txtDniCli.setStyleSheet('background-color:FFC0CB;')
-                var.ui.txtDniCli.setText(None)
-                var.ui.txtDniCli.setFocus()
+                return False
         except Exception as error:
             print("error en validar dni ", error)
