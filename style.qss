@@ -4,16 +4,26 @@ QMainWindow{
 }
 
 QTabWidget{
-    background-color: none ;
+    background-color: none;
 }
 
 QMenuBar{
-    background-color: whitesmoke ;
+    background-color: whitesmoke;
 }
 
 QPushButton{
     background-color: #13b2a6;
-    front-weight: bold;
+    font-weight: bold;
     color: white;
     border-radius: 5px;
+}
+
+QPushButton:hover {
+    background-color: #11a194;
+}
+
+QPushButton:pressed {
+    background-color: #0f897e;
+    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
+    padding-top: 2px;
 }
