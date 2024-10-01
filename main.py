@@ -4,6 +4,7 @@ import style
 from ventPrincipal import *
 import sys
 import var
+import clientes
 
 class Main(QtWidgets.QMainWindow):
 
@@ -20,6 +21,12 @@ class Main(QtWidgets.QMainWindow):
         Zona de eventos del menuBar
         '''
         var.ui.actionSalir.triggered.connect(eventos.Eventos.mensajeSalir)
+
+        '''
+        Zona de eventos de los botones
+        '''
+
+        var.ui.btnGrabarCli.clicked.connect(clientes.Clientes.altaCliente)
 
 
 if __name__ == '__main__':
