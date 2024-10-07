@@ -1,3 +1,5 @@
+from calendar import Calendar
+from venAux import *
 import conexion
 import eventos
 import style
@@ -12,6 +14,7 @@ class Main(QtWidgets.QMainWindow):
         super(Main, self).__init__()
         var.ui = Ui_ventPrincipal()
         var.ui.setupUi(self)
+        var.uicalendar= Calendar()
         self.setStyleSheet(style.load_stylesheet())
         conexion.Conexion.db_conexion(self)
         eventos.Eventos.cargarProvincias(self)
@@ -27,6 +30,7 @@ class Main(QtWidgets.QMainWindow):
         '''
 
         var.ui.btnGrabarCli.clicked.connect(clientes.Clientes.altaCliente)
+        var.ui.btnAltaCli.clicked.connect(lambda: eventos.Eventos.abrirCalendar(0))
 
         '''
         Zona de eventos de las cajas de texto

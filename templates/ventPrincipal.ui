@@ -377,7 +377,7 @@
            </widget>
           </item>
           <item row="0" column="9">
-           <widget class="QPushButton" name="btnCalendarCli">
+           <widget class="QPushButton" name="btnAltaCli">
             <property name="minimumSize">
              <size>
               <width>32</width>
@@ -482,7 +482,7 @@
              </widget>
             </item>
             <item alignment="Qt::AlignHCenter">
-             <widget class="QPushButton" name="btnDelCli_2">
+             <widget class="QPushButton" name="btnDelCli">
               <property name="minimumSize">
                <size>
                 <width>80</width>

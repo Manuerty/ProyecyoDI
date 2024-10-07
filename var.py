@@ -3,4 +3,6 @@
 """
 
 global ui
+global uicalendar
+global panel
 
