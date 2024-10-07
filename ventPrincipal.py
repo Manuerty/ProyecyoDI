@@ -116,7 +116,7 @@ class Ui_ventPrincipal(object):
         spacerItem7 = QtWidgets.QSpacerItem(60, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
         self.gridLayout.addItem(spacerItem7, 0, 13, 4, 1)
         self.txtAltaCli = QtWidgets.QLineEdit(parent=self.PesClientes)
-        self.txtAltaCli.setMaximumSize(QtCore.QSize(75, 16777215))
+        self.txtAltaCli.setMaximumSize(QtCore.QSize(80, 16777215))
         self.txtAltaCli.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.txtAltaCli.setObjectName("txtAltaCli")
         self.gridLayout.addWidget(self.txtAltaCli, 0, 5, 1, 1)
