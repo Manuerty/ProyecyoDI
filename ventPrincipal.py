@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_ventPrincipal(object):
     def setupUi(self, ventPrincipal):
         ventPrincipal.setObjectName("ventPrincipal")
-        ventPrincipal.resize(1161, 768)
+        ventPrincipal.resize(1216, 768)
         ventPrincipal.setMaximumSize(QtCore.QSize(16777215, 16777215))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(".\\\\templates\\../img/logo.ico"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
@@ -183,7 +183,7 @@ class Ui_ventPrincipal(object):
         self.gridLayout_2.addWidget(self.panPrincipal, 0, 1, 1, 1)
         ventPrincipal.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(parent=ventPrincipal)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1161, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1216, 26))
         self.menubar.setObjectName("menubar")
         self.menuSalir = QtWidgets.QMenu(parent=self.menubar)
         self.menuSalir.setObjectName("menuSalir")
