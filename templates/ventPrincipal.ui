@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>img/home_icon-icons.com_73532.ico</normaloff>img/home_icon-icons.com_73532.ico</iconset>
+    <normaloff>../img/logo.ico</normaloff>../img/logo.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
@@ -398,7 +398,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>img/calendar.ico</normaloff>img/calendar.ico</iconset>
+              <normaloff>../img/calendar.ico</normaloff>../img/calendar.ico</iconset>
             </property>
             <property name="iconSize">
              <size>

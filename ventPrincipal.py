@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'ventPrincipal.ui'
+# Form implementation generated from reading ui file '.\\templates\\ventPrincipal.ui'
 #
 # Created by: PyQt6 UI code generator 6.7.1
 #
@@ -15,7 +15,7 @@ class Ui_ventPrincipal(object):
         ventPrincipal.resize(1161, 768)
         ventPrincipal.setMaximumSize(QtCore.QSize(16777215, 16777215))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("img/home_icon-icons.com_73532.ico"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon.addPixmap(QtGui.QPixmap(".\\\\templates\\../img/logo.ico"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         ventPrincipal.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(parent=ventPrincipal)
         self.centralwidget.setObjectName("centralwidget")
@@ -129,7 +129,7 @@ class Ui_ventPrincipal(object):
         self.btnCalendarCli.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.btnCalendarCli.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("img/calendar.ico"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon1.addPixmap(QtGui.QPixmap(".\\\\templates\\../img/calendar.ico"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.btnCalendarCli.setIcon(icon1)
         self.btnCalendarCli.setIconSize(QtCore.QSize(21, 21))
         self.btnCalendarCli.setObjectName("btnCalendarCli")
