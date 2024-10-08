@@ -1,6 +1,8 @@
 from tabnanny import check
 
 from PyQt6 import QtWidgets, QtGui
+
+import conexion
 import var
 import eventos
 
@@ -21,10 +23,6 @@ class Clientes:
             print("error en validar dni ", error)
 
 
-    def altaCliente(self):
-        dni = var.ui.txtEmailCli.text()
-        print(dni)
-
     def checkEmail(mail):
         try:
             mail = str(var.ui.txtEmailCli.text())
@@ -40,3 +38,11 @@ class Clientes:
 
         except Exception as error:
             print("error check cliente", error)
+
+    def altaCliente(self):
+        try:
+            nuevocli = [var.ui.txtDniCli.text(), var.ui.txtAltaCli.text(), var.ui.txtApelCli.text(), var.ui.txtNomCli.text(), var.ui.txtEmailCli.text(),  var.ui.txtMovilCli.text(), var.ui.txtDirCli.text(),  var.ui.cmbProCli.currentText(), var.ui.cmbMuniCli.currentText()]
+            conexion.Conexion.altaCliente(nuevocli)
+
+        except Exception as e:
+            print("error alta cliente", e)

@@ -1,5 +1,6 @@
 import os
 from PyQt6 import QtSql, QtWidgets
+from PyQt6 import QtGui
 
 class Conexion:
 
@@ -63,3 +64,33 @@ class Conexion:
             while query.next():
                 listaprov.append(query.value(1))
         return listaprov
+
+
+    def altaCliente(nuevocli):
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("INSERT into CLIENTES (dnicli, altacli, apelcli, nomecli, emailcli, movilcli, dircli, provcli, municli ) VALUES (:dnicli, :altacli, :apelcli, :nomecli, :emailcli, :movilcli, :dircli, :provcli, :municli)")
+            query.bindValue(":dnicli", nuevocli[0])
+            query.bindValue(":altacli", nuevocli[1])
+            query.bindValue(":apelcli", nuevocli[2])
+            query.bindValue(":nomecli", nuevocli[3])
+            query.bindValue(":emailcli", nuevocli[4])
+            query.bindValue(":movilcli", nuevocli[5])
+            query.bindValue(":dircli", nuevocli[6])
+            query.bindValue(":provcli", nuevocli[7])
+            query.bindValue(":municli", nuevocli[8])
+            if query.exec():
+                mbox = QtWidgets.QMessageBox()
+                mbox.setIcon(QtWidgets.QMessageBox.Icon.Information)
+                mbox.setWindowIcon(QtGui.QIcon('./img/logo.ico'))
+                mbox.setWindowTitle("Aviso")
+                mbox.setText("Cliente dado de Alta en la Base de Datos")
+                mbox.setStandardButtons(
+                    QtWidgets.QMessageBox.StandardButton.Ok)
+                mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
+                mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText("Aceptar")
+            else:
+                QtWidgets.QMessageBox.critical(None, 'Error', 'Error al dar de Alta el Cliente en la Base de Datos',
+                                               QtWidgets.QMessageBox.StandardButton.Cancel)
+        except Exception as e:
+            print("error alta cliente", e)

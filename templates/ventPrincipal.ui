@@ -96,7 +96,7 @@
            </widget>
           </item>
           <item row="1" column="5" colspan="7">
-           <widget class="QLineEdit" name="txtDNomCli">
+           <widget class="QLineEdit" name="txtNomCli">
             <property name="minimumSize">
              <size>
               <width>200</width>
@@ -561,7 +561,7 @@
      <x>0</x>
      <y>0</y>
      <width>1216</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSalir">
