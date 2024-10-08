@@ -22,5 +22,21 @@ class Clientes:
 
 
     def altaCliente(self):
-        dni = var.ui.txtDniCli.text()
+        dni = var.ui.txtEmailCli.text()
         print(dni)
+
+    def checkEmail(mail):
+        try:
+            mail = str(var.ui.txtEmailCli.text())
+            if eventos.Eventos.validarMail(mail):
+                var.ui.txtEmailCli.setStyleSheet('background-color: rgb(255, 255, 255);')
+                var.ui.txtEmailCli.setText(mail.lower())
+
+            else:
+                var.ui.txtEmailCli.setStyleSheet('background-color:#FFC0CB; font-style: italic;')
+                var.ui.txtEmailCli.setText(None)
+                var.ui.txtEmailCli.setText("correo no válido")
+                var.ui.txtEmailCli.setFocus()
+
+        except Exception as error:
+            print("error check cliente", error)

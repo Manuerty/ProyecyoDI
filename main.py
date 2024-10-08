@@ -37,6 +37,7 @@ class Main(QtWidgets.QMainWindow):
         '''
 
         var.ui.txtDniCli.editingFinished.connect(lambda: clientes.Clientes.checkDNI(var.ui.txtDniCli.text()))
+        var.ui.txtEmailCli.editingFinished.connect(lambda: clientes.Clientes.checkEmail(var.ui.txtEmailCli.text()))
         '''
         combobox events
         '''
