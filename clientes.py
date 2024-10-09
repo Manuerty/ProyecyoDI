@@ -1,6 +1,7 @@
 from tabnanny import check
 
 from PyQt6 import QtWidgets, QtGui
+from PyQt6.QtGui import QIcon
 
 import conexion
 import var
@@ -39,10 +40,35 @@ class Clientes:
         except Exception as error:
             print("error check cliente", error)
 
+    @staticmethod
     def altaCliente(self):
+
         try:
-            nuevocli = [var.ui.txtDniCli.text(), var.ui.txtAltaCli.text(), var.ui.txtApelCli.text(), var.ui.txtNomCli.text(), var.ui.txtEmailCli.text(),  var.ui.txtMovilCli.text(), var.ui.txtDirCli.text(),  var.ui.cmbProCli.currentText(), var.ui.cmbMuniCli.currentText()]
-            conexion.Conexion.altaCliente(nuevocli)
+            nuevoCli = [var.ui.txtDniCli.text(), var.ui.txtAltaCli.text(), var.ui.txtApelCli.text(),
+                        var.ui.txtNomCli.text(), var.ui.txtEmailCli.text(), var.ui.txtMovilCli.text(),
+                        var.ui.txtDirCli.text(), var.ui.cmbProCli.currentText(),
+                        var.ui.cmbMuniCli.currentText()]
+            if var.ui.txtDniCli.text() != '':
+                if conexion.Conexion.altaCliente(nuevoCli):
+                    mbox = QtWidgets.QMessageBox()
+                    mbox.setIcon(QtWidgets.QMessageBox.Icon.Information)
+                    mbox.setWindowTitle('Aviso')
+                    mbox.setWindowIcon(QIcon('./img/logo.ico'))
+                    mbox.setText('Cliente dado de alta en la base de datos')
+                    mbox.setStandardButtons(
+                        QtWidgets.QMessageBox.StandardButton.Ok)
+                    mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
+                    mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
+                    mbox.exec()
+                    print("Cliente dado de alta")
+                    return "True"
+                QtWidgets.QMessageBox.critical(None, 'Error', 'Error al dar de alta el cliente',
+                                               QtWidgets.QMessageBox.StandardButton.Cancel)
+                return "False"
+            else:
+                QtWidgets.QMessageBox.critical(None, 'Error', 'El DNI no puede estar vacío',
+                                               QtWidgets.QMessageBox.StandardButton.Cancel)
+                return "False"
 
         except Exception as e:
-            print("error alta cliente", e)
+            print("error altaCliente", e)
