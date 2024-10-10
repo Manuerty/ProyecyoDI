@@ -63,7 +63,8 @@ class Clientes:
                     mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
                     mbox.exec()
                     Clientes.cargaTablaClientes(self)
-                QtWidgets.QMessageBox.critical(None, 'Error', 'Error al dar de alta el cliente',
+                else:
+                    QtWidgets.QMessageBox.critical(None, 'Error', 'Error al dar de alta el cliente',
                                                QtWidgets.QMessageBox.StandardButton.Cancel)
                 return "False"
             else:
