@@ -19,6 +19,7 @@ class Main(QtWidgets.QMainWindow):
         conexion.Conexion.db_conexion(self)
         eventos.Eventos.cargarProvincias(self)
         eventos.Eventos.cargarMunicipios(self)
+        clientes.Clientes.cargaTablaClientes(self)
 
         '''
         Zona de eventos del menuBar
