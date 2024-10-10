@@ -20,6 +20,7 @@ class Main(QtWidgets.QMainWindow):
         eventos.Eventos.cargarProvincias(self)
         eventos.Eventos.cargarMunicipios(self)
         clientes.Clientes.cargaTablaClientes(self)
+        eventos.Eventos.resizeTablaClientes(self)
 
         '''
         Zona de eventos del menuBar

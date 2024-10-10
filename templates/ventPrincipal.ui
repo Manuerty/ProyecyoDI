@@ -530,7 +530,7 @@
            <bool>false</bool>
           </property>
           <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectColumns</enum>
+           <enum>QAbstractItemView::SelectRows</enum>
           </property>
           <attribute name="verticalHeaderVisible">
            <bool>false</bool>
@@ -606,12 +606,30 @@
     </property>
     <addaction name="actionSalir"/>
    </widget>
+   <widget class="QMenu" name="menuHerramientas">
+    <property name="title">
+     <string>Herramientas</string>
+    </property>
+    <addaction name="actionCrear_BackUp"/>
+    <addaction name="actionRestaurar_BackUp"/>
+   </widget>
    <addaction name="menuSalir"/>
+   <addaction name="menuHerramientas"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSalir">
    <property name="text">
     <string>Salir</string>
+   </property>
+  </action>
+  <action name="actionCrear_BackUp">
+   <property name="text">
+    <string>Crear BackUp</string>
+   </property>
+  </action>
+  <action name="actionRestaurar_BackUp">
+   <property name="text">
+    <string>Restaurar BackUp</string>
    </property>
   </action>
  </widget>

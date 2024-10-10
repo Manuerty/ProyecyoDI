@@ -78,8 +78,26 @@ class Eventos():
 
     def validarMail(mail):
         mail = mail.lower()
-        regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
+        regex = r'[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,5}'
         if re.match(regex, mail):
             return True
         else:
             return False
+
+    def resizeTablaClientes(self):
+        try:
+            header = var.ui.tablaClientes.horizontalHeader()
+            for i in range (header.count()):
+                if i==0 or i==1 or i==3 or i == 4:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+
+                else:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+
+                header_item = var.ui.tablaClientes.horizontalHeaderItem(i)
+                font = header_item.font()
+                font.setBold(True)
+                header_item.setFont(font)
+
+        except Exception as e:
+            print("error en resize tabla clientes", e)
