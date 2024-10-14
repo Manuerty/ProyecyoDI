@@ -1,4 +1,8 @@
 from datetime import datetime
+
+from PyQt6.QtCore import QFile
+from PyQt6.QtWidgets import QFileDialog
+
 from dlgCalendar import *
 import var
 import eventos
@@ -15,4 +19,6 @@ class Calendar(QtWidgets.QDialog):
         var.uicalendar.Calendar.setSelectedDate((QtCore.QDate(ano,mes,dia)))
         var.uicalendar.Calendar.clicked.connect(eventos.Eventos.cargaFecha)
 
-
+class FileDialogAbrir(QtWidgets.QFileDialog):
+    def __init__(self):
+        super(FileDialogAbrir, self).__init__()

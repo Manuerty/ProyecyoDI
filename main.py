@@ -17,12 +17,13 @@ class Main(QtWidgets.QMainWindow):
         var.ui = Ui_ventPrincipal()
         var.ui.setupUi(self)
         var.uicalendar= Calendar()
+        var.dlgabrir = FileDialogAbrir()
         self.setStyleSheet(style.load_stylesheet())
         conexion.Conexion.db_conexion(self)
         #conexionserver.ConexionServer.crear_conexion(self)
 
         '''
-            Zona de eventos de la tabla
+        Zona de eventos de la tabla
         '''
         clientes.Clientes.cargaTablaClientes(self)
         eventos.Eventos.resizeTablaClientes(self)
@@ -31,6 +32,7 @@ class Main(QtWidgets.QMainWindow):
         Zona de eventos del menuBar
         '''
         var.ui.actionSalir.triggered.connect(eventos.Eventos.mensajeSalir)
+        var.ui.actionCrear_BackUp.triggered.connect(eventos.Eventos.crearBackUp)
 
         '''
         Zona de eventos de los botones
