@@ -6,6 +6,7 @@ from PyQt6.QtGui import QIcon
 
 
 import conexion
+import conexionserver
 import var
 import eventos
 
@@ -78,7 +79,8 @@ class Clientes:
 
     def cargaTablaClientes(self):
         try:
-            listado = conexion.Conexion.listadoClientes(self)
+            listado= conexion.Conexion.listadoClientes(self)
+            #listado = conexionserver.ConexionServer.listadoClientes(self)
             index = 0
             for registro in listado:
                 var.ui.tablaClientes.setRowCount(index + 1)

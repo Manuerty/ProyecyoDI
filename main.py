@@ -1,4 +1,6 @@
 from calendar import Calendar
+
+import conexionserver
 from venAux import *
 import conexion
 import eventos
@@ -17,8 +19,11 @@ class Main(QtWidgets.QMainWindow):
         var.uicalendar= Calendar()
         self.setStyleSheet(style.load_stylesheet())
         conexion.Conexion.db_conexion(self)
-        eventos.Eventos.cargarProvincias(self)
-        eventos.Eventos.cargarMunicipios(self)
+        #conexionserver.ConexionServer.crear_conexion(self)
+
+        '''
+            Zona de eventos de la tabla
+        '''
         clientes.Clientes.cargaTablaClientes(self)
         eventos.Eventos.resizeTablaClientes(self)
 
@@ -42,7 +47,10 @@ class Main(QtWidgets.QMainWindow):
         var.ui.txtEmailCli.editingFinished.connect(lambda: clientes.Clientes.checkEmail(var.ui.txtEmailCli.text()))
         '''
         combobox events
+        
         '''
+        eventos.Eventos.cargarProvincias(self)
+        eventos.Eventos.cargarMunicipios(self)
         var.ui.cmbProCli.currentIndexChanged.connect(eventos.Eventos.cargarMunicipios)
 
 
