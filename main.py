@@ -33,6 +33,7 @@ class Main(QtWidgets.QMainWindow):
         '''
         var.ui.actionSalir.triggered.connect(eventos.Eventos.mensajeSalir)
         var.ui.actionCrear_BackUp.triggered.connect(eventos.Eventos.crearBackUp)
+        var.ui.actionRestaurar_BackUp.triggered.connect(eventos.Eventos.restaurarBackUp)
 
         '''
         Zona de eventos de los botones

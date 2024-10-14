@@ -4,12 +4,14 @@ from datetime import datetime
 
 from PyQt6.QtGui import QIcon
 
+import clientes
 import conexion
 import time
 from PyQt6 import QtWidgets, QtGui
 import zipfile
 import shutil
 import conexionserver
+import eventos
 import var
 import re
 import locale
@@ -140,3 +142,27 @@ class Eventos():
 
         except Exception as error:
             print("error en crear backup", error)
+
+    def restaurarBackUp(self):
+        try:
+            filename = var.dlgabrir.getOpenFileName(None, "Restaurar Copia de Seguridad", "", '*.zip;;All Files(*)')
+            file = filename[0]
+            if file:
+                with zipfile.ZipFile(file, 'r') as bbdd:
+                    bbdd.extractall(pwd=None)
+                bbdd.close()
+            mbox = QtWidgets.QMessageBox()
+            mbox.setIcon(QtWidgets.QMessageBox.Icon.Information)
+            mbox.setWindowTitle('Copia de Seguridad')
+            mbox.setWindowIcon(QIcon('./img/logo.ico'))
+            mbox.setText('Copia de Seguridad restaurada correctamente')
+            mbox.setStandardButtons(
+                QtWidgets.QMessageBox.StandardButton.Ok)
+            mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
+            mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
+            mbox.exec()
+            conexion.Conexion.db_conexion(self)
+            eventos.Eventos.cargarProvincias(self)
+            clientes.Clientes.cargaTablaClientes(self)
+        except Exception as error:
+            print("Eroor al restaurar el BackUp", error)
