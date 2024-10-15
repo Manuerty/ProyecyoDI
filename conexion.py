@@ -103,3 +103,19 @@ class Conexion:
             return listado
         except Exception as error:
             print("error en listado clientes ", error)
+
+
+    def datosOneCliente(dni):
+        try:
+            registro = []
+            query = QtSql.QSqlQuery()
+            query.prepare('SELECT * FROM CLIENTES WHERE dnicli = :dnicli')
+            query.bindValue(':dnicli', str(dni))
+            if query.exec():
+                while query.next():
+                    for i in range(query.record().count()):
+                        registro.append(query.value(i))
+            return registro
+
+        except Exception as error:
+            print("error en datosOneCliente ", error)

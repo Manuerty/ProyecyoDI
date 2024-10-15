@@ -21,12 +21,15 @@ class Main(QtWidgets.QMainWindow):
         self.setStyleSheet(style.load_stylesheet())
         conexion.Conexion.db_conexion(self)
         #conexionserver.ConexionServer.crear_conexion(self)
+        clientes.Clientes.cargaTablaClientes(self)
+
+
 
         '''
         Zona de eventos de la tabla
         '''
-        clientes.Clientes.cargaTablaClientes(self)
         eventos.Eventos.resizeTablaClientes(self)
+        var.ui.tablaClientes.clicked.connect(clientes.Clientes.cargaOneCliente)
 
         '''
         Zona de eventos del menuBar

@@ -84,7 +84,7 @@ class Clientes:
             index = 0
             for registro in listado:
                 var.ui.tablaClientes.setRowCount(index + 1)
-                var.ui.tablaClientes.setItem(index, 0, QtWidgets.QTableWidgetItem(("  " + registro[0] + "  ")))
+                var.ui.tablaClientes.setItem(index, 0, QtWidgets.QTableWidgetItem((registro[0])))
                 var.ui.tablaClientes.setItem(index, 1, QtWidgets.QTableWidgetItem((registro[2])))
                 var.ui.tablaClientes.setItem(index, 2, QtWidgets.QTableWidgetItem((registro[3])))
                 var.ui.tablaClientes.setItem(index, 3, QtWidgets.QTableWidgetItem(("  " + registro[5] + "  ")))
@@ -100,6 +100,23 @@ class Clientes:
                 var.ui.tablaClientes.item(index, 5).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
                 var.ui.tablaClientes.item(index, 6).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
                 index += 1
+
+        except Exception as error:
+            print("Error al cargar tabla clientes", error)
+
+    def cargaOneCliente(self):
+        try:
+            fila = var.ui.tablaClientes.selectedItems()
+            datos = [dato.text() for dato in fila]
+            registro = conexion.Conexion.datosOneCliente(datos[0])
+            listado = [var.ui.txtDniCli, var.ui.txtAltaCli, var.ui.txtApelCli,
+                        var.ui.txtNomCli, var.ui.txtEmailCli, var.ui.txtMovilCli,
+                        var.ui.txtDirCli, var.ui.cmbProCli,var.ui.cmbMuniCli]
+            for i in range(len(listado)):
+                if i ==  7 or i == 8 :
+                    listado[i].setCurrentText(registro[i])
+                else:
+                    listado[i].setText((registro[i]))
 
         except Exception as error:
             print("Error al cargar tabla clientes", error)
