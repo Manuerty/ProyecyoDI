@@ -119,3 +119,23 @@ class Conexion:
 
         except Exception as error:
             print("error en datosOneCliente ", error)
+
+    def modifCliente(registro):
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare('UPDATE clientes SET altacli = :altacli , apelcli = :apelcli, nomecli = :nomecli, emailcli = :emailcli, movilcli = :movilcli, dircli = :dircli, provcli = :provcli, municli = :municli WHERE dnicli = :dnicli')
+            query.bindValue(':dnicli', str(registro[0]))
+            query.bindValue(':altacli', str(registro[1]))
+            query.bindValue(':apelcli', str(registro[2]))
+            query.bindValue(':nomecli', str(registro[3]))
+            query.bindValue(':emailcli', str(registro[4]))
+            query.bindValue(':movilcli', str(registro[5]))
+            query.bindValue(':dircli', str(registro[6]))
+            query.bindValue(':provcli', str(registro[7]))
+            query.bindValue(':municli', str(registro[8]))
+            if query.exec():
+                return True
+            else:
+                return False
+        except Exception as error:
+            print("error en modifCliente ", error)

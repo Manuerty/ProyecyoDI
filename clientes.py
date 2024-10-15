@@ -3,8 +3,7 @@ from tabnanny import check
 from PyQt6 import QtWidgets, QtGui, QtCore
 from PyQt6.QtGui import QIcon
 
-
-
+import clientes
 import conexion
 import conexionserver
 import var
@@ -117,6 +116,39 @@ class Clientes:
                     listado[i].setCurrentText(registro[i])
                 else:
                     listado[i].setText((registro[i]))
+            return registro
 
         except Exception as error:
             print("Error al cargar tabla clientes", error)
+
+    def modifCliente(self):
+        try:
+            modifcli = [var.ui.txtDniCli.text(), var.ui.txtAltaCli.text(), var.ui.txtApelCli.text(),
+                        var.ui.txtNomCli.text(), var.ui.txtEmailCli.text(), var.ui.txtMovilCli.text(),
+                        var.ui.txtDirCli.text(), var.ui.cmbProCli.currentText(),
+                        var.ui.cmbMuniCli.currentText()]
+            if conexion.Conexion.modifCliente(modifcli):
+                mbox = QtWidgets.QMessageBox()
+                mbox.setIcon(QtWidgets.QMessageBox.Icon.Information)
+                mbox.setWindowTitle('Aviso')
+                mbox.setWindowIcon(QIcon('./img/logo.ico'))
+                mbox.setText('Datos del cliente modificados')
+                mbox.setStandardButtons(
+                    QtWidgets.QMessageBox.StandardButton.Ok)
+                mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
+                mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
+                mbox.exec()
+                clientes.Clientes.cargaTablaClientes(self)
+            else:
+                mbox = QtWidgets.QMessageBox()
+                mbox.setIcon(QtWidgets.QMessageBox.Icon.Critical)
+                mbox.setWindowTitle('Aviso')
+                mbox.setWindowIcon(QIcon('./img/logo.ico'))
+                mbox.setText('Error al modificar los datos del cliente')
+                mbox.setStandardButtons(
+                    QtWidgets.QMessageBox.StandardButton.Ok)
+                mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
+                mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
+                mbox.exec()
+        except Exception as error:
+            print("Error en modifiCliente: ", error)

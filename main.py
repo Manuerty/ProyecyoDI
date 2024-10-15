@@ -44,6 +44,7 @@ class Main(QtWidgets.QMainWindow):
 
         var.ui.btnGrabarCli.clicked.connect(clientes.Clientes.altaCliente)
         var.ui.btnAltaCli.clicked.connect(lambda: eventos.Eventos.abrirCalendar(0))
+        var.ui.btnModifiCli.clicked.connect(clientes.Clientes.modifCliente)
 
         '''
         Zona de eventos de las cajas de texto
@@ -63,6 +64,5 @@ class Main(QtWidgets.QMainWindow):
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
     window = Main()
-    window.show()
     window.showMaximized()
     sys.exit(app.exec())
