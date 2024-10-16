@@ -43,8 +43,10 @@ class Main(QtWidgets.QMainWindow):
         '''
 
         var.ui.btnGrabarCli.clicked.connect(clientes.Clientes.altaCliente)
-        var.ui.btnAltaCli.clicked.connect(lambda: eventos.Eventos.abrirCalendar(0))
+        var.ui.btnAltaCli.clicked.connect(lambda: eventos.Eventos.abrirCalendar(0, 0))
+        var.ui.btnBajaCli.clicked.connect(lambda: eventos.Eventos.abrirCalendar(0, 1))
         var.ui.btnModifiCli.clicked.connect(clientes.Clientes.modifCliente)
+        var.ui.btnDelCli.clicked.connect(clientes.Clientes.bajaCliente)
 
         '''
         Zona de eventos de las cajas de texto

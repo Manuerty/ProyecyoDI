@@ -152,3 +152,12 @@ class Clientes:
                 mbox.exec()
         except Exception as error:
             print("Error en modifiCliente: ", error)
+
+    def bajaCliente(self):
+        try:
+            datos = [var.ui.txtBajaCli.text(), var.ui.txtDniCli.text()]
+            conexion.Conexion.bajaCliente(datos)
+
+
+        except Exception as error:
+            print("Error en bajaCliente: ", error)
