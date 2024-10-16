@@ -38,6 +38,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.actionCrear_BackUp.triggered.connect(eventos.Eventos.crearBackUp)
         var.ui.actionRestaurar_BackUp.triggered.connect(eventos.Eventos.restaurarBackUp)
 
+
         '''
         Zona de eventos de los botones
         '''
@@ -61,6 +62,13 @@ class Main(QtWidgets.QMainWindow):
         eventos.Eventos.cargarProvincias(self)
         eventos.Eventos.cargarMunicipios(self)
         var.ui.cmbProCli.currentIndexChanged.connect(eventos.Eventos.cargarMunicipios)
+
+        '''
+            Zona de eventos del toolBar
+        '''
+
+        var.ui.actionbarSalir.triggered.connect(eventos.Eventos.mensajeSalir)
+        var.ui.actionbar_limpiar.triggered.connect(eventos.Eventos.limpiarPanel)
 
 
 if __name__ == '__main__':

@@ -169,3 +169,18 @@ class Eventos():
             clientes.Clientes.cargaTablaClientes(self)
         except Exception as error:
             print("Eroor al restaurar el BackUp", error)
+
+    def limpiarPanel(self):
+        try:
+            objetospanelcli = [var.ui.txtDniCli, var.ui.txtAltaCli, var.ui.txtApelCli, var.ui.txtNomCli,
+                        var.ui.txtEmailCli, var.ui.txtMovilCli,var.ui.txtDirCli, var.ui.cmbProCli,
+                        var.ui.cmbMuniCli, var.ui.txtBajaCli]
+            for i, dato in enumerate(objetospanelcli):
+                if i == 7 or i == 8:
+                    pass
+                else:
+                    dato.setText('')
+
+            eventos.Eventos.cargarProvincias(self)
+        except Exception as error:
+            print("Error en limpiar panel", error)
