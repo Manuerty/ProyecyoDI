@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1276</width>
-    <height>768</height>
+    <width>1307</width>
+    <height>795</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -681,7 +681,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1276</width>
+     <width>1307</width>
      <height>21</height>
     </rect>
    </property>
@@ -708,6 +708,23 @@
    <addaction name="menuAyuda"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: whitesmoke;</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionbar_limpiar"/>
+   <addaction name="separator"/>
+   <addaction name="actionbarSalir"/>
+  </widget>
   <action name="actionSalir">
    <property name="text">
     <string>Salir</string>
@@ -721,6 +738,47 @@
   <action name="actionRestaurar_BackUp">
    <property name="text">
     <string>Restaurar BackUp</string>
+   </property>
+  </action>
+  <action name="actionbarSalir">
+   <property name="icon">
+    <iconset>
+     <normalon>../img/Salir.ico</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>barSalir</string>
+   </property>
+   <property name="iconText">
+    <string>Salir</string>
+   </property>
+   <property name="toolTip">
+    <string>Salir</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+S</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionbar_limpiar">
+   <property name="icon">
+    <iconset>
+     <normalon>../img/reload.ico</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>bar_limpiar</string>
+   </property>
+   <property name="iconText">
+    <string>Limpiar</string>
+   </property>
+   <property name="toolTip">
+    <string>Limpiar</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+R</string>
    </property>
   </action>
  </widget>
