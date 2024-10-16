@@ -2,6 +2,11 @@
 ### Python template
 # Byte-compiled / optimized / DLL files
 __pycache__/
+        __pycache__/conexion.cpython-312.pyc
+        __pycache__/eventos.cpython-312.pyc
+        __pycache__/style.cpython-312.pyc
+        __pycache__/var.cpython-312.pyc
+        __pycache__/ventPrincipal.cpython-312.pyc
 *.py[cod]
 *$py.class
 
