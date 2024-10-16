@@ -64,5 +64,5 @@ class Main(QtWidgets.QMainWindow):
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
     window = Main()
-    window.showMaximized()
+    window.show()
     sys.exit(app.exec())
