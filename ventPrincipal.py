@@ -192,6 +192,7 @@ class Ui_ventPrincipal(object):
         self.verticalLayout.addWidget(self.line)
         self.tablaClientes = QtWidgets.QTableWidget(parent=self.PesClientes)
         self.tablaClientes.setAutoFillBackground(False)
+        self.tablaClientes.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
         self.tablaClientes.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
         self.tablaClientes.setObjectName("tablaClientes")
         self.tablaClientes.setColumnCount(7)
