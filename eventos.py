@@ -74,6 +74,17 @@ class Eventos():
         except Exception as error:
             print("error en validar dni ", error)
 
+    def chekTelefono(dni):
+        try:
+            dni = dni.lower()
+            regex = r'^(?:\+34|0034)?[\s.-]?[6-9]\d{2}[\s.-]?\d{3}[\s.-]?\d{3}$'
+            if re.match(regex, dni):
+                return True
+            else:
+                return False
+        except Exception as error:
+            print("error en checkDNI ", error)
+
     def abrirCalendar(pan, btn):
         try:
             var.panel = pan
@@ -98,7 +109,7 @@ class Eventos():
     def validarMail(mail):
         mail = mail.lower()
         regex = r'[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,5}'
-        if re.match(regex, mail):
+        if re.match(regex, mail) or mail == '':
             return True
         else:
             return False

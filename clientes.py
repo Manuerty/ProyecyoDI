@@ -42,6 +42,23 @@ class Clientes:
         except Exception as error:
             print("error check cliente", error)
 
+
+    def checktelefono(tlf):
+        try:
+            tlf = str(var.ui.txtMovilCli.text())
+            if eventos.Eventos.chekTelefono(tlf):
+                var.ui.txtMovilCli.setStyleSheet('background-color: rgb(255, 255, 255);')
+                var.ui.txtMovilCli.setText(tlf)
+
+            else:
+                var.ui.txtMovilCli.setStyleSheet('background-color:#FFC0CB; font-style: italic;')
+                var.ui.txtMovilCli.setText(None)
+                var.ui.txtMovilCli.setText("telefono no válido")
+                var.ui.txtMovilCli.setFocus()
+
+        except Exception as error:
+            print("error check cliente", error)
+
     @staticmethod
     def altaCliente(self):
 
