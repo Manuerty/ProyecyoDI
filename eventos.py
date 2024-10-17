@@ -195,3 +195,13 @@ class Eventos():
             eventos.Eventos.cargarProvincias(self)
         except Exception as error:
             print("Error en limpiar panel", error)
+
+    def clearCampos(self):
+        var.ui.txtDniCli.setText(None)
+        var.ui.txtApelCli.setText(None)
+        var.ui.txtNomCli.setText(None)
+        var.ui.txtMovilCli.setText(None)
+        var.ui.txtEmailCli.setText(None)
+        var.ui.txtAltaCli.setText(None)
+        var.ui.txtDirCli.setText(None)
+        var.ui.cmbProCli.setCurrentIndex(0)
