@@ -152,3 +152,16 @@ class Conexion:
                 return False
         except Exception as error:
             print("error en bajaCliente ", error)
+
+    def checkUserInDb(dni):
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare('SELECT * FROM clientes WHERE dnicli = :dnicli')
+            query.bindValue(':dnicli', str(dni))
+            if query.exec():
+                if query.next():
+                    return True
+                else:
+                    return False
+        except Exception as error:
+            print("error en checkUserInDb ", error)
