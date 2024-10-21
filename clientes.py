@@ -184,6 +184,7 @@ class Clientes:
 
     def bajaCliente(self):
         try:
+
             datos = [var.ui.txtBajaCli.text(), var.ui.txtDniCli.text()]
             if conexion.Conexion.checkUserInDb(datos[1]):
                 if datos[0] != "":

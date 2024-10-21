@@ -290,7 +290,7 @@ class Ui_ventPrincipal(object):
         self.label_2.setText(_translate("ventPrincipal", "Fecha de baja"))
         self.btnGrabarCli.setText(_translate("ventPrincipal", "Grabar"))
         self.btnModifiCli.setText(_translate("ventPrincipal", "Modificar"))
-        self.btnDelCli.setText(_translate("ventPrincipal", "Eliminar"))
+        self.btnDelCli.setText(_translate("ventPrincipal", "Baja"))
         item = self.tablaClientes.horizontalHeaderItem(0)
         item.setText(_translate("ventPrincipal", "DNI/NIE"))
         item = self.tablaClientes.horizontalHeaderItem(1)
