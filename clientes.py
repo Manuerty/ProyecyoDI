@@ -235,3 +235,14 @@ class Clientes:
                 mbox.exec()
         except Exception as error:
             print("Error en bajaCliente: ", error)
+
+
+    def historicoCli(self):
+        try:
+            if var.ui.chkHistoriaCli.isChecked():
+                var.historico = 0
+            else:
+                var.historico = 1
+            Clientes.cargaTablaClientes(self)
+        except Exception as error:
+            print("Error en historicoCli: ", error)

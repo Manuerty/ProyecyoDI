@@ -18,6 +18,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.setupUi(self)
         var.uicalendar= Calendar()
         var.dlgabrir = FileDialogAbrir()
+        var.historico = 1
         self.setStyleSheet(style.load_stylesheet())
         conexion.Conexion.db_conexion(self)
         #conexionserver.ConexionServer.crear_conexion(self)
@@ -70,6 +71,13 @@ class Main(QtWidgets.QMainWindow):
 
         var.ui.actionbarSalir.triggered.connect(eventos.Eventos.mensajeSalir)
         var.ui.actionbar_limpiar.triggered.connect(eventos.Eventos.limpiarPanel)
+
+
+        '''
+        Zona de eventos de los checkbox
+        '''
+        var.ui.chkHistoriaCli.stateChanged.connect(clientes.Clientes.historicoCli)
+
 
 
 if __name__ == '__main__':
