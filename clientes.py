@@ -187,7 +187,6 @@ class Clientes:
 
             datos = [var.ui.txtBajaCli.text(), var.ui.txtDniCli.text()]
             if conexion.Conexion.checkUserInDb(datos[1]):
-                if datos[0] != "":
                     if conexion.Conexion.bajaCliente(datos) :
                         mbox = QtWidgets.QMessageBox()
                         mbox.setIcon(QtWidgets.QMessageBox.Icon.Information)
@@ -212,17 +211,7 @@ class Clientes:
                         mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
                         mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
                         mbox.exec()
-                else:
-                    mbox = QtWidgets.QMessageBox()
-                    mbox.setIcon(QtWidgets.QMessageBox.Icon.Critical)
-                    mbox.setWindowTitle('Aviso')
-                    mbox.setWindowIcon(QIcon('./img/logo.ico'))
-                    mbox.setText('Debe introducir la fecha de baja')
-                    mbox.setStandardButtons(
-                        QtWidgets.QMessageBox.StandardButton.Ok)
-                    mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
-                    mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
-                    mbox.exec()
+
             else:
                 mbox = QtWidgets.QMessageBox()
                 mbox.setIcon(QtWidgets.QMessageBox.Icon.Critical)
