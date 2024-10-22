@@ -1,4 +1,6 @@
 import os
+from datetime import datetime
+
 from PyQt6 import QtSql, QtWidgets, QtCore
 from PyQt6 import QtGui
 
@@ -174,7 +176,7 @@ class Conexion:
         try:
             query = QtSql.QSqlQuery()
             query.prepare('UPDATE clientes SET bajacli = :bajacli WHERE dnicli = :dnicli')
-            query.bindValue(':bajacli', str(datos[0]))
+            query.bindValue(':bajacli', datetime.now().strftime("%d/%m/%Y"))
             query.bindValue(':dnicli', str(datos[1]))
             if query.exec():
                 return True
