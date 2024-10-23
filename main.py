@@ -18,6 +18,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.setupUi(self)
         var.uicalendar= Calendar()
         var.dlgabrir = FileDialogAbrir()
+        var.historico = 1
         self.setStyleSheet(style.load_stylesheet())
         conexion.Conexion.db_conexion(self)
         #conexionserver.ConexionServer.crear_conexion(self)
@@ -30,6 +31,7 @@ class Main(QtWidgets.QMainWindow):
         '''
         eventos.Eventos.resizeTablaClientes(self)
         var.ui.tablaClientes.clicked.connect(clientes.Clientes.cargaOneCliente)
+        eventos.Eventos.resizeTablaPropiedades(self)
 
         '''
         Zona de eventos del menuBar
@@ -55,6 +57,7 @@ class Main(QtWidgets.QMainWindow):
 
         var.ui.txtDniCli.editingFinished.connect(lambda: clientes.Clientes.checkDNI(var.ui.txtDniCli.text()))
         var.ui.txtEmailCli.editingFinished.connect(lambda: clientes.Clientes.checkEmail(var.ui.txtEmailCli.text()))
+        var.ui.txtMovilCli.editingFinished.connect(lambda: clientes.Clientes.checktelefono(var.ui.txtMovilCli.text()))
         '''
         combobox events
         
@@ -69,6 +72,13 @@ class Main(QtWidgets.QMainWindow):
 
         var.ui.actionbarSalir.triggered.connect(eventos.Eventos.mensajeSalir)
         var.ui.actionbar_limpiar.triggered.connect(eventos.Eventos.limpiarPanel)
+
+
+        '''
+        Zona de eventos de los checkbox
+        '''
+        var.ui.chkHistoriaCli.stateChanged.connect(clientes.Clientes.historicoCli)
+
 
 
 if __name__ == '__main__':

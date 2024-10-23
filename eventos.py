@@ -74,6 +74,17 @@ class Eventos():
         except Exception as error:
             print("error en validar dni ", error)
 
+    def chekTelefono(dni):
+        try:
+            dni = dni.lower()
+            regex = r'^(?:\+34|0034)?[\s.-]?[67]\d{2}[\s.-]?\d{3}[\s.-]?\d{3}$'
+            if re.match(regex, dni):
+                return True
+            else:
+                return False
+        except Exception as error:
+            print("error en checkDNI ", error)
+
     def abrirCalendar(pan, btn):
         try:
             var.panel = pan
@@ -98,7 +109,7 @@ class Eventos():
     def validarMail(mail):
         mail = mail.lower()
         regex = r'[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,5}'
-        if re.match(regex, mail):
+        if re.match(regex, mail) or mail == '':
             return True
         else:
             return False
@@ -117,7 +128,23 @@ class Eventos():
                 font = header_item.font()
                 font.setBold(True)
                 header_item.setFont(font)
+        except Exception as e:
+            print("error en resize tabla clientes", e)
 
+    def resizeTablaPropiedades(self):
+        try:
+            header = var.ui.tablaProp.horizontalHeader()
+            for i in range(header.count()):
+                if i == 1 or i == 2 or i == 6 :
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+
+                else:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+
+                header_item = var.ui.tablaClientes.horizontalHeaderItem(i)
+                font = header_item.font()
+                font.setBold(True)
+                header_item.setFont(font)
         except Exception as e:
             print("error en resize tabla clientes", e)
 
@@ -184,3 +211,13 @@ class Eventos():
             eventos.Eventos.cargarProvincias(self)
         except Exception as error:
             print("Error en limpiar panel", error)
+
+    def clearCampos(self):
+        var.ui.txtDniCli.setText(None)
+        var.ui.txtApelCli.setText(None)
+        var.ui.txtNomCli.setText(None)
+        var.ui.txtMovilCli.setText(None)
+        var.ui.txtEmailCli.setText(None)
+        var.ui.txtAltaCli.setText(None)
+        var.ui.txtDirCli.setText(None)
+        var.ui.cmbProCli.setCurrentIndex(0)
