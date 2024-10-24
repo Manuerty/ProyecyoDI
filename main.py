@@ -17,6 +17,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui = Ui_ventPrincipal()
         var.ui.setupUi(self)
         var.uicalendar= Calendar()
+        # var.dlggestion = DialogGestion()
         var.dlgabrir = FileDialogAbrir()
         var.historico = 1
         self.setStyleSheet(style.load_stylesheet())
@@ -39,6 +40,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.actionSalir.triggered.connect(eventos.Eventos.mensajeSalir)
         var.ui.actionCrear_BackUp.triggered.connect(eventos.Eventos.crearBackUp)
         var.ui.actionRestaurar_BackUp.triggered.connect(eventos.Eventos.restaurarBackUp)
+        var.ui.actionTipoPropiedad.triggered.connect(eventos.Eventos.abrirTipoProp)
 
 
         '''

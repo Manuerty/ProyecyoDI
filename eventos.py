@@ -221,3 +221,9 @@ class Eventos():
         var.ui.txtAltaCli.setText(None)
         var.ui.txtDirCli.setText(None)
         var.ui.cmbProCli.setCurrentIndex(0)
+
+    def abrirTipoProp(self):
+        try:
+            var.dlggeestion.show()
+        except Exception as error:
+            print("error en abrir tipo propiedad", error)
