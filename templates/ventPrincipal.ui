@@ -1568,7 +1568,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="btnBajaCli_3">
+             <widget class="QPushButton" name="btnAltaProp">
               <property name="minimumSize">
                <size>
                 <width>32</width>
