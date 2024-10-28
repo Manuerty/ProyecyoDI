@@ -6,149 +6,170 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>402</width>
-    <height>301</height>
+    <width>397</width>
+    <height>298</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="layoutWidget">
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>0</y>
-     <width>401</width>
-     <height>301</height>
+     <y>6</y>
+     <width>399</width>
+     <height>201</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Sunken</enum>
+   </property>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>110</y>
+      <width>275</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>275</width>
+      <height>2</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>230</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Introduzca tipo de propiedad a crear o eliminar:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtTipoProp">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>150</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+      <horstretch>150</horstretch>
+      <verstretch>20</verstretch>
+     </sizepolicy>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>0</y>
+      <width>141</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../img/house.ico</pixmap>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>240</y>
+     <width>275</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QFrame" name="frame">
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-      <property name="frameShape">
-       <enum>QFrame::Box</enum>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
       </property>
-      <property name="frameShadow">
-       <enum>QFrame::Sunken</enum>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnAlraTipoProp">
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>25</height>
+       </size>
       </property>
-      <widget class="QLabel" name="label">
-       <property name="geometry">
-        <rect>
-         <x>80</x>
-         <y>40</y>
-         <width>275</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>275</width>
-         <height>2</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>230</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Introduzca tipo de propiedad a crear o eliminar:</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="txtTipoProp">
-       <property name="geometry">
-        <rect>
-         <x>150</x>
-         <y>80</y>
-         <width>113</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>150</horstretch>
-         <verstretch>20</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
+      <property name="text">
+       <string>Alta</string>
+      </property>
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnAlraTipoProp">
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Alta</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnDelTipoProp">
-        <property name="minimumSize">
-         <size>
-          <width>100</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Elimninar</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
+     <widget class="QPushButton" name="btnDelTipoProp">
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>25</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Elimninar</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
     </item>
    </layout>
   </widget>
