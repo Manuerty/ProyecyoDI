@@ -52,6 +52,19 @@ class Eventos():
         #listado = conexionserver.ConexionServer.listaMuniProv(provincia)
         var.ui.cmbMuniCli.addItems(listado)
 
+    def cargarProvinciasProp(self):
+            var.ui.cmbProvProp.clear()
+            listado = conexion.Conexion.listaProv(self)
+            # listado = conexionserver.ConexionServer.listaProv()
+            var.ui.cmbProvProp.addItems(listado)
+
+    def cargarMunicipiosProp(self):
+        var.ui.cmbMuniProp.clear()
+        provincia = var.ui.cmbProCli.currentText()
+        listado = conexion.Conexion.listaMuni(provincia)
+        #listado = conexionserver.ConexionServer.listaMuniProv(provincia)
+        var.ui.cmbMuniProp.addItems(listado)
+
     def validarDNIcli(dni):
         try:
             dni = str(dni).upper()
@@ -224,6 +237,6 @@ class Eventos():
 
     def abrirTipoProp(self):
         try:
-            var.dlggeestion.show()
+            var.dlggestion.show()
         except Exception as error:
             print("error en abrir tipo propiedad", error)

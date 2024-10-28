@@ -2533,7 +2533,7 @@
     <property name="title">
      <string>Gestión</string>
     </property>
-    <addaction name="actionTipo_Proiedades"/>
+    <addaction name="actionTipoPropiedad"/>
    </widget>
    <addaction name="menuSalir"/>
    <addaction name="menuGesti_n"/>
@@ -2614,16 +2614,16 @@
     <string>Alt+R</string>
    </property>
   </action>
-  <action name="actionTipo_Proiedades">
+  <action name="actionTipoPropiedad">
    <property name="text">
-    <string>Tipo Proiedades</string>
+    <string>Tipo Propiedad</string>
    </property>
   </action>
  </widget>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>
