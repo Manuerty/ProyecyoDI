@@ -67,6 +67,9 @@ class Main(QtWidgets.QMainWindow):
         eventos.Eventos.cargarProvincias(self)
         eventos.Eventos.cargarMunicipios(self)
         var.ui.cmbProCli.currentIndexChanged.connect(eventos.Eventos.cargarMunicipios)
+        eventos.Eventos.cargarProvinciasProp(self)
+        eventos.Eventos.cargarMunicipiosProp(self)
+        var.ui.cmbProvProp.currentIndexChanged.connect(eventos.Eventos.cargarMunicipiosProp)
 
         '''
             Zona de eventos del toolBar

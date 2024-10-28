@@ -60,7 +60,7 @@ class Eventos():
 
     def cargarMunicipiosProp(self):
         var.ui.cmbMuniProp.clear()
-        provincia = var.ui.cmbProCli.currentText()
+        provincia = var.ui.cmbProvProp.currentText()
         listado = conexion.Conexion.listaMuni(provincia)
         #listado = conexionserver.ConexionServer.listaMuniProv(provincia)
         var.ui.cmbMuniProp.addItems(listado)
