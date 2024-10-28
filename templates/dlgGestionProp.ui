@@ -20,9 +20,9 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>6</y>
+     <y>-4</y>
      <width>399</width>
-     <height>201</height>
+     <height>221</height>
     </rect>
    </property>
    <property name="layoutDirection">
@@ -37,8 +37,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>110</y>
+      <x>70</x>
+      <y>120</y>
       <width>275</width>
       <height>31</height>
      </rect>
@@ -73,9 +73,9 @@
    <widget class="QLineEdit" name="txtTipoProp">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>150</y>
-      <width>113</width>
+      <x>110</x>
+      <y>160</y>
+      <width>181</width>
       <height>20</height>
      </rect>
     </property>
@@ -89,8 +89,8 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>0</y>
+      <x>140</x>
+      <y>10</y>
       <width>141</width>
       <height>121</height>
      </rect>

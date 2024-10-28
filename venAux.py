@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import QFileDialog
 from dlgCalendar import *
 import var
 import eventos
+import propiedades
 from dlgGestionProp import *
 
 class Calendar(QtWidgets.QDialog):
@@ -20,6 +21,7 @@ class Calendar(QtWidgets.QDialog):
         var.uicalendar.Calendar.setSelectedDate((QtCore.QDate(ano,mes,dia)))
         var.uicalendar.Calendar.clicked.connect(eventos.Eventos.cargaFecha)
 
+
 class FileDialogAbrir(QtWidgets.QFileDialog):
     def __init__(self):
         super(FileDialogAbrir, self).__init__()
@@ -30,3 +32,4 @@ class dlgGestionprop(QtWidgets.QDialog):
         super(dlgGestionprop, self).__init__()
         var.dlggestion = Ui_dialog()
         var.dlggestion.setupUi(self)
+        var.dlggestion.btnAlraTipoProp.clicked.connect(propiedades.Propiedades.altaTipoPropiedad)

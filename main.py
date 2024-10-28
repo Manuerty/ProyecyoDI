@@ -9,6 +9,7 @@ from ventPrincipal import *
 import sys
 import var
 import clientes
+import propiedades
 
 class Main(QtWidgets.QMainWindow):
 
@@ -52,6 +53,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.btnBajaCli.clicked.connect(lambda: eventos.Eventos.abrirCalendar(0, 1))
         var.ui.btnModifiCli.clicked.connect(clientes.Clientes.modifCliente)
         var.ui.btnDelCli.clicked.connect(clientes.Clientes.bajaCliente)
+
 
         '''
         Zona de eventos de las cajas de texto
