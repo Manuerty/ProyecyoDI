@@ -197,3 +197,33 @@ class Conexion:
                     return False
         except Exception as error:
             print("error en checkUserInDb ", error)
+
+    def altaTipoProp(tipo):
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("INSERT INTO tipopropiedad (tipo) VALUES (:tipo)")
+            query.bindValue(":tipo", tipo)
+            if query.exec():
+                query = QtSql.QSqlQuery()
+                query.prepare("SELECT tipo FROM tipopropiedad ORDER BY tipo ASC")
+                if query.exec():
+                    registro = []
+                    while query.next():
+                        registro.append(str(query.value(0)))
+                    return registro
+            else:
+                return False
+        except Exception as e:
+            print("error altaTipoProp", e)
+
+    def cargarTipoProp(self):
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT tipo FROM tipopropiedad ORDER BY tipo ASC")
+            if query.exec():
+                registro = []
+                while query.next():
+                    registro.append(str(query.value(0)))
+                return registro
+        except Exception as e:
+            print("error cargarTipoProp", e)

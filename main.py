@@ -64,7 +64,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.txtEmailCli.editingFinished.connect(lambda: clientes.Clientes.checkEmail(var.ui.txtEmailCli.text()))
         var.ui.txtMovilCli.editingFinished.connect(lambda: clientes.Clientes.checktelefono(var.ui.txtMovilCli.text()))
         '''
-        combobox events
+        Zona de eventos de los comboBox
         
         '''
         eventos.Eventos.cargarProvincias(self)
@@ -73,6 +73,7 @@ class Main(QtWidgets.QMainWindow):
         eventos.Eventos.cargarProvinciasProp(self)
         eventos.Eventos.cargarMunicipiosProp(self)
         var.ui.cmbProvProp.currentIndexChanged.connect(eventos.Eventos.cargarMunicipiosProp)
+        eventos.Eventos.cargarTipoProp(self)
 
         '''
             Zona de eventos del toolBar

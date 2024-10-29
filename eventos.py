@@ -240,3 +240,12 @@ class Eventos():
             var.dlggestion.show()
         except Exception as error:
             print("error en abrir tipo propiedad", error)
+
+
+    def cargarTipoProp(self):
+        try:
+            registro = conexion.Conexion.cargarTipoProp(self)
+            var.ui.cmbTipoProp.clear()
+            var.ui.cmbTipoProp.addItems(registro)
+        except Exception as error:
+            print('Error cargarTipoProp: %s ' % str(error))
