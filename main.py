@@ -18,7 +18,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui = Ui_ventPrincipal()
         var.ui.setupUi(self)
         var.uicalendar= Calendar()
-        var.dlggestion = dlgGestionprop()
+        var.dlggestion = dlgGestionProp()
         var.dlgabrir = FileDialogAbrir()
         var.historico = 1
         self.setStyleSheet(style.load_stylesheet())

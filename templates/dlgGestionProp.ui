@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>dialog</class>
- <widget class="QDialog" name="dialog">
+ <class>dlgGestionProp</class>
+ <widget class="QDialog" name="dlgGestionProp">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -103,7 +103,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>80</x>
@@ -127,7 +127,7 @@
      </spacer>
     </item>
     <item>
-     <widget class="QPushButton" name="btnAlraTipoProp">
+     <widget class="QPushButton" name="btnAltaTipoProp">
       <property name="maximumSize">
        <size>
         <width>100</width>

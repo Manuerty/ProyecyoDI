@@ -9,12 +9,12 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_dialog(object):
-    def setupUi(self, dialog):
-        dialog.setObjectName("dialog")
-        dialog.resize(397, 298)
-        dialog.setModal(True)
-        self.frame = QtWidgets.QFrame(parent=dialog)
+class Ui_dlgGestionProp(object):
+    def setupUi(self, dlgGestionProp):
+        dlgGestionProp.setObjectName("dlgGestionProp")
+        dlgGestionProp.resize(397, 298)
+        dlgGestionProp.setModal(True)
+        self.frame = QtWidgets.QFrame(parent=dlgGestionProp)
         self.frame.setGeometry(QtCore.QRect(0, -4, 399, 221))
         self.frame.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
         self.frame.setFrameShape(QtWidgets.QFrame.Shape.Box)
@@ -46,19 +46,19 @@ class Ui_dialog(object):
         self.label_2.setText("")
         self.label_2.setPixmap(QtGui.QPixmap(".\\\\templates\\../img/house.ico"))
         self.label_2.setObjectName("label_2")
-        self.widget = QtWidgets.QWidget(parent=dialog)
-        self.widget.setGeometry(QtCore.QRect(80, 240, 275, 25))
-        self.widget.setObjectName("widget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
+        self.layoutWidget = QtWidgets.QWidget(parent=dlgGestionProp)
+        self.layoutWidget.setGeometry(QtCore.QRect(80, 240, 275, 25))
+        self.layoutWidget.setObjectName("layoutWidget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
-        self.btnAlraTipoProp = QtWidgets.QPushButton(parent=self.widget)
-        self.btnAlraTipoProp.setMaximumSize(QtCore.QSize(100, 25))
-        self.btnAlraTipoProp.setObjectName("btnAlraTipoProp")
-        self.horizontalLayout.addWidget(self.btnAlraTipoProp)
-        self.btnDelTipoProp = QtWidgets.QPushButton(parent=self.widget)
+        self.btnAltaTipoProp = QtWidgets.QPushButton(parent=self.layoutWidget)
+        self.btnAltaTipoProp.setMaximumSize(QtCore.QSize(100, 25))
+        self.btnAltaTipoProp.setObjectName("btnAltaTipoProp")
+        self.horizontalLayout.addWidget(self.btnAltaTipoProp)
+        self.btnDelTipoProp = QtWidgets.QPushButton(parent=self.layoutWidget)
         self.btnDelTipoProp.setMinimumSize(QtCore.QSize(100, 0))
         self.btnDelTipoProp.setMaximumSize(QtCore.QSize(100, 25))
         self.btnDelTipoProp.setObjectName("btnDelTipoProp")
@@ -66,12 +66,12 @@ class Ui_dialog(object):
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
 
-        self.retranslateUi(dialog)
-        QtCore.QMetaObject.connectSlotsByName(dialog)
+        self.retranslateUi(dlgGestionProp)
+        QtCore.QMetaObject.connectSlotsByName(dlgGestionProp)
 
-    def retranslateUi(self, dialog):
+    def retranslateUi(self, dlgGestionProp):
         _translate = QtCore.QCoreApplication.translate
-        dialog.setWindowTitle(_translate("dialog", "Dialog"))
-        self.label.setText(_translate("dialog", "Introduzca tipo de propiedad a crear o eliminar:"))
-        self.btnAlraTipoProp.setText(_translate("dialog", "Alta"))
-        self.btnDelTipoProp.setText(_translate("dialog", "Elimninar"))
+        dlgGestionProp.setWindowTitle(_translate("dlgGestionProp", "Dialog"))
+        self.label.setText(_translate("dlgGestionProp", "Introduzca tipo de propiedad a crear o eliminar:"))
+        self.btnAltaTipoProp.setText(_translate("dlgGestionProp", "Alta"))
+        self.btnDelTipoProp.setText(_translate("dlgGestionProp", "Elimninar"))
