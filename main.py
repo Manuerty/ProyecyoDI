@@ -56,6 +56,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.btnDelCli.clicked.connect(clientes.Clientes.bajaCliente)
 
 
+
         '''
         Zona de eventos de las cajas de texto
         '''

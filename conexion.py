@@ -4,6 +4,7 @@ from datetime import datetime
 from PyQt6 import QtSql, QtWidgets, QtCore
 from PyQt6 import QtGui
 
+import eventos
 import var
 
 
@@ -227,3 +228,18 @@ class Conexion:
                 return registro
         except Exception as e:
             print("error cargarTipoProp", e)
+
+
+    def bajaTipoProp(tipo):
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("DELETE FROM tipopropiedad WHERE tipo = :tipo")
+            query.bindValue(":tipo", tipo)
+            if query.exec():
+                eventos.Eventos.cargarTipoProp(tipo)
+                return True
+            else:
+                eventos.Eventos.cargarTipoProp(tipo)
+                return False
+        except Exception as e:
+            print("error bajaTipoProp", e)

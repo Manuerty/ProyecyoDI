@@ -33,3 +33,4 @@ class dlgGestionProp(QtWidgets.QDialog):
         self.ui = Ui_dlgGestionProp()
         self.ui.setupUi(self)
         self.ui.btnAltaTipoProp.clicked.connect(propiedades.Propiedades.altaTipoPropiedad)
+        self.ui.btnDelTipoProp.clicked.connect(propiedades.Propiedades.bajaTipoPropiedad)
