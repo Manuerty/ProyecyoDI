@@ -30,7 +30,6 @@ class Propiedades():
         try:
             tipo = var.dlggestion.ui.txtTipoProp.text().title()
             if conexion.Conexion.bajaTipoProp(tipo):
-
                 mbox = QtWidgets.QMessageBox()
                 mbox.setIcon(QtWidgets.QMessageBox.Icon.Information)
                 mbox.setWindowIcon(QtGui.QIcon("./img/icono.svg"))

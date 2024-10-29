@@ -229,17 +229,22 @@ class Conexion:
         except Exception as e:
             print("error cargarTipoProp", e)
 
-
     def bajaTipoProp(tipo):
         try:
             query = QtSql.QSqlQuery()
-            query.prepare("DELETE FROM tipopropiedad WHERE tipo = :tipo")
+            query.prepare("SELECT COUNT(*) FROM tipopropiedad WHERE tipo = :tipo")
             query.bindValue(":tipo", tipo)
-            if query.exec():
-                eventos.Eventos.cargarTipoProp(tipo)
-                return True
+            if query.exec() and query.next() and query.value(0) > 0:
+                query.prepare("DELETE FROM tipopropiedad WHERE tipo = :tipo")
+                query.bindValue(":tipo", tipo)
+                if query.exec():
+                    eventos.Eventos.cargarTipoProp(tipo)
+                    return True
+                else:
+                    eventos.Eventos.cargarTipoProp(tipo)
+                    return False
             else:
-                eventos.Eventos.cargarTipoProp(tipo)
                 return False
         except Exception as e:
             print("error bajaTipoProp", e)
+            return False
