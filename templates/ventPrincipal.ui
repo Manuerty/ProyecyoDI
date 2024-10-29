@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1458</width>
-    <height>1119</height>
+    <width>1540</width>
+    <height>1122</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -2080,7 +2080,7 @@
           </attribute>
           <column>
            <property name="text">
-            <string>ID</string>
+            <string>Código</string>
            </property>
           </column>
           <column>
@@ -2126,7 +2126,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1458</width>
+     <width>1540</width>
      <height>26</height>
     </rect>
    </property>
