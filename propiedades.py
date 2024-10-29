@@ -9,6 +9,16 @@ class Propiedades():
             tipo = var.dlggestion.ui.txtTipoProp.text().title()
             registro = conexion.Conexion.altaTipoProp(tipo)
             if registro:
+                mbox = QtWidgets.QMessageBox()
+                mbox.setIcon(QtWidgets.QMessageBox.Icon.Information)
+                mbox.setWindowIcon(QtGui.QIcon("./img/icono.svg"))
+                mbox.setWindowTitle('Aviso')
+                mbox.setText("Tipo añadido a la BBDD")
+                mbox.setStandardButtons(
+                    QtWidgets.QMessageBox.StandardButton.Ok)
+                mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
+                mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
+                mbox.exec()
                 var.ui.cmbTipoProp.clear()
                 var.ui.cmbTipoProp.addItems(registro)
                 var.dlggestion.ui.txtTipoProp.setText('')
