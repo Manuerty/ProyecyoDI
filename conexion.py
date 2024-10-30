@@ -248,3 +248,10 @@ class Conexion:
         except Exception as e:
             print("error bajaTipoProp", e)
             return False
+
+    def altaPropiedad(propiedad ):
+        try:
+            return
+        except Exception as e:
+            print("error altaProp", e)
+            return False

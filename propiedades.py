@@ -95,7 +95,7 @@ class Propiedades():
 
             propiedad.append(var.ui.txtPropietarioProp.text())
             propiedad.append(var.ui.txtMovilpropietarioProp.text())
-
+            conexion.Conexion.altaPropiedad(propiedad)
             print(propiedad)
 
         except Exception as error:
