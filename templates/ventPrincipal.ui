@@ -1619,7 +1619,7 @@
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_7">
                 <item>
-                 <widget class="QRadioButton" name="rbAlquiladoProp">
+                 <widget class="QRadioButton" name="rbtAlquiladoProp">
                   <property name="text">
                    <string>Alquilado</string>
                   </property>
@@ -1629,7 +1629,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="rbVendidoProp">
+                 <widget class="QRadioButton" name="rbtVendidoProp">
                   <property name="text">
                    <string>Vendido</string>
                   </property>
@@ -1639,7 +1639,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="rbDisponibleProp">
+                 <widget class="QRadioButton" name="rbtDisponibleProp">
                   <property name="text">
                    <string>Disponible</string>
                   </property>

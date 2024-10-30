@@ -49,12 +49,13 @@ class Main(QtWidgets.QMainWindow):
         '''
 
         var.ui.btnGrabarCli.clicked.connect(clientes.Clientes.altaCliente)
+        var.ui.btnModifiCli.clicked.connect(clientes.Clientes.modifCliente)
+        var.ui.btnDelCli.clicked.connect(clientes.Clientes.bajaCliente)
         var.ui.btnAltaCli.clicked.connect(lambda: eventos.Eventos.abrirCalendar(0, 0))
         var.ui.btnBajaCli.clicked.connect(lambda: eventos.Eventos.abrirCalendar(0, 1))
         var.ui.btnFechaAltaProp.clicked.connect(lambda: eventos.Eventos.abrirCalendar(1, 0))
         var.ui.btnFechaBajaProp.clicked.connect(lambda: eventos.Eventos.abrirCalendar(1, 1))
-        var.ui.btnModifiCli.clicked.connect(clientes.Clientes.modifCliente)
-        var.ui.btnDelCli.clicked.connect(clientes.Clientes.bajaCliente)
+        var.ui.btnGrabarProp.clicked.connect(propiedades.Propiedades.altaPropiedad)
 
 
 
