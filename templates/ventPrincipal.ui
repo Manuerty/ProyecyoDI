@@ -1067,6 +1067,22 @@
              </widget>
             </item>
             <item>
+             <spacer name="horizontalSpacer_27">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>16</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
              <widget class="QComboBox" name="cmbTipoProp">
               <property name="minimumSize">
                <size>
@@ -1940,6 +1956,13 @@
             </property>
            </widget>
           </item>
+          <item row="4" column="9">
+           <widget class="QCheckBox" name="chkHistoriaProp">
+            <property name="text">
+             <string>Histórico</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -2043,13 +2066,6 @@
          </layout>
         </item>
         <item>
-         <widget class="Line" name="line_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QTableWidget" name="tablaProp">
           <property name="minimumSize">
            <size>
@@ -2113,6 +2129,13 @@
             <string>Tipo de Operación</string>
            </property>
           </column>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
          </widget>
         </item>
        </layout>

@@ -27,3 +27,12 @@ QPushButton:pressed {
     padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
     padding-top: 2px;
 }
+
+QHeaderView::section{
+    background-color: #FFFBE7;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px;
+    border: 1px solid black;
+}
