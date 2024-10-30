@@ -251,7 +251,33 @@ class Conexion:
 
     def altaPropiedad(propiedad ):
         try:
-            return
+            query = QtSql.QSqlQuery()
+            query.prepare("INSERT INTO propiedades (altaprop, dirprop, provprop, muniprop, tipoprop, habprop"
+                          "banoprop, superprop, precioventaprop, precioalquilerprop, cpprop,"
+                          " descriprop, tipoperprop, estadoprop, nomeprop, movilprop ) "
+                          "VALUES (:altaprop, :dirprop, :provprop, :muniprop, :tipoprop, :habprop,"
+                          " :banoprop, :superprop, :precioventaprop, :precioalquilerprop, :cpprop,"
+                          " :descriprop, :tipoperprop, :estadoprop, :nomeprop, :movilprop)")
+            query.bindValue(":altaprop", str(propiedad[0]))
+            query.bindValue(":dirprop", str(propiedad[1]))
+            query.bindValue(":provprop", str(propiedad[2]))
+            query.bindValue(":muniprop", str(propiedad[3]))
+            query.bindValue(":tipoprop", str(propiedad[4]))
+            query.bindValue(":habprop", str(propiedad[5]))
+            query.bindValue(":banoprop", str(propiedad[6]))
+            query.bindValue(":superprop", str(propiedad[7]))
+            query.bindValue(":precioventaprop", str(propiedad[8]))
+            query.bindValue(":precioalquilerprop", str(propiedad[9]))
+            query.bindValue(":cpprop", str(propiedad[10]))
+            query.bindValue(":descriprop", str(propiedad[11]))
+            query.bindValue(":tipoperprop", str(propiedad[12]))
+            query.bindValue(":estadoprop", str(propiedad[13]))
+            query.bindValue(":nomeprop", str(propiedad[14]))
+            query.bindValue(":movilprop", str(propiedad[15]))
+            if query.exec():
+                return True
+            else:
+                return False
         except Exception as e:
             print("error altaProp", e)
             return False
