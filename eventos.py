@@ -152,7 +152,7 @@ class Eventos():
         try:
             header = var.ui.tablaProp.horizontalHeader()
             for i in range(header.count()):
-                if i == 1 or i == 2 or i == 6 :
+                if i == 1 or i == 2  :
                     header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
 
                 else:

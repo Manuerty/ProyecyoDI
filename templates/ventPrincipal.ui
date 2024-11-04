@@ -2111,17 +2111,22 @@
           </column>
           <column>
            <property name="text">
-            <string>Número de Habitaciones</string>
+            <string>Habitaciones</string>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>Número de Baños</string>
+            <string>Baños</string>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>Precio</string>
+            <string>Precio Venta</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Precio Alquiler</string>
            </property>
           </column>
           <column>
