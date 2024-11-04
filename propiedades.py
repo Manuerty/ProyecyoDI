@@ -111,3 +111,11 @@ class Propiedades():
         except Exception as error:
             print('Error altaPropiedad: %s ' % str(error))
 
+    @classmethod
+    def cargaTablaPropiedades(self):
+        try:
+            query = 'SELECT * FROM propiedades'
+            conexion.Conexion.mostrarPropiedades(self, query)
+        except Exception as error:
+            print('Error cargaTablaPropiedades: %s ' % str(error)
+

@@ -283,3 +283,16 @@ class Conexion:
         except Exception as e:
             print("error altaProp", e)
             return False
+
+    def listadoPropiedades(self):
+        try:
+            listado = []
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT * FROM propiedades ORDER BY dirprop ASC ")
+            if query.exec():
+                while query.next():
+                    fila = [query.value(i) for i in range(query.record().count())]
+                    listado.append(fila)
+                return listado
+        except Exception as e:
+            print("Error listado en conexion", e)

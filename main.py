@@ -25,6 +25,7 @@ class Main(QtWidgets.QMainWindow):
         conexion.Conexion.db_conexion(self)
         #conexionserver.ConexionServer.crear_conexion(self)
         clientes.Clientes.cargaTablaClientes(self)
+        propiedades.Propiedades.cargaTablaPropiedades(self)
 
 
 
