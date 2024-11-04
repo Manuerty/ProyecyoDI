@@ -249,10 +249,11 @@ class Conexion:
             print("error bajaTipoProp", e)
             return False
 
-    def altaPropiedad(propiedad ):
+    @staticmethod
+    def altaPropiedad(propiedad):
         try:
             query = QtSql.QSqlQuery()
-            query.prepare("INSERT INTO propiedades (altaprop, dirprop, provprop, muniprop, tipoprop, habprop"
+            query.prepare("INSERT INTO propiedades (altaprop, dirprop, provprop, muniprop, tipoprop, habprop,"
                           "banoprop, superprop, precioventaprop, precioalquilerprop, cpprop,"
                           " descriprop, tipoperprop, estadoprop, nomeprop, movilprop ) "
                           "VALUES (:altaprop, :dirprop, :provprop, :muniprop, :tipoprop, :habprop,"
@@ -263,20 +264,21 @@ class Conexion:
             query.bindValue(":provprop", str(propiedad[2]))
             query.bindValue(":muniprop", str(propiedad[3]))
             query.bindValue(":tipoprop", str(propiedad[4]))
-            query.bindValue(":habprop", str(propiedad[5]))
-            query.bindValue(":banoprop", str(propiedad[6]))
-            query.bindValue(":superprop", str(propiedad[7]))
-            query.bindValue(":precioventaprop", str(propiedad[8]))
-            query.bindValue(":precioalquilerprop", str(propiedad[9]))
+            query.bindValue(":habprop", int(propiedad[5]))
+            query.bindValue(":banoprop", int(propiedad[6]))
+            query.bindValue(":superprop", float(propiedad[7]))
+            query.bindValue(":precioventaprop", float(propiedad[8]))
+            query.bindValue(":precioalquilerprop", float(propiedad[9]))
             query.bindValue(":cpprop", str(propiedad[10]))
             query.bindValue(":descriprop", str(propiedad[11]))
-            query.bindValue(":tipoperprop", str(propiedad[12]))
+            query.bindValue(":tipoperprop", ",".join(str(propiedad[12])))
             query.bindValue(":estadoprop", str(propiedad[13]))
             query.bindValue(":nomeprop", str(propiedad[14]))
             query.bindValue(":movilprop", str(propiedad[15]))
             if query.exec():
                 return True
             else:
+                print(query.lastError().text())
                 return False
         except Exception as e:
             print("error altaProp", e)

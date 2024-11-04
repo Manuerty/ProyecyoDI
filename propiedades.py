@@ -95,7 +95,17 @@ class Propiedades():
 
             propiedad.append(var.ui.txtPropietarioProp.text())
             propiedad.append(var.ui.txtMovilpropietarioProp.text())
-            conexion.Conexion.altaPropiedad(propiedad)
+            if conexion.Conexion.altaPropiedad(propiedad):
+                mbox = QtWidgets.QMessageBox()
+                mbox.setIcon(QtWidgets.QMessageBox.Icon.Information)
+                mbox.setWindowIcon(QtGui.QIcon("./img/icono.svg"))
+                mbox.setWindowTitle('Aviso')
+                mbox.setText("Propiedad añadida a la BBDD")
+                mbox.setStandardButtons(
+                    QtWidgets.QMessageBox.StandardButton.Ok)
+                mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
+                mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
+                mbox.exec()
             print(propiedad)
 
         except Exception as error:
