@@ -88,7 +88,7 @@ class Conexion:
             query.bindValue(":provcli", str(nuevocli[7]))
             query.bindValue(":municli", str(nuevocli[8]))
 
-            # NO ENTRA EN EL IF
+
             if query.exec():
                 return True
             else:
