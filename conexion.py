@@ -122,6 +122,31 @@ class Conexion:
             print("Error listado en conexion", e)
 
 
+    def listadoPropiedades(self):
+        try:
+            listado = []
+            if var.historico == 1:
+                query = QtSql.QSqlQuery()
+                query.prepare("SELECT * FROM propiedades WHERE bajaprop is NULL ORDER BY dirprop ASC ")
+
+                if query.exec():
+                    while query.next():
+                        fila = [query.value(i) for i in range(query.record().count())]
+                        listado.append(fila)
+                return listado
+            elif var.historico == 0:
+                query = QtSql.QSqlQuery()
+                query.prepare("SELECT * FROM propiedades ORDER BY dirprop ASC ")
+                if query.exec():
+                    while query.next():
+                        fila = [query.value(i) for i in range(query.record().count())]
+                        listado.append(fila)
+                return listado
+        except Exception as e:
+            print("Error listado en conexion", e)
+
+
+
     def datosOneCliente(dni):
         try:
             registro = []
@@ -271,7 +296,7 @@ class Conexion:
             query.bindValue(":precioalquilerprop", float(propiedad[9]))
             query.bindValue(":cpprop", str(propiedad[10]))
             query.bindValue(":descriprop", str(propiedad[11]))
-            query.bindValue(":tipoperprop", ",".join(str(propiedad[12])))
+            query.bindValue(":tipoperprop", ",".join((propiedad[12])))
             query.bindValue(":estadoprop", str(propiedad[13]))
             query.bindValue(":nomeprop", str(propiedad[14]))
             query.bindValue(":movilprop", str(propiedad[15]))
@@ -284,15 +309,3 @@ class Conexion:
             print("error altaProp", e)
             return False
 
-    def listadoPropiedades(self):
-        try:
-            listado = []
-            query = QtSql.QSqlQuery()
-            query.prepare("SELECT * FROM propiedades ORDER BY dirprop ASC ")
-            if query.exec():
-                while query.next():
-                    fila = [query.value(i) for i in range(query.record().count())]
-                    listado.append(fila)
-                return listado
-        except Exception as e:
-            print("Error listado en conexion", e)
