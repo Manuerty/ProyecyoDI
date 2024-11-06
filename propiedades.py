@@ -163,9 +163,9 @@ class Propiedades():
                        var.ui.cmbProvProp, var.ui.cmbMuniProp, var.ui.txtCpProp, var.ui.cmbTipoProp,
                        var.ui.spinNumhabitProp,
                        var.ui.spinNumbanProp, var.ui.txtSuperficieProp, var.ui.txtPrecioVProp, var.ui.txtPrecioAProp,
-                       var.ui.textDescriptProp, var.ui.rbtAlquiladoProp, var.ui.rbtVendidoProp,
-                       var.ui.rbtDisponibleProp,
-                       var.ui.chkAlquilerProp, var.ui.chkIntercambioProp, var.ui.chkVentaProp,
+                       var.ui.textDescriptProp,var.ui.rbtDisponibleProp,  var.ui.rbtAlquiladoProp,
+                       var.ui.rbtVendidoProp, var.ui.chkIntercambioProp,
+                       var.ui.chkAlquilerProp,  var.ui.chkVentaProp,
                        var.ui.txtPropietarioProp, var.ui.txtMovilpropietarioProp]
             for i in range(len(listado)):
                 if i in (4, 5, 7):
@@ -195,3 +195,73 @@ class Propiedades():
             print("Error cargando UNA propiedad en propiedades.", e)
 
 
+
+    @staticmethod
+    def modifPropiedad(self):
+        try:
+            propiedad = [var.ui.lblProp.text(), var.ui.txtFechaAltaProp.text(),  var.ui.txtFechaBajaProp.text(),
+                         var.ui.txtDirProp.text(), var.ui.cmbProvProp.currentText(),
+                         var.ui.cmbMuniProp.currentText(), var.ui.cmbTipoProp.currentText(),
+                         var.ui.spinNumhabitProp.text(), var.ui.spinNumbanProp.text(), var.ui.txtSuperficieProp.text(),
+                         var.ui.txtPrecioVProp.text(), var.ui.txtPrecioAProp.text(), var.ui.txtCpProp.text(),
+                         var.ui.textDescriptProp.toPlainText()]
+            tipoOper = []
+            if var.ui.chkAlquilerProp.isChecked():
+                tipoOper.append(var.ui.chkAlquilerProp.text())
+            if var.ui.chkVentaProp.isChecked():
+                tipoOper.append(var.ui.chkVentaProp.text())
+            if var.ui.chkIntercambioProp.isChecked():
+                tipoOper.append(var.ui.chkIntercambioProp.text())
+            propiedad.append(tipoOper)
+            if var.ui.rbtDisponibleProp.isChecked():
+                propiedad.append(var.ui.rbtDisponibleProp.text())
+            elif var.ui.rbtAlquiladoProp.isChecked():
+                propiedad.append(var.ui.rbtAlquiladoProp.text())
+            elif var.ui.rbtVendidoProp.isChecked():
+                propiedad.append(var.ui.rbtVendidoProp.text())
+
+            propiedad.append(var.ui.txtPropietarioProp.text())
+            propiedad.append(var.ui.txtMovilpropietarioProp.text())
+
+            if propiedad[2] != "" and Propiedades.checkFechasProp(propiedad):
+                mbox = eventos.Eventos.crearMensajeError("Error",
+                                                         "La fecha de baja no puede ser posterior a la fecha de alta.")
+                mbox.exec()
+            elif Propiedades.checkDatosVaciosModifProp(propiedad) and conexion.Conexion.modifPropiedad(propiedad):
+                mbox = eventos.Eventos.crearMensajeInfo("Aviso", "Se ha modificado la propiedad correctamente.")
+                mbox.exec()
+                Propiedades.cargaTablaPropiedades(self)
+            elif not Propiedades.checkDatosVaciosModifProp(propiedad):
+                mbox = eventos.Eventos.crearMensajeError("Error", "Hay algunos campos obligatorios que están vacíos.")
+                mbox.exec()
+            else:
+                mbox = eventos.Eventos.crearMensajeError("Error", "Se ha producido un error al modificar la propiedad")
+                mbox.exec()
+
+        except Exception as e:
+            print("Error modificando cliente en propiedades.", e)
+
+
+    @staticmethod
+    def checkDatosVaciosModifProp(datosPropiedades):
+        datos = datosPropiedades[:]
+        descripcion = datos.pop(13)
+        precio_venta = datos.pop(11)
+        precio_alquiler = datos.pop(10)
+        num_banos = datos.pop(8)
+        num_habitaciones = datos.pop(7)
+        fecha_baja = datos.pop(2)
+
+        for dato in datos:
+            if dato == "" or dato is None:
+                return False
+        return True
+
+
+    @staticmethod
+    def checkFechasProp(datosPropiedades):
+        datos = datosPropiedades[:]
+        if datos[1] > datos[2]:  # si fecha de alta es posterior a fecha de baja devuelve false
+            return False
+        else:
+            return True

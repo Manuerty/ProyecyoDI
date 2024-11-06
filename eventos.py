@@ -275,3 +275,40 @@ class Eventos():
             var.ui.cmbTipoProp.addItems(registro)
         except Exception as error:
             print('Error cargarTipoProp: %s ' % str(error))
+
+    @staticmethod
+    def crearMensajeSalida(titulo_ventana, mensaje):
+        mbox = QtWidgets.QMessageBox()
+        mbox.setIcon(QtWidgets.QMessageBox.Icon.Question)
+        mbox.setWindowIcon(QtGui.QIcon('./img/icono.svg'))
+        mbox.setText(mensaje)
+        mbox.setWindowTitle(titulo_ventana)
+        mbox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No)
+        mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.No)
+        mbox.button(QtWidgets.QMessageBox.StandardButton.Yes).setText('Sí')
+        mbox.button(QtWidgets.QMessageBox.StandardButton.No).setText('No')
+        return mbox
+
+    @staticmethod
+    def crearMensajeInfo(titulo_ventana, mensaje):
+        mbox = QtWidgets.QMessageBox()
+        mbox.setIcon(QtWidgets.QMessageBox.Icon.Information)
+        mbox.setWindowIcon(QtGui.QIcon('img/icono.svg'))
+        mbox.setWindowTitle(titulo_ventana)
+        mbox.setText(mensaje)
+        mbox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+        mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
+        mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
+        return mbox
+
+    @staticmethod
+    def crearMensajeError(titulo_ventana, mensaje):
+        mbox = QtWidgets.QMessageBox()
+        mbox.setIcon(QtWidgets.QMessageBox.Icon.Critical)
+        mbox.setWindowIcon(QtGui.QIcon('img/icono.svg'))
+        mbox.setWindowTitle(titulo_ventana)
+        mbox.setText(mensaje)
+        mbox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+        mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
+        mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
+        return mbox

@@ -58,6 +58,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.btnFechaAltaProp.clicked.connect(lambda: eventos.Eventos.abrirCalendar(1, 0))
         var.ui.btnFechaBajaProp.clicked.connect(lambda: eventos.Eventos.abrirCalendar(1, 1))
         var.ui.btnGrabarProp.clicked.connect(propiedades.Propiedades.altaPropiedad)
+        var.ui.btnModifProp.clicked.connect(propiedades.Propiedades.modifPropiedad)
 
 
 

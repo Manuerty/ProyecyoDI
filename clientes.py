@@ -182,6 +182,8 @@ class Clientes:
         except Exception as error:
             print("Error en modifiCliente: ", error)
 
+
+
     def bajaCliente(self):
         try:
 
