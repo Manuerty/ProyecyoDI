@@ -265,3 +265,21 @@ class Propiedades():
             return False
         else:
             return True
+
+    @staticmethod
+    def bajaPropiedad(self):
+        propiedad = [var.ui.lblProp.text(), var.ui.txtFechaAltaProp.text(), var.ui.txtFechaBajaProp.text()]
+
+        if Propiedades.checkFechasProp(propiedad) and conexion.Conexion.bajaProp(propiedad):
+            mbox = eventos.Eventos.crearMensajeInfo("Aviso", "Se ha dado de baja la propiedad.")
+            mbox.exec()
+            Propiedades.cargaTablaPropiedades(self)
+        elif propiedad[2] == "" or propiedad[2] is None:
+            mbox = eventos.Eventos.crearMensajeError("Error", "Es necesario elegir una fecha para dar de baja la propiedad.")
+            mbox.exec()
+        elif not Propiedades.checkFechasProp(propiedad):
+            mbox = eventos.Eventos.crearMensajeError("Error", "La fecha de baja no puede ser anterior a la fecha de alta.")
+            mbox.exec()
+        else:
+            mbox = eventos.Eventos.crearMensajeError("Error", "Se ha producido un error al dar de baja la propiedad.")
+            mbox.exec()

@@ -2,10 +2,11 @@ import os
 from datetime import datetime
 
 from PyQt6 import QtSql, QtWidgets, QtCore
-from PyQt6 import QtGui
+
 
 import eventos
 import var
+
 
 
 class Conexion:
@@ -360,4 +361,30 @@ class Conexion:
         except Exception as e:
             print("error altaProp", e)
             return False
+
+
+    @staticmethod
+    def bajaProp(propiedad):
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("select count(*) from Propiedades where codigo = :codigo")
+            query.bindValue(":codigo", propiedad[0])
+            if query.exec() and query.next():
+                count = query.value(0)
+                if count == 1:  # verificamos que solo nos devuelve un resultado a consulta, por tanto la propiedad existe.
+                    query.prepare("update Propiedades set bajaprop =:baja where codigo = :codigo ")
+                    query.bindValue(":codigo", str(propiedad[0]))
+                    query.bindValue(":baja", str(propiedad[2]))  # dejamos el segundo espacio del array para fecha de alta, y comprobar mas tarde que no sea posterior a fecha de baja
+                    if query.exec():
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
+            else:
+                return False
+
+        except Exception as e:
+            print("Error al dar de baja propiedad en conexión.", e)
+
 

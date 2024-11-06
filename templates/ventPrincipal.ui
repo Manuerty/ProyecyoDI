@@ -2045,7 +2045,7 @@
            </widget>
           </item>
           <item alignment="Qt::AlignHCenter">
-           <widget class="QPushButton" name="btnDelfProp">
+           <widget class="QPushButton" name="btnDelProp">
             <property name="minimumSize">
              <size>
               <width>80</width>
