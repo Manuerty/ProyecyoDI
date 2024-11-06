@@ -216,16 +216,44 @@ class Eventos():
 
     def limpiarPanel(self):
         try:
-            objetospanelcli = [var.ui.txtDniCli, var.ui.txtAltaCli, var.ui.txtApelCli, var.ui.txtNomCli,
-                        var.ui.txtEmailCli, var.ui.txtMovilCli,var.ui.txtDirCli, var.ui.cmbProCli,
-                        var.ui.cmbMuniCli, var.ui.txtBajaCli]
-            for i, dato in enumerate(objetospanelcli):
-                if i == 7 or i == 8:
-                    pass
-                else:
-                    dato.setText('')
+            current_index = var.ui.panPrincipal.currentIndex()
 
-            eventos.Eventos.cargarProvincias(self)
+            if current_index == 0:
+                objetospanelcli = [var.ui.txtDniCli, var.ui.txtAltaCli, var.ui.txtApelCli, var.ui.txtNomCli,
+                            var.ui.txtEmailCli, var.ui.txtMovilCli,var.ui.txtDirCli, var.ui.cmbProCli,
+                            var.ui.cmbMuniCli, var.ui.txtBajaCli]
+                for i, dato in enumerate(objetospanelcli):
+                    if i == 7 or i == 8:
+                        pass
+                    else:
+                        dato.setText('')
+
+                eventos.Eventos.cargarProvincias(self)
+            elif current_index == 1:
+                listado = [var.ui.lblProp, var.ui.txtFechaAltaProp, var.ui.txtFechaBajaProp, var.ui.txtDirProp,
+                           var.ui.cmbProvProp, var.ui.cmbMuniProp, var.ui.txtCpProp, var.ui.cmbTipoProp,
+                           var.ui.spinNumhabitProp,
+                           var.ui.spinNumbanProp, var.ui.txtSuperficieProp, var.ui.txtPrecioVProp,
+                           var.ui.txtPrecioAProp,
+                           var.ui.textDescriptProp, var.ui.rbtDisponibleProp, var.ui.rbtAlquiladoProp,
+                           var.ui.rbtVendidoProp, var.ui.chkIntercambioProp,
+                           var.ui.chkAlquilerProp, var.ui.chkVentaProp,
+                           var.ui.txtPropietarioProp, var.ui.txtMovilpropietarioProp]
+
+                for i, dato in enumerate(listado):
+                    if i not in {4,5,7,8,9,14,15,16,17,18,19}:
+                        dato.setText('')
+                    if i in {8,9}:
+                        dato.setValue(0)
+                    if i in {14}:
+                        dato.setChecked(True)
+                    if i in {15,16}:
+                        dato.setChecked(False)
+                    if i in {17,18,19}:
+                        dato.setChecked(False)
+
+                eventos.Eventos.cargarProvinciasProp(self)
+
         except Exception as error:
             print("Error en limpiar panel", error)
 
