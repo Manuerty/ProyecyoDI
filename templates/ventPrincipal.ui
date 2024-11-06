@@ -865,7 +865,7 @@
              <widget class="QLabel" name="lblProp">
               <property name="minimumSize">
                <size>
-                <width>0</width>
+                <width>75</width>
                 <height>0</height>
                </size>
               </property>
@@ -876,15 +876,28 @@
                </size>
               </property>
               <property name="styleSheet">
-               <string notr="true"/>
+               <string notr="true">background-color: rgb(189, 189, 189);</string>
               </property>
               <property name="text">
                <string/>
               </property>
               <property name="alignment">
-               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_28">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </item>
@@ -2075,6 +2088,9 @@
           </property>
           <property name="autoFillBackground">
            <bool>false</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
           </property>
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
