@@ -127,7 +127,7 @@ class Conexion:
             listado = []
             if var.historico == 1:
                 query = QtSql.QSqlQuery()
-                query.prepare("SELECT * FROM propiedades WHERE bajaprop is NULL ORDER BY dirprop ASC ")
+                query.prepare("SELECT * FROM propiedades WHERE bajaprop is NULL ORDER BY codigo ASC ")
 
                 if query.exec():
                     while query.next():
@@ -161,6 +161,21 @@ class Conexion:
 
         except Exception as error:
             print("error en datosOneCliente ", error)
+
+    def datosOnePropiedad(codigo):
+        try:
+            registro = []
+            query = QtSql.QSqlQuery()
+            query.prepare('SELECT * FROM propiedades WHERE codigo = :codigo')
+            query.bindValue(':codigo', str(codigo))
+            if query.exec():
+                while query.next():
+                    for i in range(query.record().count()):
+                        registro.append(query.value(i))
+            return registro
+
+        except Exception as error:
+            print("error en datosOnePropiedad ", error)
 
     def modifCliente(registro):
         try:
@@ -291,9 +306,9 @@ class Conexion:
             query.bindValue(":tipoprop", str(propiedad[4]))
             query.bindValue(":habprop", int(propiedad[5]))
             query.bindValue(":banoprop", int(propiedad[6]))
-            query.bindValue(":superprop", float(propiedad[7]))
-            query.bindValue(":precioventaprop", float(propiedad[8]))
-            query.bindValue(":precioalquilerprop", float(propiedad[9]))
+            query.bindValue(":superprop", str(propiedad[7]))
+            query.bindValue(":precioventaprop", str(propiedad[8]))
+            query.bindValue(":precioalquilerprop", str(propiedad[9]))
             query.bindValue(":cpprop", str(propiedad[10]))
             query.bindValue(":descriprop", str(propiedad[11]))
             query.bindValue(":tipoperprop", ",".join((propiedad[12])))

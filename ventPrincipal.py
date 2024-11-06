@@ -329,7 +329,7 @@ class Ui_ventPrincipal(object):
         self.lblProp.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.lblProp.setStyleSheet("")
         self.lblProp.setText("")
-        self.lblProp.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.lblProp.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.lblProp.setObjectName("lblProp")
         self.horizontalLayout_3.addWidget(self.lblProp)
         self.gridLayout_3.addLayout(self.horizontalLayout_3, 0, 1, 1, 1)

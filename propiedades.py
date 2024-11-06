@@ -1,6 +1,7 @@
 from xml.sax.handler import property_interning_dict
 
 import conexion
+import eventos
 import var
 from PyQt6 import QtWidgets, QtGui, QtCore
 
@@ -106,6 +107,8 @@ class Propiedades():
                 mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
                 mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
                 mbox.exec()
+                Propiedades.cargaTablaPropiedades(self)
+                eventos.Eventos.clearCamposProp(self)
             else:
                 mbox = QtWidgets.QMessageBox()
                 mbox.setIcon(QtWidgets.QMessageBox.Icon.Critical)
@@ -117,7 +120,6 @@ class Propiedades():
                 mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
                 mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
                 mbox.exec()
-                Propiedades.cargaTablaPropiedades(self)
         except Exception as error:
             print('Error altaPropiedad: %s ' % str(error))
 
@@ -147,14 +149,49 @@ class Propiedades():
                 var.ui.tablaProp.item(index, 5).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
                 var.ui.tablaProp.item(index, 6).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
                 var.ui.tablaProp.item(index, 7).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
-
-
-
-
-
-
-
                 index += 1
         except Exception as error:
             print('Error cargaTablaPropiedades: %s ' % str(error))
+
+    @staticmethod
+    def cargaOnePropiedad():
+        try:
+            fila = var.ui.tablaProp.selectedItems()
+            datos = [dato.text() for dato in fila]
+            registro = conexion.Conexion.datosOnePropiedad((datos[0]))
+            listado = [var.ui.lblProp, var.ui.txtFechaAltaProp, var.ui.txtFechaBajaProp, var.ui.txtDirProp,
+                       var.ui.cmbProvProp, var.ui.cmbMuniProp, var.ui.txtCpProp, var.ui.cmbTipoProp,
+                       var.ui.spinNumhabitProp,
+                       var.ui.spinNumbanProp, var.ui.txtSuperficieProp, var.ui.txtPrecioVProp, var.ui.txtPrecioAProp,
+                       var.ui.textDescriptProp, var.ui.rbtAlquiladoProp, var.ui.rbtVendidoProp,
+                       var.ui.rbtDisponibleProp,
+                       var.ui.chkAlquilerProp, var.ui.chkIntercambioProp, var.ui.chkVentaProp,
+                       var.ui.txtPropietarioProp, var.ui.txtMovilpropietarioProp]
+            for i in range(len(listado)):
+                if i in (4, 5, 7):
+                    listado[i].setCurrentText(registro[i])
+                elif i in (8, 9):
+                    listado[i].setValue(int(registro[i]))
+                elif i == 13:
+                    listado[i].setPlainText(registro[i])
+                elif i == 14:
+                    listado[i].setChecked(registro[15] == "Disponible")
+                elif i == 15:
+                    listado[i].setChecked(registro[15] == "Alquilado")
+                elif i == 16:
+                    listado[i].setChecked(registro[15] == "Vendido")
+                elif i in (17, 18, 19):
+                    listado[17].setChecked("Intercambio" in registro[14])
+                    listado[18].setChecked("Alquiler" in registro[14])
+                    listado[19].setChecked("Venta" in registro[14])
+                elif i == 20:
+                    listado[i].setText(registro[16])
+                elif i == 21:
+                    listado[i].setText(registro[17])
+                else:
+                    listado[i].setText(str(registro[i]))  # Convert to string
+
+        except Exception as e:
+            print("Error cargando UNA propiedad en propiedades.", e)
+
 

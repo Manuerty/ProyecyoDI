@@ -239,6 +239,28 @@ class Eventos():
         var.ui.txtDirCli.setText(None)
         var.ui.cmbProCli.setCurrentIndex(0)
 
+    def clearCamposProp(self):
+        var.ui.lblProp.setText(None)
+        var.ui.txtFechaAltaProp.setText(None)
+        var.ui.txtDirProp.setText(None)
+        var.ui.cmbProvProp.setCurrentIndex(0)
+        var.ui.cmbMuniProp.setCurrentIndex(0)
+        var.ui.txtCpProp.setText(None)
+        var.ui.cmbTipoProp.setCurrentIndex(0)
+        var.ui.spinNumhabitProp.setValue(0)
+        var.ui.spinNumbanProp.setValue(0)
+        var.ui.txtSuperficieProp.setText(None)
+        var.ui.txtPrecioVProp.setText(None)
+        var.ui.txtPrecioAProp.setText(None)
+        var.ui.textDescriptProp.setText(None)
+        var.ui.txtPropietarioProp.setText(None)
+        var.ui.txtMovilpropietarioProp.setText(None)
+        var.ui.chkAlquilerProp.setChecked(False)
+        var.ui.chkIntercambioProp.setChecked(False)
+        var.ui.chkVentaProp.setChecked(False)
+        var.ui.rbtAlquiladoProp.setChecked(False)
+        var.ui.rbtVendidoProp.setChecked(False)
+
     def abrirTipoProp(self):
         try:
             var.dlggestion.show()

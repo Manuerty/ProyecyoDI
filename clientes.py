@@ -131,7 +131,7 @@ class Clientes:
                 if i ==  7 or i == 8 :
                     listado[i].setCurrentText(registro[i])
                 else:
-                    listado[i].setText((registro[i]))
+                    listado[i].setText(registro[i])
             return registro
 
         except Exception as error:
