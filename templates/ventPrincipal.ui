@@ -27,6 +27,12 @@
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <widget class="QTabWidget" name="panPrincipal">
+      <property name="minimumSize">
+       <size>
+        <width>1522</width>
+        <height>1028</height>
+       </size>
+      </property>
       <property name="styleSheet">
        <string notr="true"/>
       </property>
@@ -1112,6 +1118,35 @@
              </widget>
             </item>
             <item>
+             <widget class="QPushButton" name="btnBuscarTipoProp">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../img/lupa.ico</normaloff>../img/lupa.ico</iconset>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="horizontalSpacer_26">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1983,10 +2018,13 @@
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>40</height>
+            <height>20</height>
            </size>
           </property>
          </spacer>
@@ -2079,6 +2117,13 @@
          </layout>
         </item>
         <item>
+         <widget class="Line" name="line_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QTableWidget" name="tablaProp">
           <property name="minimumSize">
            <size>
@@ -2092,6 +2137,15 @@
           <property name="styleSheet">
            <string notr="true"/>
           </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOn</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOn</enum>
+          </property>
+          <property name="autoScrollMargin">
+           <number>14</number>
+          </property>
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>
@@ -2100,6 +2154,12 @@
           </property>
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="verticalScrollMode">
+           <enum>QAbstractItemView::ScrollPerPixel</enum>
+          </property>
+          <property name="rowCount">
+           <number>15</number>
           </property>
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>150</number>
@@ -2110,6 +2170,21 @@
           <attribute name="verticalHeaderVisible">
            <bool>false</bool>
           </attribute>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
+          <row/>
           <column>
            <property name="text">
             <string>Código</string>
@@ -2239,8 +2314,7 @@
   <action name="actionbarSalir">
    <property name="icon">
     <iconset>
-     <normalon>../img/Salir.ico</normalon>
-    </iconset>
+     <normaloff>../img/Salir.ico</normaloff>../img/Salir.ico</iconset>
    </property>
    <property name="text">
     <string>barSalir</string>
@@ -2275,6 +2349,9 @@
    </property>
    <property name="shortcut">
     <string>Alt+R</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
   <action name="actionTipoPropiedad">

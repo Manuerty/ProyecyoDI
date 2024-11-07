@@ -1,3 +1,4 @@
+import datetime
 from xml.sax.handler import property_interning_dict
 
 import conexion
@@ -131,9 +132,9 @@ class Propiedades():
                 var.ui.tablaProp.setRowCount(index + 1)
                 var.ui.tablaProp.setItem(index, 0, QtWidgets.QTableWidgetItem(str(registro[0])))
                 var.ui.tablaProp.setItem(index, 1, QtWidgets.QTableWidgetItem(str(registro[5])))
-                var.ui.tablaProp.setItem(index, 2, QtWidgets.QTableWidgetItem(str(registro[6])))
-                var.ui.tablaProp.setItem(index, 3, QtWidgets.QTableWidgetItem(str(registro[7])))
-                var.ui.tablaProp.setItem(index, 4, QtWidgets.QTableWidgetItem(str(registro[8])))
+                var.ui.tablaProp.setItem(index, 2, QtWidgets.QTableWidgetItem(str(registro[7])))
+                var.ui.tablaProp.setItem(index, 3, QtWidgets.QTableWidgetItem(str(registro[8])))
+                var.ui.tablaProp.setItem(index, 4, QtWidgets.QTableWidgetItem(str(registro[9])))
                 if registro[10] == "":
                     registro[10] = "-"
                 elif registro[11] == "":
@@ -223,7 +224,7 @@ class Propiedades():
             propiedad.append(var.ui.txtPropietarioProp.text())
             propiedad.append(var.ui.txtMovilpropietarioProp.text())
 
-            if propiedad[2] != "" and Propiedades.checkFechasProp(propiedad):
+            if propiedad[2] != "" and Propiedades.esFechasValidas(propiedad):
                 mbox = eventos.Eventos.crearMensajeError("Error",
                                                          "La fecha de baja no puede ser posterior a la fecha de alta.")
                 mbox.exec()
@@ -259,27 +260,31 @@ class Propiedades():
 
 
     @staticmethod
-    def checkFechasProp(datosPropiedades):
+    def esFechasValidas(datosPropiedades):
         datos = datosPropiedades[:]
-        if datos[1] > datos[2]:  # si fecha de alta es posterior a fecha de baja devuelve false
-            return False
-        else:
-            return True
+        alta = datos[1]
+        baja = datos[2]
+
+        fecha_alta = datetime.datetime.strptime(alta, "%d/%m/%Y")
+        fecha_baja = datetime.datetime.strptime(baja, "%d/%m/%Y")
+
+        return fecha_alta < fecha_baja
 
     @staticmethod
     def bajaPropiedad(self):
         propiedad = [var.ui.lblProp.text(), var.ui.txtFechaAltaProp.text(), var.ui.txtFechaBajaProp.text()]
 
-        if Propiedades.checkFechasProp(propiedad) and conexion.Conexion.bajaProp(propiedad):
+        if Propiedades.esFechasValidas(propiedad) and conexion.Conexion.bajaProp(propiedad):
             mbox = eventos.Eventos.crearMensajeInfo("Aviso", "Se ha dado de baja la propiedad.")
             mbox.exec()
             Propiedades.cargaTablaPropiedades(self)
         elif propiedad[2] == "" or propiedad[2] is None:
             mbox = eventos.Eventos.crearMensajeError("Error", "Es necesario elegir una fecha para dar de baja la propiedad.")
             mbox.exec()
-        elif not Propiedades.checkFechasProp(propiedad):
+        elif not Propiedades.esFechasValidas(propiedad):
             mbox = eventos.Eventos.crearMensajeError("Error", "La fecha de baja no puede ser anterior a la fecha de alta.")
             mbox.exec()
         else:
             mbox = eventos.Eventos.crearMensajeError("Error", "Se ha producido un error al dar de baja la propiedad.")
             mbox.exec()
+

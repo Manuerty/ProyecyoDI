@@ -60,6 +60,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.btnGrabarProp.clicked.connect(propiedades.Propiedades.altaPropiedad)
         var.ui.btnModifProp.clicked.connect(propiedades.Propiedades.modifPropiedad)
         var.ui.btnDelProp.clicked.connect(propiedades.Propiedades.bajaPropiedad)
+        var.ui.btnBuscarTipoProp.clicked.connect(propiedades.Propiedades.cargaTablaPropiedades)
 
 
 
@@ -94,6 +95,7 @@ class Main(QtWidgets.QMainWindow):
         Zona de eventos de los checkbox
         '''
         var.ui.chkHistoriaCli.stateChanged.connect(clientes.Clientes.historicoCli)
+        var.ui.chkHistoriaProp.stateChanged.connect(propiedades.Propiedades.cargaTablaPropiedades)
 
 
 

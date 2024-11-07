@@ -13,10 +13,10 @@ class Conexion:
 
     '''
 
-    método de una clase que no depende de una instancia específica de esa clase. 
-    Se puede llamarlo directamente a través de la clase, sin necesidad de crear un objeto de esa clase. 
+    método de una clase que no depende de una instancia específica de esa clase.
+    Se puede llamarlo directamente a través de la clase, sin necesidad de crear un objeto de esa clase.
     Es útil en comportamientos o funcionalidades que son más a una clase en general que a una instancia en particular.
-    
+
     '''
 
     @staticmethod
@@ -123,29 +123,52 @@ class Conexion:
             print("Error listado en conexion", e)
 
 
+
     def listadoPropiedades(self):
         try:
             listado = []
-            if var.historico == 1:
+            historico = var.ui.chkHistoriaProp.isChecked()
+            municipio = var.ui.cmbMuniProp.currentText()
+            filtrado = var.ui.btnBuscarTipoProp.isChecked()
+            tipoSeleccionado = var.ui.cmbTipoProp.currentText()
+            if not historico and filtrado:
                 query = QtSql.QSqlQuery()
-                query.prepare("SELECT * FROM propiedades WHERE bajaprop is NULL ORDER BY codigo ASC ")
+                query.prepare(
+                    "SELECT * FROM PROPIEDADES where bajaprop is null and estadoprop = 'Disponible' and tipoprop = :tipo_propiedad  and muniprop = :municipio order by muniprop asc")
+                query.bindValue(":tipo_propiedad", str(tipoSeleccionado))
+                query.bindValue(":municipio", str(municipio))
+                if query.exec():
+                    while query.next():
+                        fila = [query.value(i) for i in range(query.record().count())]
+                        listado.append(fila)
+            elif historico and not filtrado:
+                query = QtSql.QSqlQuery()
+                query.prepare("SELECT * FROM propiedades ORDER BY muniprop ASC")
+                if query.exec():
+                    while query.next():
+                        fila = [query.value(i) for i in range(query.record().count())]
+                        listado.append(fila)
+            elif historico and filtrado:
+                query = QtSql.QSqlQuery()
+                query.prepare(
+                    "SELECT * FROM PROPIEDADES where estadoprop = 'Disponible' and tipoprop = :tipo_propiedad and muniprop = :municipio order by muniprop asc")
+                query.bindValue(":tipo_propiedad", str(tipoSeleccionado))
+                query.bindValue(":municipio", str(municipio))
+                if query.exec():
+                    while query.next():
+                        fila = [query.value(i) for i in range(query.record().count())]
+                        listado.append(fila)
+            else:
+                query = QtSql.QSqlQuery()
+                query.prepare("SELECT * FROM propiedades where bajaprop is null ORDER BY muniprop ASC")
+                if query.exec():
+                    while query.next():
+                        fila = [query.value(i) for i in range(query.record().count())]
+                        listado.append(fila)
+            return listado
 
-                if query.exec():
-                    while query.next():
-                        fila = [query.value(i) for i in range(query.record().count())]
-                        listado.append(fila)
-                return listado
-            elif var.historico == 0:
-                query = QtSql.QSqlQuery()
-                query.prepare("SELECT * FROM propiedades ORDER BY dirprop ASC ")
-                if query.exec():
-                    while query.next():
-                        fila = [query.value(i) for i in range(query.record().count())]
-                        listado.append(fila)
-                return listado
         except Exception as e:
-            print("Error listado en conexion", e)
-
+            print("Error al listar propiedades en listadoPropiedades", e)
 
 
     def datosOneCliente(dni):
