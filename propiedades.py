@@ -135,12 +135,12 @@ class Propiedades():
                 var.ui.tablaProp.setItem(index, 2, QtWidgets.QTableWidgetItem(str(registro[7])))
                 var.ui.tablaProp.setItem(index, 3, QtWidgets.QTableWidgetItem(str(registro[8])))
                 var.ui.tablaProp.setItem(index, 4, QtWidgets.QTableWidgetItem(str(registro[9])))
-                if registro[10] == "":
-                    registro[10] = "-"
-                elif registro[11] == "":
+                if registro[11] == "":
                     registro[11] = "-"
-                var.ui.tablaProp.setItem(index, 5, QtWidgets.QTableWidgetItem(str(registro[10]) + "€"))
-                var.ui.tablaProp.setItem(index, 6, QtWidgets.QTableWidgetItem(str(registro[11]) + "€"))
+                elif registro[12] == "":
+                    registro[12] = "-"
+                var.ui.tablaProp.setItem(index, 5, QtWidgets.QTableWidgetItem(str(registro[11]) + "€"))
+                var.ui.tablaProp.setItem(index, 6, QtWidgets.QTableWidgetItem(str(registro[12]) + "€"))
                 var.ui.tablaProp.setItem(index, 7, QtWidgets.QTableWidgetItem(str(registro[14])))
                 var.ui.tablaProp.item(index, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
                 var.ui.tablaProp.item(index, 1).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
