@@ -101,7 +101,7 @@ class Main(QtWidgets.QMainWindow):
         '''
         var.ui.chkHistoriaCli.stateChanged.connect(clientes.Clientes.historicoCli)
         var.ui.chkHistoriaProp.stateChanged.connect(propiedades.Propiedades.cargaTablaPropiedades)
-        var.ui.chkIntercambioProp.setChecked(True)
+        propiedades.Propiedades.manageChkBox(self)
 
 
 

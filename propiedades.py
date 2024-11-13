@@ -296,8 +296,6 @@ class Propiedades():
             var.ui.chkAlquilerProp.setChecked(False)
             var.ui.chkAlquilerProp.setEnabled(False)
         else:
-            var.ui.chkIntercambioProp.setChecked(False)
-            var.ui.chkIntercambioProp.setEnabled(False)
             var.ui.chkAlquilerProp.setChecked(True)
             var.ui.chkAlquilerProp.setEnabled(True)
 
@@ -305,8 +303,6 @@ class Propiedades():
             var.ui.chkVentaProp.setChecked(False)
             var.ui.chkVentaProp.setEnabled(False)
         else:
-            var.ui.chkIntercambioProp.setChecked(False)
-            var.ui.chkIntercambioProp.setEnabled(False)
             var.ui.chkVentaProp.setChecked(True)
             var.ui.chkVentaProp.setEnabled(True)
 
