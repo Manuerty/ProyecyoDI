@@ -292,23 +292,20 @@ class Propiedades():
 
 
     def manageChkBox(self):
+        var.ui.chkAlquilerProp.setEnabled(False)
+        var.ui.chkVentaProp.setEnabled(False)
         if var.ui.txtPrecioAProp.text() == "":
             var.ui.chkAlquilerProp.setChecked(False)
-            var.ui.chkAlquilerProp.setEnabled(False)
         else:
             var.ui.chkAlquilerProp.setChecked(True)
-            var.ui.chkAlquilerProp.setEnabled(True)
 
         if var.ui.txtPrecioVProp.text() == "":
             var.ui.chkVentaProp.setChecked(False)
-            var.ui.chkVentaProp.setEnabled(False)
         else:
             var.ui.chkVentaProp.setChecked(True)
-            var.ui.chkVentaProp.setEnabled(True)
 
         if var.ui.txtPrecioAProp.text() == "" and var.ui.txtPrecioVProp.text() == "":
             var.ui.chkIntercambioProp.setChecked(True)
-            var.ui.chkIntercambioProp.setEnabled(True)
 
     def manageRadioButtons(self):
         if var.ui.txtFechaBajaProp.text() == "":
