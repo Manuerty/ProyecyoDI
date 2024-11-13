@@ -2314,6 +2314,9 @@
    <property name="text">
     <string>Crear BackUp</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
   </action>
   <action name="actionRestaurar_BackUp">
    <property name="text">

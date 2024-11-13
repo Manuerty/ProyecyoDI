@@ -985,6 +985,7 @@ class Ui_ventPrincipal(object):
         self.toolBar.setWindowTitle(_translate("ventPrincipal", "toolBar"))
         self.actionSalir.setText(_translate("ventPrincipal", "Salir"))
         self.actionCrear_BackUp.setText(_translate("ventPrincipal", "Crear BackUp"))
+        self.actionCrear_BackUp.setShortcut(_translate("ventPrincipal", "Ctrl+B"))
         self.actionRestaurar_BackUp.setText(_translate("ventPrincipal", "Restaurar BackUp"))
         self.actionbarSalir.setText(_translate("ventPrincipal", "barSalir"))
         self.actionbarSalir.setIconText(_translate("ventPrincipal", "Salir"))
