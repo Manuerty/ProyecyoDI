@@ -71,6 +71,11 @@ class Main(QtWidgets.QMainWindow):
         var.ui.txtDniCli.editingFinished.connect(lambda: clientes.Clientes.checkDNI(var.ui.txtDniCli.text()))
         var.ui.txtEmailCli.editingFinished.connect(lambda: clientes.Clientes.checkEmail(var.ui.txtEmailCli.text()))
         var.ui.txtMovilCli.editingFinished.connect(lambda: clientes.Clientes.checktelefono(var.ui.txtMovilCli.text()))
+        var.ui.txtPrecioVProp.textChanged.connect(lambda: propiedades.Propiedades.manageChkBox(self))
+        var.ui.txtPrecioAProp.textChanged.connect(lambda: propiedades.Propiedades.manageChkBox(self))
+
+
+
         '''
         Zona de eventos de los comboBox
         
@@ -96,6 +101,7 @@ class Main(QtWidgets.QMainWindow):
         '''
         var.ui.chkHistoriaCli.stateChanged.connect(clientes.Clientes.historicoCli)
         var.ui.chkHistoriaProp.stateChanged.connect(propiedades.Propiedades.cargaTablaPropiedades)
+        var.ui.chkIntercambioProp.setChecked(True)
 
 
 

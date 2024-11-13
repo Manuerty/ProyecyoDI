@@ -8,6 +8,8 @@ from PyQt6 import QtWidgets, QtGui, QtCore
 
 class Propiedades():
 
+
+
     def altaTipoPropiedad(self):
         try:
             tipo = var.dlggestion.ui.txtTipoProp.text().title()
@@ -287,6 +289,32 @@ class Propiedades():
         else:
             mbox = eventos.Eventos.crearMensajeError("Error", "Se ha producido un error al dar de baja la propiedad.")
             mbox.exec()
+
+
+    def manageChkBox(self):
+        if var.ui.txtPrecioAProp.text() == "":
+            var.ui.chkAlquilerProp.setChecked(False)
+            var.ui.chkAlquilerProp.setEnabled(False)
+        else:
+            var.ui.chkIntercambioProp.setChecked(False)
+            var.ui.chkIntercambioProp.setEnabled(False)
+            var.ui.chkAlquilerProp.setChecked(True)
+            var.ui.chkAlquilerProp.setEnabled(True)
+
+        if var.ui.txtPrecioVProp.text() == "":
+            var.ui.chkVentaProp.setChecked(False)
+            var.ui.chkVentaProp.setEnabled(False)
+        else:
+            var.ui.chkIntercambioProp.setChecked(False)
+            var.ui.chkIntercambioProp.setEnabled(False)
+            var.ui.chkVentaProp.setChecked(True)
+            var.ui.chkVentaProp.setEnabled(True)
+
+        if var.ui.txtPrecioAProp.text() == "" and var.ui.txtPrecioVProp.text() == "":
+            var.ui.chkIntercambioProp.setChecked(True)
+            var.ui.chkIntercambioProp.setEnabled(True)
+
+
 
 
 
