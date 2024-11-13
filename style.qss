@@ -51,6 +51,11 @@ QHeaderView::section{
     border: 1px solid black;
 }
 
+QRadioButton:disabled{
+        color: rgba(0, 0, 0, 0.3); /* Color más claro */
+}
+
+
 /* Checkbox deshabilitado sin estar marcado */
 QCheckBox:disabled {
     color: rgba(0, 0, 0, 0.3); /* Color más claro */
