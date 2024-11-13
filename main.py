@@ -73,6 +73,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.txtMovilCli.editingFinished.connect(lambda: clientes.Clientes.checktelefono(var.ui.txtMovilCli.text()))
         var.ui.txtPrecioVProp.textChanged.connect(lambda: propiedades.Propiedades.manageChkBox(self))
         var.ui.txtPrecioAProp.textChanged.connect(lambda: propiedades.Propiedades.manageChkBox(self))
+        var.ui.txtFechaBajaProp.textChanged.connect(lambda: propiedades.Propiedades.manageRadioButtons(self))
 
 
 
@@ -102,6 +103,13 @@ class Main(QtWidgets.QMainWindow):
         var.ui.chkHistoriaCli.stateChanged.connect(clientes.Clientes.historicoCli)
         var.ui.chkHistoriaProp.stateChanged.connect(propiedades.Propiedades.cargaTablaPropiedades)
         propiedades.Propiedades.manageChkBox(self)
+
+        '''
+        Zona de eventos de los RdioButtons
+        '''
+
+        propiedades.Propiedades.manageRadioButtons(self)
+
 
 
 

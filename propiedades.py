@@ -310,7 +310,20 @@ class Propiedades():
             var.ui.chkIntercambioProp.setChecked(True)
             var.ui.chkIntercambioProp.setEnabled(True)
 
-
+    def manageRadioButtons(self):
+        if var.ui.txtFechaBajaProp.text() == "":
+            var.ui.rbtDisponibleProp.setEnabled(True)
+            var.ui.rbtDisponibleProp.setChecked(True)
+            var.ui.rbtAlquiladoProp.setChecked(False)
+            var.ui.rbtVendidoProp.setChecked(False)
+            var.ui.rbtAlquiladoProp.setEnabled(False)
+            var.ui.rbtVendidoProp.setEnabled(False)
+        else:
+            var.ui.rbtDisponibleProp.setChecked(False)
+            var.ui.rbtDisponibleProp.setEnabled(False)
+            var.ui.rbtAlquiladoProp.setChecked(True)
+            var.ui.rbtAlquiladoProp.setEnabled(True)
+            var.ui.rbtVendidoProp.setEnabled(True)
 
 
 
