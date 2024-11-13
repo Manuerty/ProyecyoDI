@@ -288,3 +288,7 @@ class Propiedades():
             mbox = eventos.Eventos.crearMensajeError("Error", "Se ha producido un error al dar de baja la propiedad.")
             mbox.exec()
 
+
+
+
+
