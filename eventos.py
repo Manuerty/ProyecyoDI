@@ -1,3 +1,4 @@
+import csv
 import os.path
 import sys
 from datetime import datetime
@@ -340,3 +341,27 @@ class Eventos():
         mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
         mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
         return mbox
+
+
+
+    def exportCSVProp(self):
+        try:
+            fecha = datetime.today().strftime('%Y_%m_%d')
+            file = (str(fecha) + '_propiedades.csv')
+            directorio, fichero = var.dlgabrir.getSaveFileName(None, "Exportar Datos en CSV", file, '.csv')
+            if fichero:
+                registros = conexion.Conexion.listadoPropiedades(self)
+                with open (fichero, "w", newline='', encoding= 'utf-8') as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow(["Codigo", "Alta", "Baja", "Direccion", "Provincia", "Municipio", "CP", "Tipo", "Habitaciones",
+                    "Banos", "Superficie", "Precio Venta", "Precio Alquiler","Descripción",  "Operación", "Estado", "Propietario", "Movil"])
+                    for registro in registros:
+                        writer.writerow(registro)
+                shutil.move(fichero, directorio)
+            else:
+                eventos.Eventos.crearMensajeError('Exportar CSV', 'No se ha seleccionado ningún fichero')
+
+        except Exception as error:
+            print("error en exportar csv propiedades", error)
+
+
