@@ -1,4 +1,5 @@
 import csv
+import json
 import os.path
 import sys
 from datetime import datetime
@@ -346,11 +347,11 @@ class Eventos():
 
     def exportCSVProp(self):
         try:
-            fecha = datetime.today().strftime('%Y_%m_%d')
+            fecha = datetime.today().strftime('%Y_%m_%d_%H_%M_%S')
             file = (str(fecha) + '_propiedades.csv')
             directorio, fichero = var.dlgabrir.getSaveFileName(None, "Exportar Datos en CSV", file, '.csv')
             if fichero:
-                registros = conexion.Conexion.listadoPropiedadesCSV(self)
+                registros = conexion.Conexion.listadoPropiedadesExport(self)
                 with open (fichero, "w", newline='', encoding= 'utf-8') as csvfile:
                     writer = csv.writer(csvfile)
                     writer.writerow(["Codigo", "Alta", "Baja", "Direccion", "Provincia", "Municipio", "CP", "Tipo", "Habitaciones",
@@ -364,4 +365,60 @@ class Eventos():
         except Exception as error:
             print("error en exportar csv propiedades", error)
 
+    def exportJSONProp(self):
+        try:
+            var.historiaprop = 0
+            fecha = datetime.today().strftime('%Y_%m_%d_%H_%M_%S')
+            file = (str(fecha) + '_propiedades.json')
+            directorio, fichero = var.dlgabrir.getSaveFileName(None, "Exportar Datos en JSON", file, '.json')
+            if fichero:
+                keys = ['codigo', 'alta', 'baja', 'direccion', 'provincia', 'municipio', 'cp', 'tipo', 'habitaciones',
+                        'banos', 'superficie', 'precioventa', 'precioalquiler', 'descripcion', 'operacion', 'estado', 'propietario', 'movil']
+                registros = conexion.Conexion.listadoPropiedadesExport(self)
+                lista_propiedades = [dict(zip(keys, registro)) for registro in registros]
+                with open (fichero, "w", encoding= 'utf-8') as jsonfile:
+                    json.dump(lista_propiedades, jsonfile, ensure_ascii=False, indent=4)
+                shutil.move(fichero, directorio)
+            else:
+                eventos.Eventos.crearMensajeError('Exportar JSON', 'No se ha seleccionado ningún fichero')
+        except Exception as error:
+            print("error en exportar json porpiedades" , error)
 
+    def exportCSVClientes(self):
+        try:
+            fecha = datetime.today().strftime('%Y_%m_%d_%H_%M_%S')
+            file = (str(fecha) + '_clientes.csv')
+            directorio, fichero = var.dlgabrir.getSaveFileName(None, "Exportar Datos en CSV", file, '.csv')
+            if fichero:
+                registros = conexion.Conexion.listadoClientesExport(self)
+                with open (fichero, "w", newline='', encoding= 'utf-8') as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow(["DNI", "Fecha de Alta", "Fecha de Baja", "Apellidos", "Nombre","Email", "Telefono", "Direccion", "Provincia", "Municipio"])
+                    for registro in registros:
+                        writer.writerow(registro)
+                shutil.move(fichero, directorio)
+            else:
+                eventos.Eventos.crearMensajeError('Exportar CSV', 'No se ha seleccionado ningún fichero')
+
+        except Exception as error:
+            print("error en exportar csv clientes", error)
+
+
+    def exportJSONClientes(self):
+        try:
+            var.historiacli = 0
+            fecha = datetime.today().strftime('%Y_%m_%d_%H_%M_%S')
+            file = (str(fecha) + '_clientes.json')
+            directorio, fichero = var.dlgabrir.getSaveFileName(None, "Exportar Datos en JSON", file, '.json')
+            if fichero:
+                keys = ['dni', 'alta', 'baja', 'apellidos', 'nombre', 'email', 'telefono', 'direccion', 'provincia', 'municipio']
+                registros = conexion.Conexion.listadoClientesExport(self)
+                lista_clientes = [dict(zip(keys, registro)) for registro in registros]
+                with open (fichero, "w", encoding= 'utf-8') as jsonfile:
+                    json.dump(lista_clientes, jsonfile, ensure_ascii=False, indent=4)
+                shutil.move(fichero, directorio)
+            else:
+                eventos.Eventos.crearMensajeError('Exportar JSON', 'No se ha seleccionado ningún fichero')
+
+        except Exception as error:
+            print("error en exportar json clientes", error)

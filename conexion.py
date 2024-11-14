@@ -213,17 +213,17 @@ class Conexion:
                         query.prepare("UPDATE clientes SET altacli = :altacli , apelcli = :apelcli, nomecli = :nomecli, emailcli = :emailcli, movilcli = :movilcli, dircli = :dircli, provcli = :provcli, municli = :municli, bajacli = :bajacli WHERE dnicli = :dnicli")
                         query.bindValue(':dnicli', str(registro[0]))
                         query.bindValue(':altacli', str(registro[1]))
-                        query.bindValue(':apelcli', str(registro[2]))
-                        query.bindValue(':nomecli', str(registro[3]))
-                        query.bindValue(':emailcli', str(registro[4]))
-                        query.bindValue(':movilcli', str(registro[5]))
-                        query.bindValue(':dircli', str(registro[6]))
-                        query.bindValue(':provcli', str(registro[7]))
-                        query.bindValue(':municli', str(registro[8]))
-                        if registro[9] == "":
+                        query.bindValue(':apelcli', str(registro[3]))
+                        query.bindValue(':nomecli', str(registro[4]))
+                        query.bindValue(':emailcli', str(registro[5]))
+                        query.bindValue(':movilcli', str(registro[6]))
+                        query.bindValue(':dircli', str(registro[7]))
+                        query.bindValue(':provcli', str(registro[8]))
+                        query.bindValue(':municli', str(registro[9]))
+                        if registro[2] == "":
                             query.bindValue(":bajacli", QtCore.QVariant())
                         else:
-                            query.bindValue(":bajacli", str(registro[9]))
+                            query.bindValue(":bajacli", str(registro[2]))
                         if query.exec():
                             return True
                         else:
@@ -411,11 +411,22 @@ class Conexion:
             print("Error al dar de baja propiedad en conexión.", e)
 
 
-    def listadoPropiedadesCSV(self):
+    def listadoPropiedadesExport(self):
         listado = []
         query = QtSql.QSqlQuery()
         query.prepare(
             "SELECT * FROM PROPIEDADES where bajaprop is null or bajaprop is not null order by muniprop asc")
+        if query.exec():
+            while query.next():
+                fila = [query.value(i) for i in range(query.record().count())]
+                listado.append(fila)
+        return listado
+
+    def listadoClientesExport(self):
+        listado = []
+        query = QtSql.QSqlQuery()
+        query.prepare(
+            "SELECT * FROM CLIENTES where bajacli is null or bajacli is not null order by apelcli asc")
         if query.exec():
             while query.next():
                 fila = [query.value(i) for i in range(query.record().count())]

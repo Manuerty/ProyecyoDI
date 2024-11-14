@@ -100,12 +100,12 @@ class Clientes:
             for registro in listado:
                 var.ui.tablaClientes.setRowCount(index + 1)
                 var.ui.tablaClientes.setItem(index, 0, QtWidgets.QTableWidgetItem((registro[0])))
-                var.ui.tablaClientes.setItem(index, 1, QtWidgets.QTableWidgetItem((registro[2])))
-                var.ui.tablaClientes.setItem(index, 2, QtWidgets.QTableWidgetItem((registro[3])))
-                var.ui.tablaClientes.setItem(index, 3, QtWidgets.QTableWidgetItem(("  " + registro[5] + "  ")))
-                var.ui.tablaClientes.setItem(index, 4, QtWidgets.QTableWidgetItem((registro[7])))
-                var.ui.tablaClientes.setItem(index, 5, QtWidgets.QTableWidgetItem((registro[8])))
-                var.ui.tablaClientes.setItem(index, 6, QtWidgets.QTableWidgetItem(("  " + registro[9] + "  ")))
+                var.ui.tablaClientes.setItem(index, 1, QtWidgets.QTableWidgetItem((registro[3])))
+                var.ui.tablaClientes.setItem(index, 2, QtWidgets.QTableWidgetItem((registro[4])))
+                var.ui.tablaClientes.setItem(index, 3, QtWidgets.QTableWidgetItem(("  " + registro[6] + "  ")))
+                var.ui.tablaClientes.setItem(index, 4, QtWidgets.QTableWidgetItem((registro[8])))
+                var.ui.tablaClientes.setItem(index, 5, QtWidgets.QTableWidgetItem((registro[9])))
+                var.ui.tablaClientes.setItem(index, 6, QtWidgets.QTableWidgetItem(("  " + registro[2] + "  ")))
 
                 var.ui.tablaClientes.item(index, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
                 var.ui.tablaClientes.item(index, 1).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
@@ -124,11 +124,11 @@ class Clientes:
             fila = var.ui.tablaClientes.selectedItems()
             datos = [dato.text() for dato in fila]
             registro = conexion.Conexion.datosOneCliente(datos[0])
-            listado = [var.ui.txtDniCli, var.ui.txtAltaCli, var.ui.txtApelCli,
+            listado = [var.ui.txtDniCli, var.ui.txtAltaCli, var.ui.txtBajaCli,  var.ui.txtApelCli,
                         var.ui.txtNomCli, var.ui.txtEmailCli, var.ui.txtMovilCli,
-                        var.ui.txtDirCli, var.ui.cmbProCli,var.ui.cmbMuniCli, var.ui.txtBajaCli]
+                        var.ui.txtDirCli, var.ui.cmbProCli,var.ui.cmbMuniCli ]
             for i in range(len(listado)):
-                if i ==  7 or i == 8 :
+                if i ==  8 or i == 9 :
                     listado[i].setCurrentText(registro[i])
                 else:
                     listado[i].setText(registro[i])
@@ -139,10 +139,10 @@ class Clientes:
 
     def modifCliente(self):
         try:
-            modifcli = [var.ui.txtDniCli.text(), var.ui.txtAltaCli.text(), var.ui.txtApelCli.text(),
+            modifcli = [var.ui.txtDniCli.text(), var.ui.txtAltaCli.text(), var.ui.txtBajaCli.text(), var.ui.txtApelCli.text(),
                         var.ui.txtNomCli.text(), var.ui.txtEmailCli.text(), var.ui.txtMovilCli.text(),
                         var.ui.txtDirCli.text(), var.ui.cmbProCli.currentText(),
-                        var.ui.cmbMuniCli.currentText(), var.ui.txtBajaCli.text()]
+                        var.ui.cmbMuniCli.currentText()]
             if conexion.Conexion.checkUserInDb(modifcli[0]):
                 if conexion.Conexion.modifCliente(modifcli):
                     mbox = QtWidgets.QMessageBox()

@@ -95,7 +95,10 @@ class Main(QtWidgets.QMainWindow):
 
         var.ui.actionbarSalir.triggered.connect(eventos.Eventos.mensajeSalir)
         var.ui.actionbar_limpiar.triggered.connect(eventos.Eventos.limpiarPanel)
+        var.ui.actionExportar_Clientes_CSV.triggered.connect(eventos.Eventos.exportCSVClientes)
+        var.ui.actionExportar_Clientes_JSON.triggered.connect(eventos.Eventos.exportJSONClientes)
         var.ui.actionExportar_Propiedades_CSV.triggered.connect(eventos.Eventos.exportCSVProp)
+        var.ui.actionExportar_Propiedades_JSON.triggered.connect(eventos.Eventos.exportJSONProp)
 
 
         '''
