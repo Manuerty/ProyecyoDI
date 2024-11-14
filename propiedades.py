@@ -226,7 +226,7 @@ class Propiedades():
             propiedad.append(var.ui.txtPropietarioProp.text())
             propiedad.append(var.ui.txtMovilpropietarioProp.text())
 
-            if propiedad[2] != "" and Propiedades.esFechasValidas(propiedad):
+            if propiedad[2] != "" and not Propiedades.esFechasValidas(propiedad):
                 mbox = eventos.Eventos.crearMensajeError("Error",
                                                          "La fecha de baja no puede ser posterior a la fecha de alta.")
                 mbox.exec()
