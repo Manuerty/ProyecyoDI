@@ -411,3 +411,15 @@ class Conexion:
             print("Error al dar de baja propiedad en conexión.", e)
 
 
+    def listadoPropiedadesCSV(self):
+        listado = []
+        query = QtSql.QSqlQuery()
+        query.prepare(
+            "SELECT * FROM PROPIEDADES where bajaprop is null or bajaprop is not null order by muniprop asc")
+        if query.exec():
+            while query.next():
+                fila = [query.value(i) for i in range(query.record().count())]
+                listado.append(fila)
+        return listado
+
+

@@ -350,7 +350,7 @@ class Eventos():
             file = (str(fecha) + '_propiedades.csv')
             directorio, fichero = var.dlgabrir.getSaveFileName(None, "Exportar Datos en CSV", file, '.csv')
             if fichero:
-                registros = conexion.Conexion.listadoPropiedades(self)
+                registros = conexion.Conexion.listadoPropiedadesCSV(self)
                 with open (fichero, "w", newline='', encoding= 'utf-8') as csvfile:
                     writer = csv.writer(csvfile)
                     writer.writerow(["Codigo", "Alta", "Baja", "Direccion", "Provincia", "Municipio", "CP", "Tipo", "Habitaciones",
