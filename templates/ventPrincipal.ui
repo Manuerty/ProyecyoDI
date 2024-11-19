@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1540</width>
-    <height>1122</height>
+    <height>1124</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -2225,6 +2225,11 @@
             <string>Tipo de Operación</string>
            </property>
           </column>
+          <column>
+           <property name="text">
+            <string>Fecha Baja</string>
+           </property>
+          </column>
          </widget>
         </item>
         <item>
@@ -2307,6 +2312,8 @@
    <addaction name="actionbar_limpiar"/>
    <addaction name="separator"/>
    <addaction name="actionbarSalir"/>
+   <addaction name="separator"/>
+   <addaction name="actionbarBuscar"/>
   </widget>
   <action name="actionSalir">
    <property name="text">
@@ -2397,6 +2404,18 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionbarBuscar">
+   <property name="icon">
+    <iconset>
+     <normaloff>../img/lupa.ico</normaloff>../img/lupa.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Buscar</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
  </widget>

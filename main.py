@@ -46,6 +46,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.actionRestaurar_BackUp.triggered.connect(eventos.Eventos.restaurarBackUp)
         var.ui.actionTipoPropiedad.triggered.connect(eventos.Eventos.abrirTipoProp)
         var.ui.actionAbout.triggered.connect(eventos.Eventos.abrirAbout)
+        var.ui.actionbarBuscar.triggered.connect(propiedades.Propiedades.filtrarProp)
 
 
         '''

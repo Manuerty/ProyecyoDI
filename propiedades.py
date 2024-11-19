@@ -8,8 +8,6 @@ from PyQt6 import QtWidgets, QtGui, QtCore
 
 class Propiedades():
 
-
-
     def altaTipoPropiedad(self):
         try:
             tipo = var.dlggestion.ui.txtTipoProp.text().title()
@@ -130,6 +128,12 @@ class Propiedades():
         try:
             listado = conexion.Conexion.listadoPropiedades(self)
             index = 0
+            # var.ui.tablaProp.setRowCount(len(listado))
+            # if not listado:
+            #     var.ui.tablaProp.setRowCount(1)
+            #     var.ui.tablaProp.setItem(0, 2, QtWidgets.QTableWidgetItem("No hay propiedades de este tipo"))
+            #     var.ui.tablaProp.item(0 , 2).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            # else:
             for registro in listado:
                 var.ui.tablaProp.setRowCount(index + 1)
                 var.ui.tablaProp.setItem(index, 0, QtWidgets.QTableWidgetItem(str(registro[0])))
@@ -144,6 +148,7 @@ class Propiedades():
                 var.ui.tablaProp.setItem(index, 5, QtWidgets.QTableWidgetItem(str(registro[11]) + "€"))
                 var.ui.tablaProp.setItem(index, 6, QtWidgets.QTableWidgetItem(str(registro[12]) + "€"))
                 var.ui.tablaProp.setItem(index, 7, QtWidgets.QTableWidgetItem(str(registro[14])))
+                var.ui.tablaProp.setItem(index, 8, QtWidgets.QTableWidgetItem(str(registro[2])))
                 var.ui.tablaProp.item(index, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
                 var.ui.tablaProp.item(index, 1).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
                 var.ui.tablaProp.item(index, 2).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
@@ -322,7 +327,10 @@ class Propiedades():
             var.ui.rbtAlquiladoProp.setEnabled(True)
             var.ui.rbtVendidoProp.setEnabled(True)
 
-
+    def filtrarProp(self):
+        checkeado = var.ui.btnBuscarTipoProp.isChecked()
+        var.ui.btnBuscarTipoProp.setChecked(not checkeado)
+        Propiedades.cargaTablaPropiedades(self)
 
 
 
