@@ -24,6 +24,8 @@ locale.setlocale(locale.LC_MONETARY, 'es_ES.UTF-8')
 
 
 class Eventos():
+
+
     def mensajeSalir(self=None):
         mbox = QtWidgets.QMessageBox()
         mbox.setIcon(QtWidgets.QMessageBox.Icon.Question)
@@ -296,6 +298,18 @@ class Eventos():
             var.dlggestion.show()
         except Exception as error:
             print("error en abrir tipo propiedad", error)
+
+    def abrirAbout(self):
+        try:
+            var.dlgabout.show()
+        except Exception as error:
+            print("error en abrir about", error)
+
+    def cerrarAbout(self):
+        try:
+            var.dlgabout.close()
+        except Exception as error:
+            print("error en abrir about", error)
 
 
     def cargarTipoProp(self):

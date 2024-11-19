@@ -20,6 +20,7 @@ class Main(QtWidgets.QMainWindow):
         var.uicalendar= Calendar()
         var.dlggestion = dlgGestionProp()
         var.dlgabrir = FileDialogAbrir()
+        var.dlgabout = dlgAbout()
         var.historico = 1
         self.setStyleSheet(style.load_stylesheet())
         conexion.Conexion.db_conexion(self)
@@ -44,6 +45,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.actionCrear_BackUp.triggered.connect(eventos.Eventos.crearBackUp)
         var.ui.actionRestaurar_BackUp.triggered.connect(eventos.Eventos.restaurarBackUp)
         var.ui.actionTipoPropiedad.triggered.connect(eventos.Eventos.abrirTipoProp)
+        var.ui.actionAbout.triggered.connect(eventos.Eventos.abrirAbout)
 
 
         '''
@@ -61,6 +63,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.btnModifProp.clicked.connect(propiedades.Propiedades.modifPropiedad)
         var.ui.btnDelProp.clicked.connect(propiedades.Propiedades.bajaPropiedad)
         var.ui.btnBuscarTipoProp.clicked.connect(propiedades.Propiedades.cargaTablaPropiedades)
+
 
 
 

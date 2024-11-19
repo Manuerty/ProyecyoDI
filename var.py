@@ -8,4 +8,5 @@ global panel
 global dlgabrir
 global historico
 global dlggestion
+global dlgabout
 
