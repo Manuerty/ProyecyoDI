@@ -47,6 +47,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.actionTipoPropiedad.triggered.connect(eventos.Eventos.abrirTipoProp)
         var.ui.actionAbout.triggered.connect(eventos.Eventos.abrirAbout)
         var.ui.actionbarBuscar.triggered.connect(propiedades.Propiedades.filtrarProp)
+        var.ui.actionbarGestionProp.triggered.connect(eventos.Eventos.abrirTipoProp)
 
 
         '''

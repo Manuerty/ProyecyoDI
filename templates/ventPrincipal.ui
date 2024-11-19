@@ -2309,11 +2309,13 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionbarGestionProp"/>
+   <addaction name="separator"/>
+   <addaction name="actionbarBuscar"/>
+   <addaction name="separator"/>
    <addaction name="actionbar_limpiar"/>
    <addaction name="separator"/>
    <addaction name="actionbarSalir"/>
-   <addaction name="separator"/>
-   <addaction name="actionbarBuscar"/>
   </widget>
   <action name="actionSalir">
    <property name="text">
@@ -2416,6 +2418,15 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionbarGestionProp">
+   <property name="icon">
+    <iconset>
+     <normaloff>../img/house.ico</normaloff>../img/house.ico</iconset>
+   </property>
+   <property name="text">
+    <string>a</string>
    </property>
   </action>
  </widget>
