@@ -97,8 +97,8 @@ class Clientes:
             listado= conexion.Conexion.listadoClientes(self)
             #listado = conexionserver.ConexionServer.listadoClientes(self)
             index = 0
+            var.ui.tablaClientes.setRowCount(len(listado))
             for registro in listado:
-                var.ui.tablaClientes.setRowCount(index + 1)
                 var.ui.tablaClientes.setItem(index, 0, QtWidgets.QTableWidgetItem((registro[0])))
                 var.ui.tablaClientes.setItem(index, 1, QtWidgets.QTableWidgetItem((registro[3])))
                 var.ui.tablaClientes.setItem(index, 2, QtWidgets.QTableWidgetItem((registro[4])))
@@ -238,3 +238,8 @@ class Clientes:
             Clientes.cargaTablaClientes(self)
         except Exception as error:
             print("Error en historicoCli: ", error)
+
+    def filtrarProp(self):
+        checkeado = var.ui.btnBuscarCli.isChecked()
+        var.ui.btnBuscarCli.setChecked(not checkeado)
+        Clientes.cargaTablaClientes(self)

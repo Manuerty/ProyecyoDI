@@ -1,4 +1,53 @@
 
+#btnBuscarCli{
+background-color: #13b2a6;
+    font-weight: bold;
+    color: white;
+    border-radius: 5px;
+}
+
+#btnBuscarCli:hover {
+    background-color: #11a194;
+}
+
+#btnBuscarCli:pressed {
+    background-color: #0f897e;
+    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
+    padding-top: 2px;
+}
+
+#btnBuscarCli:checked {
+    background-color: #0f897e;
+    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
+    padding-top: 2px;
+}
+
+
+
+
+#btnBuscarTipoProp{
+background-color: #13b2a6;
+    font-weight: bold;
+    color: white;
+    border-radius: 5px;
+}
+
+#btnBuscarTipoProp:hover {
+    background-color: #11a194;
+}
+
+#btnBuscarTipoProp:pressed {
+    background-color: #0f897e;
+    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
+    padding-top: 2px;
+}
+
+#btnBuscarTipoProp:checked {
+    background-color: #0f897e;
+    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
+    padding-top: 2px;
+}
+
 
 /*---- Estilo boton de filtrado por Tipo de propiedad ------*/
 #btnBuscarTipoProp {
@@ -41,6 +90,8 @@ QPushButton:pressed {
     padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
     padding-top: 2px;
 }
+
+
 
 QHeaderView::section{
     background-color: #FFFBE7;

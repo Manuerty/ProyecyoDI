@@ -48,6 +48,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.actionAbout.triggered.connect(eventos.Eventos.abrirAbout)
         var.ui.actionbarBuscar.triggered.connect(propiedades.Propiedades.filtrarProp)
         var.ui.actionbarGestionProp.triggered.connect(eventos.Eventos.abrirTipoProp)
+        var.ui.actionbarGestionProp.triggered.connect(eventos.Eventos.abrirTipoProp)
 
 
         '''
@@ -65,6 +66,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.btnModifProp.clicked.connect(propiedades.Propiedades.modifPropiedad)
         var.ui.btnDelProp.clicked.connect(propiedades.Propiedades.bajaPropiedad)
         var.ui.btnBuscarTipoProp.clicked.connect(propiedades.Propiedades.cargaTablaPropiedades)
+        var.ui.btnBuscarCli.clicked.connect(clientes.Clientes.cargaTablaClientes)
 
 
 
