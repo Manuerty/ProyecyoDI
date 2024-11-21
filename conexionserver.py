@@ -75,7 +75,43 @@ class ConexionServer():
             # Cerrar el cursor y la conexión si no los necesitas más
             cursor.close()
             conexion.close()
-            print(listadoclientes)
+            # print(listadoclientes)
             return listadoclientes
         except Exception as e:
             print("error listado en conexion", e)
+
+    def altaCliente(cliente):
+        try:
+            conexion = ConexionServer().crear_conexion()
+            if conexion:
+                cursor = conexion.cursor()
+                # Definir la consulta de inserción
+                query = """
+                INSERT INTO clientes (dnicli, altacli, apelcli, nomecli, dircli, emailcli, movilcli, provcli, municli)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """
+                cursor.execute(query, cliente)  # Ejecutar la consulta pasando la lista directamente
+                conexion.commit()  # Confirmar la transacción
+                cursor.close()  # Cerrar el cursor y la conexión
+                conexion.close()
+                return True
+        except Error as e:
+            print(f"Error al insertar el cliente: {e}")
+
+    def datosOneCliente(dni):
+        registro = []  # Inicializa la lista para almacenar los datos del cliente
+        try:
+            conexion = ConexionServer().crear_conexion()
+            if conexion:
+                cursor = conexion.cursor()
+                # Definir la consulta de selección
+                query = '''SELECT * FROM clientes WHERE dnicli = %s'''  # Usa %s para el placeholder
+                cursor.execute(query, (dni,))  # Pasar 'dni' como una tupla
+                # Recuperar los datos de la consulta
+                for row in cursor.fetchall():
+                    registro.extend([str(col) for col in row])
+            return registro
+
+        except Exception as e:
+            print("Error al obtener datos de un cliente:", e)
+            return None  # Devolver None en caso de error

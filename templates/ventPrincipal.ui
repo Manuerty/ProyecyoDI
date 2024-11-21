@@ -852,7 +852,7 @@
           </column>
           <column>
            <property name="text">
-            <string>DNI/NIE</string>
+            <string>Nombre</string>
            </property>
           </column>
           <column>

@@ -960,7 +960,7 @@ class Ui_ventPrincipal(object):
         item = self.tablaClientes.horizontalHeaderItem(1)
         item.setText(_translate("ventPrincipal", "Apellidos"))
         item = self.tablaClientes.horizontalHeaderItem(2)
-        item.setText(_translate("ventPrincipal", "DNI/NIE"))
+        item.setText(_translate("ventPrincipal", "Nombre"))
         item = self.tablaClientes.horizontalHeaderItem(3)
         item.setText(_translate("ventPrincipal", "Móvil"))
         item = self.tablaClientes.horizontalHeaderItem(4)

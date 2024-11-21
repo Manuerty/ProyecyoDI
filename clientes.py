@@ -95,7 +95,6 @@ class Clientes:
     def cargaTablaClientes(self):
         try:
             listado= conexion.Conexion.listadoClientes(self)
-            #listado = conexionserver.ConexionServer.listadoClientes(self)
             index = 0
             var.ui.tablaClientes.setRowCount(len(listado))
             if not listado:
@@ -124,11 +123,47 @@ class Clientes:
         except Exception as error:
             print("Error al cargar tabla clientes", error)
 
+    def cargaTablaClientesServer(self):
+        try:
+            listado = conexionserver.ConexionServer.listadoClientes(self)
+            index = 0
+            var.ui.tablaClientes.setRowCount(len(listado))
+            if not listado:
+                var.ui.tablaClientes.setRowCount(1)
+                var.ui.tablaClientes.setItem(0, 2, QtWidgets.QTableWidgetItem("No existen Clientes con ese DNI"))
+                var.ui.tablaClientes.item(0, 2).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            else:
+                for registro in listado:
+                    var.ui.tablaClientes.setItem(index, 0, QtWidgets.QTableWidgetItem((registro[0])))
+                    var.ui.tablaClientes.setItem(index, 1, QtWidgets.QTableWidgetItem((registro[2])))
+                    var.ui.tablaClientes.setItem(index, 2, QtWidgets.QTableWidgetItem((registro[3])))
+                    var.ui.tablaClientes.setItem(index, 3, QtWidgets.QTableWidgetItem(("  " + registro[5] + "  ")))
+                    var.ui.tablaClientes.setItem(index, 4, QtWidgets.QTableWidgetItem((registro[7])))
+                    var.ui.tablaClientes.setItem(index, 5, QtWidgets.QTableWidgetItem((registro[8])))
+                    var.ui.tablaClientes.setItem(index, 6, QtWidgets.QTableWidgetItem((registro[9])))
+
+                    var.ui.tablaClientes.item(index, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+                    var.ui.tablaClientes.item(index, 1).setTextAlignment(
+                        QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
+                    var.ui.tablaClientes.item(index, 2).setTextAlignment(
+                        QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
+                    var.ui.tablaClientes.item(index, 3).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+                    var.ui.tablaClientes.item(index, 4).setTextAlignment(
+                        QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
+                    var.ui.tablaClientes.item(index, 5).setTextAlignment(
+                        QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
+                    var.ui.tablaClientes.item(index, 6).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+                    index += 1
+
+        except Exception as error:
+            print("Error al cargar tabla clientes", error)
+
     def cargaOneCliente(self):
         try:
             fila = var.ui.tablaClientes.selectedItems()
             datos = [dato.text() for dato in fila]
-            registro = conexion.Conexion.datosOneCliente(datos[0])
+            # registro = conexion.Conexion.datosOneCliente(datos[0])
+            registro = conexionserver.ConexionServer.datosOneCliente(datos[0])
             listado = [var.ui.txtDniCli, var.ui.txtAltaCli, var.ui.txtBajaCli,  var.ui.txtApelCli,
                         var.ui.txtNomCli, var.ui.txtEmailCli, var.ui.txtMovilCli,
                         var.ui.txtDirCli, var.ui.cmbProCli,var.ui.cmbMuniCli ]
@@ -140,7 +175,7 @@ class Clientes:
             return registro
 
         except Exception as error:
-            print("Error al cargar tabla clientes", error)
+            print("Error al cargar one clientes", error)
 
     def modifCliente(self):
         try:
@@ -248,3 +283,4 @@ class Clientes:
         checkeado = var.ui.btnBuscarCli.isChecked()
         var.ui.btnBuscarCli.setChecked(not checkeado)
         Clientes.cargaTablaClientes(self)
+
