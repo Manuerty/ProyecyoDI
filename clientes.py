@@ -163,16 +163,31 @@ class Clientes:
             fila = var.ui.tablaClientes.selectedItems()
             datos = [dato.text() for dato in fila]
             # registro = conexion.Conexion.datosOneCliente(datos[0])
+            # listado = [var.ui.txtDniCli, var.ui.txtAltaCli, var.ui.txtBajaCli,  var.ui.txtApelCli,
+            #             var.ui.txtNomCli, var.ui.txtEmailCli, var.ui.txtMovilCli,
+            #             var.ui.txtDirCli, var.ui.cmbProCli,var.ui.cmbMuniCli ]
+            # for i in range(len(listado)):
+            #     if i ==  8 or i == 9 :
+            #         listado[i].setCurrentText(registro[i])
+            #     else:
+            #         listado[i].setText(registro[i])
+            # return registro
+
+
             registro = conexionserver.ConexionServer.datosOneCliente(datos[0])
-            listado = [var.ui.txtDniCli, var.ui.txtAltaCli, var.ui.txtBajaCli,  var.ui.txtApelCli,
-                        var.ui.txtNomCli, var.ui.txtEmailCli, var.ui.txtMovilCli,
-                        var.ui.txtDirCli, var.ui.cmbProCli,var.ui.cmbMuniCli ]
+            listado = [var.ui.txtDniCli, var.ui.txtAltaCli, var.ui.txtApelCli,
+                       var.ui.txtNomCli, var.ui.txtEmailCli, var.ui.txtMovilCli,
+                       var.ui.txtDirCli, var.ui.cmbProCli, var.ui.cmbMuniCli, var.ui.txtBajaCli ]
+
             for i in range(len(listado)):
-                if i ==  8 or i == 9 :
+                if i ==  7 or i == 8 :
                     listado[i].setCurrentText(registro[i])
                 else:
                     listado[i].setText(registro[i])
             return registro
+
+
+
 
         except Exception as error:
             print("Error al cargar one clientes", error)
