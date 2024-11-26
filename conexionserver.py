@@ -115,3 +115,41 @@ class ConexionServer():
         except Exception as e:
             print("Error al obtener datos de un cliente:", e)
             return None  # Devolver None en caso de error
+
+
+
+    def modificarCliente(cliente):
+        try:
+            conexion = ConexionServer().crear_conexion()
+            if conexion:
+                cursor = conexion.cursor()
+                # Definir la consulta de actualización
+                query = """
+                UPDATE clientes
+                SET altacli = %s, apelcli = %s, nomecli = %s, dircli = %s, emailcli = %s, movilcli = %s, provcli = %s, municli = %s, bajacli = %s
+                WHERE dnicli = %s
+                """
+                cursor.execute(query, cliente)  # Ejecutar la consulta pasando la lista directamente
+                conexion.commit()  # Confirmar la transacción
+                cursor.close()  # Cerrar el cursor y la conexión
+                conexion.close()
+                return True
+        except Error as e:
+            print(f"Error al modificar el cliente: {e}")
+
+
+    def bajaCliente(fecha, dni):
+        try:
+            conexion = ConexionServer().crear_conexion()
+            if conexion:
+                datos=(fecha, dni)
+                cursor = conexion.cursor()
+                query = '''UPDATE clientes SET bajacli = %s WHERE dnicli = %s'''
+                cursor.execute(query, datos)  # Pasar 'dni' como una tupla
+                conexion.commit()  # Confirmar la transacción
+                cursor.close()  # Cerrar el cursor y la conexión
+                conexion.close()
+                return True
+        except Error as e:
+            print(f"Error al eliminar el cliente: {e}")
+            return False
