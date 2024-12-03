@@ -37,7 +37,7 @@
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="PesClientes">
        <attribute name="title">
@@ -2313,13 +2313,13 @@
           <property name="minimumSize">
            <size>
             <width>700</width>
-            <height>505</height>
+            <height>494</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>505</height>
+            <height>494</height>
            </size>
           </property>
           <property name="autoFillBackground">
@@ -2329,10 +2329,13 @@
            <string notr="true"/>
           </property>
           <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOn</enum>
+           <enum>Qt::ScrollBarAlwaysOff</enum>
           </property>
           <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOn</enum>
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="autoScroll">
+           <bool>false</bool>
           </property>
           <property name="autoScrollMargin">
            <number>14</number>

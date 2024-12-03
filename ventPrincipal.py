@@ -832,12 +832,13 @@ class Ui_ventPrincipal(object):
         self.line_3.setObjectName("line_3")
         self.verticalLayout_4.addWidget(self.line_3)
         self.tablaProp = QtWidgets.QTableWidget(parent=self.PesConstruct)
-        self.tablaProp.setMinimumSize(QtCore.QSize(700, 505))
-        self.tablaProp.setMaximumSize(QtCore.QSize(16777215, 505))
+        self.tablaProp.setMinimumSize(QtCore.QSize(700, 494))
+        self.tablaProp.setMaximumSize(QtCore.QSize(16777215, 494))
         self.tablaProp.setAutoFillBackground(False)
         self.tablaProp.setStyleSheet("")
-        self.tablaProp.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        self.tablaProp.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.tablaProp.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.tablaProp.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.tablaProp.setAutoScroll(False)
         self.tablaProp.setAutoScrollMargin(14)
         self.tablaProp.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
         self.tablaProp.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.SingleSelection)
@@ -982,7 +983,7 @@ class Ui_ventPrincipal(object):
         self.toolBar.addAction(self.actionbarSalir)
 
         self.retranslateUi(ventPrincipal)
-        self.panPrincipal.setCurrentIndex(0)
+        self.panPrincipal.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(ventPrincipal)
 
     def retranslateUi(self, ventPrincipal):

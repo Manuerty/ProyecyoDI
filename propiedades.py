@@ -126,15 +126,19 @@ class Propiedades():
 
     def cargaTablaPropiedades(self):
         try:
+            var.ui.tablaProp.setRowCount(0)
             listado = conexion.Conexion.listadoPropiedades(self)
-            index = 0
-            var.ui.tablaProp.setRowCount(len(listado))
+            total = len(listado)
+            start_index = var.current_page_prop * var.items_per_page_prop
+            end_index = start_index + var.items_per_page_prop
+            sublistado = listado[start_index:end_index] if listado else []
+            var.ui.tablaProp.setRowCount(len(sublistado))
             if not listado:
                 var.ui.tablaProp.setRowCount(1)
                 var.ui.tablaProp.setItem(0, 2, QtWidgets.QTableWidgetItem("No hay propiedades de este tipo"))
                 var.ui.tablaProp.item(0 , 2).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
             else:
-                for registro in listado:
+                for index, registro in enumerate(sublistado):
                     var.ui.tablaProp.setRowCount(index + 1)
                     var.ui.tablaProp.setItem(index, 0, QtWidgets.QTableWidgetItem(str(registro[0])))
                     var.ui.tablaProp.setItem(index, 1, QtWidgets.QTableWidgetItem(str(registro[5])))
@@ -157,9 +161,26 @@ class Propiedades():
                     var.ui.tablaProp.item(index, 5).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
                     var.ui.tablaProp.item(index, 6).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
                     var.ui.tablaProp.item(index, 7).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
-                    index += 1
+                var.ui.BtnSiguienteProp.setEnabled(end_index < total)
+                var.ui.BtnAnteriorProp.setEnabled(var.current_page_prop > 0)
         except Exception as error:
             print('Error cargaTablaPropiedades: %s ' % str(error))
+
+
+    def anteriorPropiedad(self):
+        try:
+            if var.current_page_prop > 0:
+                var.current_page_prop -= 1
+            Propiedades.cargaTablaPropiedades(self)
+        except Exception as error:
+            print("Error en anteriorPropiedad: ", error)
+
+    def siguientePropiedad(self):
+        try:
+            var.current_page_prop += 1
+            Propiedades.cargaTablaPropiedades(self)
+        except Exception as error:
+            print("Error en siguientePropiedad: ", error)
 
     @staticmethod
     def cargaOnePropiedad():

@@ -22,6 +22,10 @@ class Main(QtWidgets.QMainWindow):
         var.dlgabrir = FileDialogAbrir()
         var.dlgabout = dlgAbout()
         var.historico = 1
+        var.current_page_cli = 0
+        var.items_per_page_cli = 15
+        var.current_page_prop = 0
+        var.items_per_page_prop = 15
         self.setStyleSheet(style.load_stylesheet())
         conexion.Conexion.db_conexion(self)
         # conexionserver.ConexionServer.crear_conexion(self)
@@ -68,6 +72,10 @@ class Main(QtWidgets.QMainWindow):
         var.ui.btnDelProp.clicked.connect(propiedades.Propiedades.bajaPropiedad)
         var.ui.btnBuscarTipoProp.clicked.connect(propiedades.Propiedades.cargaTablaPropiedades)
         var.ui.btnBuscarCli.clicked.connect(clientes.Clientes.cargaTablaClientes)
+        var.ui.BtnSiguienteCli.clicked.connect(clientes.Clientes.siguienteCliente)
+        var.ui.BtnAnteriorCli.clicked.connect(clientes.Clientes.anteriorCliente)
+        var.ui.BtnSiguienteProp.clicked.connect(propiedades.Propiedades.siguientePropiedad)
+        var.ui.BtnAnteriorProp.clicked.connect(propiedades.Propiedades.anteriorPropiedad)
 
 
 

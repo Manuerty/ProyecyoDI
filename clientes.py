@@ -94,15 +94,20 @@ class Clientes:
 
     def cargaTablaClientes(self):
         try:
+            var.ui.tablaClientes.setRowCount(0)
             listado= conexion.Conexion.listadoClientes(self)
-            index = 0
-            var.ui.tablaClientes.setRowCount(len(listado))
+            total = len(listado)
+            start_index = var.current_page_cli * var.items_per_page_cli
+            end_index = start_index + var.items_per_page_cli
+            sublistado = listado[start_index:end_index] if listado else []
+            var.ui.tablaClientes.setRowCount(len(sublistado))
+
             if not listado:
                 var.ui.tablaClientes.setRowCount(1)
                 var.ui.tablaClientes.setItem(0, 2, QtWidgets.QTableWidgetItem("No existen Clientes con ese DNI"))
                 var.ui.tablaClientes.item(0 , 2).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
             else:
-                for registro in listado:
+                for index, registro in enumerate(sublistado):
                     var.ui.tablaClientes.setItem(index, 0, QtWidgets.QTableWidgetItem((registro[0])))
                     var.ui.tablaClientes.setItem(index, 1, QtWidgets.QTableWidgetItem((registro[3])))
                     var.ui.tablaClientes.setItem(index, 2, QtWidgets.QTableWidgetItem((registro[4])))
@@ -118,10 +123,27 @@ class Clientes:
                     var.ui.tablaClientes.item(index, 4).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
                     var.ui.tablaClientes.item(index, 5).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
                     var.ui.tablaClientes.item(index, 6).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-                    index += 1
+                var.ui.BtnSiguienteCli.setEnabled(end_index < total)
+                var.ui.BtnAnteriorCli.setEnabled(var.current_page_cli > 0)
 
         except Exception as error:
             print("Error al cargar tabla clientes", error)
+
+
+    def anteriorCliente(self):
+        try:
+            if var.current_page_cli > 0:
+                var.current_page_cli -= 1
+            Clientes.cargaTablaClientes(self)
+        except Exception as error:
+            print("Error en anteriorCliente: ", error)
+
+    def siguienteCliente(self):
+        try:
+            var.current_page_cli += 1
+            Clientes.cargaTablaClientes(self)
+        except Exception as error:
+            print("Error en siguienteCliente: ", error)
 
     def cargaTablaClientesServer(self):
         try:
