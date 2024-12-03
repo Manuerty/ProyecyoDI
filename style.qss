@@ -49,6 +49,95 @@ background-color: #13b2a6;
 }
 
 
+#BtnAnteriorProp {
+    background-color: #13b2a6;
+    font-weight: bold;
+    color: white;
+    border-radius: 5px;
+}
+
+#BtnAnteriorProp:hover {
+    background-color: #11a194;
+}
+
+#BtnAnteriorProp:pressed {
+    background-color: #0f897e;
+    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
+    padding-top: 2px;
+}
+
+#BtnAnteriorProp:disabled {
+    background-color: rgba(19, 178, 166, 0.5); /* Fondo más opaco */
+    color: gray; /* Texto gris */
+}
+
+#BtnSiguienteProp {
+    background-color: #13b2a6;
+    font-weight: bold;
+    color: white;
+    border-radius: 5px;
+}
+
+#BtnSiguienteProp:hover {
+    background-color: #11a194;
+}
+
+#BtnSiguienteProp:pressed {
+    background-color: #0f897e;
+    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
+    padding-top: 2px;
+}
+
+#BtnSiguienteProp:disabled {
+    background-color: rgba(19, 178, 166, 0.5); /* Fondo más opaco */
+    color: gray; /* Texto gris */
+}
+
+#BtnAnteriorCli {
+    background-color: #13b2a6;
+    font-weight: bold;
+    color: white;
+    border-radius: 5px;
+}
+
+#BtnAnteriorCli:hover {
+    background-color: #11a194;
+}
+
+#BtnAnteriorCli:pressed {
+    background-color: #0f897e;
+    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
+    padding-top: 2px;
+}
+
+#BtnAnteriorCli:disabled {
+    background-color: rgba(19, 178, 166, 0.5); /* Fondo más opaco */
+    color: gray; /* Texto gris */
+}
+
+#BtnSiguienteCli {
+    background-color: #13b2a6;
+    font-weight: bold;
+    color: white;
+    border-radius: 5px;
+}
+
+#BtnSiguienteCli:hover {
+    background-color: #11a194;
+}
+
+#BtnSiguienteCli:pressed {
+    background-color: #0f897e;
+    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
+    padding-top: 2px;
+}
+
+#BtnSiguienteCli:disabled {
+    background-color: rgba(19, 178, 166, 0.5); /* Fondo más opaco */
+    color: gray; /* Texto gris */
+}
+
+
 /*---- Estilo boton de filtrado por Tipo de propiedad ------*/
 #btnBuscarTipoProp {
     background-color: #FFFFFF;
