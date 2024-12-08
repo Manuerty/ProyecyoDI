@@ -12,7 +12,6 @@ import time
 from PyQt6 import QtWidgets, QtGui
 import zipfile
 import shutil
-import conexionserver
 import eventos
 import var
 import re
@@ -45,28 +44,24 @@ class Eventos():
 
     def cargarProvincias(self):
         var.ui.cmbProCli.clear()
-        # listado = conexion.Conexion.listaProv(self)
-        listado = conexionserver.ConexionServer.listaProv()
+        listado = conexion.Conexion.listaProv(self)
         var.ui.cmbProCli.addItems(listado)
 
     def cargarMunicipios(self):
         var.ui.cmbMuniCli.clear()
         provincia = var.ui.cmbProCli.currentText()
-        # listado = conexion.Conexion.listaMuni(provincia)
-        listado = conexionserver.ConexionServer.listaMuniProv(provincia)
+        listado = conexion.Conexion.listaMuni(provincia)
         var.ui.cmbMuniCli.addItems(listado)
 
     def cargarProvinciasProp(self):
             var.ui.cmbProvProp.clear()
-            # listado = conexion.Conexion.listaProv(self)
-            listado = conexionserver.ConexionServer.listaProv()
+            listado = conexion.Conexion.listaProv(self)
             var.ui.cmbProvProp.addItems(listado)
 
     def cargarMunicipiosProp(self):
         var.ui.cmbMuniProp.clear()
         provincia = var.ui.cmbProvProp.currentText()
-        # listado = conexion.Conexion.listaMuni(provincia)
-        listado = conexionserver.ConexionServer.listaMuniProv(provincia)
+        listado = conexion.Conexion.listaMuni(provincia)
         var.ui.cmbMuniProp.addItems(listado)
 
     def validarDNIcli(dni):

@@ -1,6 +1,5 @@
 from calendar import Calendar
 
-import conexionserver
 from venAux import *
 import conexion
 import eventos
@@ -28,9 +27,7 @@ class Main(QtWidgets.QMainWindow):
         var.items_per_page_prop = 15
         self.setStyleSheet(style.load_stylesheet())
         conexion.Conexion.db_conexion(self)
-        # conexionserver.ConexionServer.crear_conexion(self)
         clientes.Clientes.cargaTablaClientes(self)
-        # clientes.Clientes.cargaTablaClientesServer(self)
         propiedades.Propiedades.cargaTablaPropiedades(self)
 
 
