@@ -302,6 +302,21 @@ class Propiedades():
     def bajaPropiedad(self):
         propiedad = [var.ui.lblProp.text(), var.ui.txtFechaAltaProp.text(), var.ui.txtFechaBajaProp.text()]
 
+        if var.ui.chkAlquilerProp.isChecked():
+            var.ui.rbtAlquiladoProp.setChecked(True)
+        elif var.ui.chkVentaProp.isChecked():
+            var.ui.rbtVendidoProp.setChecked(True)
+        elif var.ui.chkIntercambioProp.isChecked() and var.ui.txtPrecioAProp.text() == "":
+            var.ui.rbtVendidoProp.setChecked(True)
+        elif var.ui.chkIntercambioProp.isChecked() and var.ui.txtPrecioVProp.text() == "":
+            var.ui.rbtAlquiladoProp.setChecked(True)
+
+        if var.ui.rbtDisponibleProp.isChecked():
+            propiedad.append(var.ui.rbtDisponibleProp.text())
+        elif var.ui.rbtAlquiladoProp.isChecked():
+            propiedad.append(var.ui.rbtAlquiladoProp.text())
+        elif var.ui.rbtVendidoProp.isChecked():
+            propiedad.append(var.ui.rbtVendidoProp.text())
         if Propiedades.esFechasValidas(propiedad) and conexion.Conexion.bajaProp(propiedad):
             mbox = eventos.Eventos.crearMensajeInfo("Aviso", "Se ha dado de baja la propiedad.")
             mbox.exec()

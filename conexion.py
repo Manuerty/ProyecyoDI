@@ -420,9 +420,10 @@ class Conexion:
             if query.exec() and query.next():
                 count = query.value(0)
                 if count == 1:  # verificamos que solo nos devuelve un resultado a consulta, por tanto la propiedad existe.
-                    query.prepare("update Propiedades set bajaprop =:baja where codigo = :codigo ")
+                    query.prepare("update Propiedades set bajaprop =:baja, estadoprop =:estadoprop where codigo = :codigo ")
                     query.bindValue(":codigo", str(propiedad[0]))
                     query.bindValue(":baja", str(propiedad[2]))  # dejamos el segundo espacio del array para fecha de alta, y comprobar mas tarde que no sea posterior a fecha de baja
+                    query.bindValue(":estadoprop", str(propiedad[3]))
                     if query.exec():
                         return True
                     else:
