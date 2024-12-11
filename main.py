@@ -1,5 +1,6 @@
 from calendar import Calendar
 
+import vendedor
 from venAux import *
 import conexion
 import eventos
@@ -29,6 +30,7 @@ class Main(QtWidgets.QMainWindow):
         conexion.Conexion.db_conexion(self)
         clientes.Clientes.cargaTablaClientes(self)
         propiedades.Propiedades.cargaTablaPropiedades(self)
+        vendedor.Vendedor.cargarTablaVendedores(self)
 
 
 
@@ -39,6 +41,8 @@ class Main(QtWidgets.QMainWindow):
         var.ui.tablaClientes.clicked.connect(clientes.Clientes.cargaOneCliente)
         eventos.Eventos.resizeTablaPropiedades(self)
         var.ui.tablaProp.clicked.connect(propiedades.Propiedades.cargaOnePropiedad)
+        eventos.Eventos.resizeTablaVendedores(self)
+        var.ui.tablaVen.clicked.connect(vendedor.Vendedor.cargarOneVendedor)
 
         '''
         Zona de eventos del menuBar
@@ -64,6 +68,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.btnBajaCli.clicked.connect(lambda: eventos.Eventos.abrirCalendar(0, 1))
         var.ui.btnFechaAltaProp.clicked.connect(lambda: eventos.Eventos.abrirCalendar(1, 0))
         var.ui.btnFechaBajaProp.clicked.connect(lambda: eventos.Eventos.abrirCalendar(1, 1))
+        var.ui.btnAltaVen.clicked.connect(lambda: eventos.Eventos.abrirCalendar(2,0))
         var.ui.btnGrabarProp.clicked.connect(propiedades.Propiedades.altaPropiedad)
         var.ui.btnModifProp.clicked.connect(propiedades.Propiedades.modifPropiedad)
         var.ui.btnDelProp.clicked.connect(propiedades.Propiedades.bajaPropiedad)
@@ -73,6 +78,9 @@ class Main(QtWidgets.QMainWindow):
         var.ui.BtnAnteriorCli.clicked.connect(clientes.Clientes.anteriorCliente)
         var.ui.BtnSiguienteProp.clicked.connect(propiedades.Propiedades.siguientePropiedad)
         var.ui.BtnAnteriorProp.clicked.connect(propiedades.Propiedades.anteriorPropiedad)
+        var.ui.btnGrabarVen.clicked.connect(vendedor.Vendedor.altaVendedor)
+        var.ui.BtnDeleteVen.clicked.connect(vendedor.Vendedor.bajaVendedor)
+        var.ui.BtnModifVen.clicked.connect(vendedor.Vendedor.modifVendedor)
 
 
 
@@ -87,6 +95,9 @@ class Main(QtWidgets.QMainWindow):
         var.ui.txtPrecioVProp.textChanged.connect(lambda: propiedades.Propiedades.manageChkBox(self))
         var.ui.txtPrecioAProp.textChanged.connect(lambda: propiedades.Propiedades.manageChkBox(self))
         var.ui.txtFechaBajaProp.textChanged.connect(lambda: propiedades.Propiedades.manageRadioButtons(self))
+        var.ui.txtDniVen.editingFinished.connect(lambda: vendedor.Vendedor.checkDNI(var.ui.txtDniVen.text()))
+        var.ui.txtMovilVen.editingFinished.connect(lambda: vendedor.Vendedor.checktelefono(var.ui.txtMovilVen.text()))
+        var.ui.txtEmailVen.editingFinished.connect(lambda: vendedor.Vendedor.checkEmail(var.ui.txtEmailVen.text()))
 
 
 
@@ -101,6 +112,7 @@ class Main(QtWidgets.QMainWindow):
         eventos.Eventos.cargarMunicipiosProp(self)
         var.ui.cmbProvProp.currentIndexChanged.connect(eventos.Eventos.cargarMunicipiosProp)
         eventos.Eventos.cargarTipoProp(self)
+        eventos.Eventos.cargarProvinciasVen(self)
 
         '''
             Zona de eventos del toolBar
@@ -112,6 +124,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.actionExportar_Clientes_JSON.triggered.connect(eventos.Eventos.exportJSONClientes)
         var.ui.actionExportar_Propiedades_CSV.triggered.connect(eventos.Eventos.exportCSVProp)
         var.ui.actionExportar_Propiedades_JSON.triggered.connect(eventos.Eventos.exportJSONProp)
+        var.ui.actionExportar_Vendedores_JSON.triggered.connect(eventos.Eventos.exportJSONVendedor)
 
 
         '''
@@ -119,6 +132,7 @@ class Main(QtWidgets.QMainWindow):
         '''
         var.ui.chkHistoriaCli.stateChanged.connect(clientes.Clientes.historicoCli)
         var.ui.chkHistoriaProp.stateChanged.connect(propiedades.Propiedades.cargaTablaPropiedades)
+        var.ui.chkHistoricoVen.stateChanged.connect(vendedor.Vendedor.cargarTablaVendedores)
         propiedades.Propiedades.manageChkBox(self)
 
         '''

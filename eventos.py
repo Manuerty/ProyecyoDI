@@ -64,10 +64,37 @@ class Eventos():
         listado = conexion.Conexion.listaMuni(provincia)
         var.ui.cmbMuniProp.addItems(listado)
 
+    def cargarProvinciasVen(self):
+        var.ui.cmbDelegVen.clear()
+        listado = conexion.Conexion.listaProv(self)
+        var.ui.cmbDelegVen.addItems(listado)
+
     def validarDNIcli(dni):
         try:
             dni = str(dni).upper()
             var.ui.txtDniCli.setText(str(dni))
+            tabla = "TRWAGMYFPDXBNJZSQVHLCKE"
+            dig_ext = "XYZ"
+            reemp_dig_ext = {'X': '0', 'Y': '1', 'Z': '2'}
+            numeros = "1234567890"
+            if len(dni) == 9:
+                dig_control = dni[8]
+                dni = dni[:8]
+                if dni[0] in dig_ext:
+                    dni = dni.replace(dni[0], reemp_dig_ext[dni[0]])
+                if len(dni) == len([n for n in dni if n in numeros]) and tabla[int(dni) % 23] == dig_control:
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        except Exception as error:
+            print("error en validar dni ", error)
+
+    def validarDNIven(dni):
+        try:
+            dni = str(dni).upper()
+            var.ui.txtDniVen.setText(str(dni))
             tabla = "TRWAGMYFPDXBNJZSQVHLCKE"
             dig_ext = "XYZ"
             reemp_dig_ext = {'X': '0', 'Y': '1', 'Z': '2'}
@@ -116,6 +143,9 @@ class Eventos():
                 var.ui.txtFechaAltaProp.setText(str(data))
             elif var.panel == 1 and var.btn == 1:
                 var.ui.txtFechaBajaProp.setText(str(data))
+            elif var.panel == 2 and var.btn == 0:
+                var.ui.txtAltaVen.setText(str(data))
+
             time.sleep(0.125)
             var.uicalendar.hide()
             return data
@@ -163,6 +193,23 @@ class Eventos():
                     header_item.setFont(font)
         except Exception as e:
             print("error en resize tabla prop", e)
+
+    def resizeTablaVendedores(self):
+        try:
+            header = var.ui.tablaVen.horizontalHeader()
+            for i in range(header.count()):
+                if i == 1 or i == 2 or i == 4 or i == 5:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+                else:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+
+                header_item = var.ui.tablaVen.horizontalHeaderItem(i)
+                if header_item is not None:
+                    font = header_item.font()
+                    font.setBold(True)
+                    header_item.setFont(font)
+        except Exception as e:
+            print("error en resize tabla vendedores", e)
 
     def crearBackUp(self):
         try:
@@ -425,6 +472,25 @@ class Eventos():
                 lista_clientes = [dict(zip(keys, registro)) for registro in registros]
                 with open (fichero, "w", encoding= 'utf-8') as jsonfile:
                     json.dump(lista_clientes, jsonfile, ensure_ascii=False, indent=4)
+                shutil.move(fichero, directorio)
+            else:
+                eventos.Eventos.crearMensajeError('Exportar JSON', 'No se ha seleccionado ningún fichero')
+
+        except Exception as error:
+            print("error en exportar json clientes", error)
+
+    def exportJSONVendedor(self):
+        try:
+            var.historiacli = 0
+            fecha = datetime.today().strftime('%Y_%m_%d_%H_%M_%S')
+            file = (str(fecha) + '_vendedores.json')
+            directorio, fichero = var.dlgabrir.getSaveFileName(None, "Exportar Datos en JSON", file, '.json')
+            if fichero:
+                keys = ['id', 'dni', 'nombre y apellidos', 'fecha de alta', 'fecha de baja', 'numero', 'email', 'delegacion']
+                registros = conexion.Conexion.listadoVendedoresExport(self)
+                lista_vendedores = [dict(zip(keys, registro)) for registro in registros]
+                with open (fichero, "w", encoding= 'utf-8') as jsonfile:
+                    json.dump(lista_vendedores, jsonfile, ensure_ascii=False, indent=4)
                 shutil.move(fichero, directorio)
             else:
                 eventos.Eventos.crearMensajeError('Exportar JSON', 'No se ha seleccionado ningún fichero')
