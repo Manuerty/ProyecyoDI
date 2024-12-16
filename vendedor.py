@@ -156,7 +156,6 @@ class Vendedor:
     def  bajaVendedor(self):
         try:
             datos = [var.ui.txtBajaVen.text(), var.ui.lblVen.text()]
-            print(datos)
             if conexion.Conexion.checkDNIinDb(datos[1]):
                 if conexion.Conexion.bajaVendedor(datos):
                     mbox = QtWidgets.QMessageBox()

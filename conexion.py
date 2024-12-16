@@ -469,8 +469,8 @@ class Conexion:
     def checkDNIinDb(dni):
         try:
             query = QtSql.QSqlQuery()
-            query.prepare('SELECT * FROM Vendedores WHERE dniVendedor = :dniVend')
-            query.bindValue(':dniVend', str(dni))
+            query.prepare('SELECT * FROM Vendedores WHERE idVendedor = :idVend')
+            query.bindValue(':idVend', str(dni))
             if query.exec():
                 if query.next():
                     return True
