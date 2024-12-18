@@ -10,6 +10,7 @@ import sys
 import var
 import clientes
 import propiedades
+import informes
 
 class Main(QtWidgets.QMainWindow):
 
@@ -55,6 +56,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.actionbarBuscar.triggered.connect(propiedades.Propiedades.filtrarProp)
         var.ui.actionbarGestionProp.triggered.connect(eventos.Eventos.abrirTipoProp)
         var.ui.actionbarGestionProp.triggered.connect(eventos.Eventos.abrirTipoProp)
+        var.ui.actionListado_Clientes.triggered.connect(informes.Informes.reportClientes)
 
 
         '''
