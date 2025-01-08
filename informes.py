@@ -5,6 +5,9 @@ from reportlab.pdfgen import canvas
 import os, shutil
 import var
 from PIL import Image
+from PyQt6 import QtWidgets,QtSql,QtCore
+import sqlite3
+
 
 class Informes:
 
@@ -31,6 +34,38 @@ class Informes:
             var.report.drawString(360, 650, str(items[4]))
             var.report.drawString(450, 650, str(items[5]))
             var.report.line(50, 645, 525, 645)
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT dnicli, apelcli, nomecli, movilcli, provcli, municli from clientes order by apelcli")
+            if query.exec():
+                x = 55
+                y = 630
+                while query.next():
+                    if y <=90 :
+                        var.report.setFont("Helvetica-Oblique", size=8)
+                        var.report.drawString(450, 80, "Pagina Siguiente...")
+                        var.report.showPage()
+                        Informes.topInforme(titulo)
+                        Informes.footInforme(titulo)
+                        items = ['DNI', 'APELLIDOS', 'NOMBRE', 'MOVIL', 'PROVINCIA', 'MUNICIPIO']
+                        var.report.setFont('Helvetica-Bold', size=10)
+                        var.report.drawString(55, 650, str(items[0]))
+                        var.report.drawString(100, 650, str(items[1]))
+                        var.report.drawString(190, 650, str(items[2]))
+                        var.report.drawString(285, 650, str(items[3]))
+                        var.report.drawString(360, 650, str(items[4]))
+                        var.report.drawString(450, 650, str(items[5]))
+                        var.report.line(50, 645, 525, 645)
+                        x = 55
+                        y = 625
+                    var.report.setFont("Helvetica", size=8)
+                    dni = "***"+ str(query.value(0)[4:7]+"***")
+                    var.report.drawCentredString(x + 10, y , str(dni))
+                    var.report.drawString(x + 43, y , str(query.value(1)).title())
+                    var.report.drawString(x + 135, y , str(query.value(2)).title())
+                    var.report.drawString(x + 225, y , str(query.value(3)))
+                    var.report.drawString(x + 305, y , str(query.value(4)))
+                    var.report.drawString(x + 395, y , str(query.value(5)))
+                    y -= 40
             var.report.save()
 
 
@@ -67,7 +102,7 @@ class Informes:
                 var.report.line(50, 800, 525, 800)
                 var.report.setFont('Helvetica-Bold', size=14)
                 var.report.drawString(55, 785, 'Inmobiliaria Teis')
-                var.report.drawString(230, 670, titulo)
+                var.report.drawString(230, 675, titulo)
                 var.report.line(50, 665, 525, 665)
 
                 # Dibuja la imagen en el informe
