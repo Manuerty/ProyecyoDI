@@ -7,78 +7,98 @@ import var
 from PIL import Image
 from PyQt6 import QtWidgets,QtSql,QtCore
 import sqlite3
+import math
 
 
 class Informes:
 
     @staticmethod
-    def reportClientes(self):
+    def reportClientes():
+        xdni = 55
+        xapelcli = 100
+        xnomecli = 190
+        xmovilcli = 285
+        xprovcli = 360
+        xmunicli = 450
+        ymax = 630
+        ymin = 90
+        ystep = 50
         try:
-            rootPath = '.\\informes'
+            rootPath = ".\\informes"
             if not os.path.exists(rootPath):
                 os.makedirs(rootPath)
-            fecha = datetime.today()
-            fecha = fecha.strftime("%Y_%m_%d_%H_%M_%S")
-            nompdfcli = fecha + "_listadoclientes.pdf"
-            pdf_path = os.path.join(rootPath, nompdfcli)
+            fecha = datetime.today().strftime("%Y_%m_%d_%H_%M_%S")
+            nomepdfcli = fecha + "_listadoclientes.pdf"
+            pdf_path = os.path.join(rootPath, nomepdfcli)
+            print(pdf_path)
             var.report = canvas.Canvas(pdf_path)
             titulo = "Listado clientes"
-            Informes.topInforme(titulo)
-            Informes.footInforme(titulo)
-            items = ['DNI', 'APELLIDOS', 'NOMBRE', 'MOVIL', 'PROVINCIA', 'MUNICIPIO']
-            var.report.setFont('Helvetica-Bold', size=10)
-            var.report.drawString(55, 650, str(items[0]))
-            var.report.drawString(100, 650, str(items[1]))
-            var.report.drawString(190, 650, str(items[2]))
-            var.report.drawString(285, 650, str(items[3]))
-            var.report.drawString(360, 650, str(items[4]))
-            var.report.drawString(450, 650, str(items[5]))
-            var.report.line(50, 645, 525, 645)
             query = QtSql.QSqlQuery()
-            query.prepare("SELECT dnicli, apelcli, nomecli, movilcli, provcli, municli from clientes order by apelcli")
-            if query.exec():
-                x = 55
-                y = 630
+            query.prepare("SELECT dnicli, apelcli, nomecli, movilcli, provcli, municli FROM clientes order by apelcli")
+            queryCount = QtSql.QSqlQuery()
+            queryCount.prepare("Select count(*) from clientes")
+            if query.exec() and queryCount.exec() and queryCount.next():
+                total_clientes = queryCount.value(0)
+                print(total_clientes)
+                total_pages = Informes.getNumberPages(total_clientes, ymax, ymin, ystep)
+                print(total_pages)
+                Informes.topInforme(titulo)
+                Informes.footInforme(titulo, total_pages)
+                items = ["DNI", "APELLIDOS", "NOMBRE", "MOVIL", "PROVINCIA", "MUNICIPIO"]
+                var.report.setFont("Helvetica-Bold", size=10)
+
+                var.report.drawString(xdni, 650, str(items[0]))
+                var.report.drawString(xapelcli, 650, str(items[1]))
+                var.report.drawString(xnomecli, 650, str(items[2]))
+                var.report.drawString(xmovilcli, 650, str(items[3]))
+                var.report.drawString(xprovcli, 650, str(items[4]))
+                var.report.drawString(xmunicli, 650, str(items[5]))
+                var.report.line(50, 645, 525, 645)
+
+                y = ymax
                 while query.next():
-                    if y <=90 :
-                        var.report.setFont("Helvetica-Oblique", size=8)
-                        var.report.drawString(450, 80, "Pagina Siguiente...")
+                    if y <= ymin:
+                        var.report.drawString(450, 80, "Página siguiente...")
                         var.report.showPage()
+                        Informes.footInforme(titulo, total_pages)
                         Informes.topInforme(titulo)
-                        Informes.footInforme(titulo)
-                        items = ['DNI', 'APELLIDOS', 'NOMBRE', 'MOVIL', 'PROVINCIA', 'MUNICIPIO']
-                        var.report.setFont('Helvetica-Bold', size=10)
-                        var.report.drawString(55, 650, str(items[0]))
-                        var.report.drawString(100, 650, str(items[1]))
-                        var.report.drawString(190, 650, str(items[2]))
-                        var.report.drawString(285, 650, str(items[3]))
-                        var.report.drawString(360, 650, str(items[4]))
-                        var.report.drawString(450, 650, str(items[5]))
+                        var.report.setFont("Helvetica-Bold", size=10)
+                        var.report.drawString(xdni, 650, str(items[0]))
+                        var.report.drawString(xapelcli, 650, str(items[1]))
+                        var.report.drawString(xnomecli, 650, str(items[2]))
+                        var.report.drawString(xmovilcli, 650, str(items[3]))
+                        var.report.drawString(xprovcli, 650, str(items[4]))
+                        var.report.drawString(xmunicli, 650, str(items[5]))
                         var.report.line(50, 645, 525, 645)
-                        x = 55
-                        y = 625
+                        y = ymax
+
                     var.report.setFont("Helvetica", size=8)
-                    dni = "***"+ str(query.value(0)[4:7]+"***")
-                    var.report.drawCentredString(x + 10, y , str(dni))
-                    var.report.drawString(x + 43, y , str(query.value(1)).title())
-                    var.report.drawString(x + 135, y , str(query.value(2)).title())
-                    var.report.drawString(x + 225, y , str(query.value(3)))
-                    var.report.drawString(x + 305, y , str(query.value(4)))
-                    var.report.drawString(x + 395, y , str(query.value(5)))
-                    y -= 40
+                    dni = "***" + str(query.value(0))[3:6] + "***"
+                    var.report.drawCentredString(xdni + 6, y, str(dni))
+                    var.report.drawString(xapelcli, y, str(query.value(1)).title())
+                    var.report.drawString(xnomecli, y, str(query.value(2)).title())
+                    var.report.drawString(xmovilcli - 3, y, str(query.value(3)).title())
+                    var.report.drawString(xprovcli, y, str(query.value(4)).title())
+                    var.report.drawString(xmunicli, y, str(query.value(5)).title())
+                    y -= ystep
+
             var.report.save()
 
-
-
             for file in os.listdir(rootPath):
-                if file.endswith(nompdfcli):
+                if file.endswith(nomepdfcli):
                     os.startfile(pdf_path)
 
+        except Exception as error:
+            print(error)
 
-        except Exception as e:
-            print(e)
+    @staticmethod
+    def getNumberPages(amount, ymax, ymin, ystep):
+        number_per_page = math.ceil((ymax - ymin) / ystep)
+        print(number_per_page)
+        return math.ceil(amount / number_per_page)
 
-    def footInforme(titulo):
+    @staticmethod
+    def footInforme(titulo, pages):
         try:
             total_pages = 0
             var.report.line(50, 50, 525, 50)
@@ -87,7 +107,7 @@ class Informes:
             var.report.setFont('Helvetica-Oblique', size=7)
             var.report.drawString(50, 40, str(fecha))
             var.report.drawString(250, 40, str(titulo))
-            var.report.drawString(490, 40, str('Página %s' % var.report.getPageNumber()))
+            var.report.drawString(490, 40, str('Página %s/%s' % (var.report.getPageNumber(), pages)))
 
         except Exception as error:
             print('Error en pie informe de cualquier tipo: ', error)
