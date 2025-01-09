@@ -20,7 +20,17 @@ class Conexion:
     '''
 
     @staticmethod
-    def db_conexion(self):
+    def db_conexion(self = None):
+        """
+
+        :param self: None
+        :type self:  None
+        :return: False or True
+        :rtype: Booleano
+
+        Modulo para establecer la conexion  a la base de datos
+        Si exito devuelve True, si no, False
+        """
         # Verifica si el archivo de base de datos existe
         if not os.path.isfile('bbdd.sqlite'):
             QtWidgets.QMessageBox.critical(None, 'Error', 'El archivo de la base de datos no existe.',
@@ -52,6 +62,15 @@ class Conexion:
 
     @staticmethod
     def listaProv(self):
+        """
+
+        :param self:  None
+        :type self:  None
+        :return: lista proivincias
+        :rtype: bytearray
+
+        Modulo para obtener la lista de provincias
+        """
         listaprov = []
         query = QtSql.QSqlQuery()
         query.prepare("SELECT * FROM provincias")
@@ -62,6 +81,15 @@ class Conexion:
 
     @staticmethod
     def listaMuni(provincia):
+        """
+
+        :param provincia: nombre provincia
+        :type provincia: bytearray
+        :return: lista municipios
+        :rtype: bytearray
+
+        Modulo que devuelve listao de municipios de una provincia
+        """
         query = QtSql.QSqlQuery()
         query.prepare("SELECT * FROM municipios"
                       " WHERE fk_idprov = (SELECT idprov FROM provincias WHERE provincia = :provincia)")
@@ -74,6 +102,15 @@ class Conexion:
 
     @staticmethod
     def altaCliente(nuevocli):
+        """
+
+        :param nuevocli: array con datos clientes
+        :type nuevocli: lista
+        :return: true o false
+        :rtype:  booleano
+
+        Metodo que inserta datos de un cliente en la BBDD
+        """
         try:
             query = QtSql.QSqlQuery()
             query.prepare(
@@ -100,6 +137,7 @@ class Conexion:
 
     @staticmethod
     def altaVendedor(nuevoVendedor):
+
         try:
             query = QtSql.QSqlQuery()
             query.prepare(
@@ -122,6 +160,13 @@ class Conexion:
 
 
     def listadoClientes(self):
+        """
+
+        :return: devuelve listado de clientes
+        :rtype: list
+
+        Metodo que devuelve todos los clientes ordenados por apellidos y nombres
+        """
         try:
             listado = []
             historico = var.ui.chkHistoriaCli.isChecked()
@@ -267,6 +312,13 @@ class Conexion:
 
 
     def datosOneCliente(dni):
+        """
+
+        :param dni: dni
+        :type dni:
+        :return:
+        :rtype:
+        """
         try:
             registro = []
             query = QtSql.QSqlQuery()
