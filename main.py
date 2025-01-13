@@ -22,6 +22,7 @@ class Main(QtWidgets.QMainWindow):
         var.dlggestion = dlgGestionProp()
         var.dlgabrir = FileDialogAbrir()
         var.dlgabout = dlgAbout()
+        var.dlgInforme = dlgInformeProp()
         var.historico = 1
         var.current_page_cli = 0
         var.items_per_page_cli = 15
@@ -57,7 +58,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.actionbarGestionProp.triggered.connect(eventos.Eventos.abrirTipoProp)
         var.ui.actionbarGestionProp.triggered.connect(eventos.Eventos.abrirTipoProp)
         var.ui.actionListado_Clientes.triggered.connect(informes.Informes.reportClientes)
-        var.ui.actionListado_Propiedades.triggered.connect(informes.Informes.reportPropiedades)
+        var.ui.actionListado_Propiedades.triggered.connect(informes.Informes.abrirInformesProp)
 
 
         '''

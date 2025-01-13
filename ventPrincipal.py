@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_ventPrincipal(object):
     def setupUi(self, ventPrincipal):
         ventPrincipal.setObjectName("ventPrincipal")
-        ventPrincipal.resize(1540, 1128)
+        ventPrincipal.resize(1540, 1074)
         ventPrincipal.setMaximumSize(QtCore.QSize(16777215, 16777215))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(".\\\\templates\\../img/logo.ico"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
@@ -1228,7 +1228,7 @@ class Ui_ventPrincipal(object):
         self.toolBar.addAction(self.actionbarSalir)
 
         self.retranslateUi(ventPrincipal)
-        self.panPrincipal.setCurrentIndex(2)
+        self.panPrincipal.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(ventPrincipal)
 
     def retranslateUi(self, ventPrincipal):

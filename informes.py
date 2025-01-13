@@ -12,6 +12,12 @@ import math
 
 class Informes:
 
+    def abrirInformesProp(self):
+        try:
+            var.dlgInforme.show()
+        except Exception as error:
+            print("error en abrir informes propiedades", error)
+
     @staticmethod
     def getNumberPages(amount, ymax, ymin, ystep):
         number_per_page = math.ceil((ymax - ymin) / ystep)

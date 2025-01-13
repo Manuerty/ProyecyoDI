@@ -3,12 +3,14 @@ from datetime import datetime
 from PyQt6.QtCore import QFile
 from PyQt6.QtWidgets import QFileDialog
 
+import informes
 from dlgAbout import Ui_dlg_About
 from dlgCalendar import *
 import var
 import eventos
 import propiedades
 from dlgGestionProp import *
+from dlgInformeProp import *
 
 class Calendar(QtWidgets.QDialog):
     def __init__(self):
@@ -42,3 +44,10 @@ class dlgAbout(QtWidgets.QDialog):
         self.ui = Ui_dlg_About()
         self.ui.setupUi(self)
         self.ui.btnCerrarAbout.clicked.connect(eventos.Eventos.cerrarAbout)
+
+class dlgInformeProp(QtWidgets.QDialog):
+    def __init__(self):
+        super(dlgInformeProp, self).__init__()
+        self.ui = Ui_dlgInformeProp()
+        self.ui.setupUi(self)
+        self.ui.btnGenerarInformeProp.clicked.connect(informes.Informes.reportPropiedades)
