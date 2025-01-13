@@ -57,6 +57,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.actionbarGestionProp.triggered.connect(eventos.Eventos.abrirTipoProp)
         var.ui.actionbarGestionProp.triggered.connect(eventos.Eventos.abrirTipoProp)
         var.ui.actionListado_Clientes.triggered.connect(informes.Informes.reportClientes)
+        var.ui.actionListado_Propiedades.triggered.connect(informes.Informes.reportPropiedades)
 
 
         '''

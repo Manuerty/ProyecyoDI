@@ -13,6 +13,54 @@ import math
 class Informes:
 
     @staticmethod
+    def getNumberPages(amount, ymax, ymin, ystep):
+        number_per_page = math.ceil((ymax - ymin) / ystep)
+        print(number_per_page)
+        return math.ceil(amount / number_per_page)
+
+    @staticmethod
+    def footInforme(titulo, pages):
+        try:
+            total_pages = 0
+            var.report.line(50, 50, 525, 50)
+            fecha = datetime.today()
+            fecha = fecha.strftime('%d-%m-%Y %H:%M:%S')
+            var.report.setFont('Helvetica-Oblique', size=7)
+            var.report.drawString(50, 40, str(fecha))
+            var.report.drawString(250, 40, str(titulo))
+            var.report.drawString(490, 40, str('Página %s/%s' % (var.report.getPageNumber(), pages)))
+
+        except Exception as error:
+            print('Error en pie informe de cualquier tipo: ', error)
+
+    def topInforme(titulo):
+        try:
+            ruta_logo = '.\\img\\logo.png'
+            logo = Image.open(ruta_logo)
+
+            # Asegúrate de que el objeto 'logo' sea de tipo 'PngImageFile'
+            if isinstance(logo, Image.Image):
+                var.report.line(50, 800, 525, 800)
+                var.report.setFont('Helvetica-Bold', size=14)
+                var.report.drawString(55, 785, 'Inmobiliaria Teis')
+                var.report.drawString(230, 675, titulo)
+                var.report.line(50, 665, 525, 665)
+
+                # Dibuja la imagen en el informe
+                var.report.drawImage(ruta_logo, 480, 725, width=40, height=40)
+
+                var.report.setFont('Helvetica', size=9)
+                var.report.drawString(55, 770, 'CIF: A12345678')
+                var.report.drawString(55, 755, 'Avda. Galicia - 101')
+                var.report.drawString(55, 740, 'Vigo - 36216 - España')
+                var.report.drawString(55, 725, 'Teléfono: 986 132 456')
+                var.report.drawString(55, 710, 'e-mail: cartesteisr@mail.com')
+            else:
+                print(f'Error: No se pudo cargar la imagen en {ruta_logo}')
+        except Exception as error:
+            print('Error en cabecera informe:', error)
+
+    @staticmethod
     def reportClientes():
         xdni = 55
         xapelcli = 100
@@ -92,49 +140,79 @@ class Informes:
             print(error)
 
     @staticmethod
-    def getNumberPages(amount, ymax, ymin, ystep):
-        number_per_page = math.ceil((ymax - ymin) / ystep)
-        print(number_per_page)
-        return math.ceil(amount / number_per_page)
-
-    @staticmethod
-    def footInforme(titulo, pages):
+    def reportPropiedades():
+        xcodigo = 72.5
+        xtipo = 125
+        xmunicipio = 190
+        xoperacion = 305
+        xprecio = 380
+        xdisponibilidad = 465
+        ymax = 630
+        ymin = 90
+        ystep = 50
         try:
-            total_pages = 0
-            var.report.line(50, 50, 525, 50)
-            fecha = datetime.today()
-            fecha = fecha.strftime('%d-%m-%Y %H:%M:%S')
-            var.report.setFont('Helvetica-Oblique', size=7)
-            var.report.drawString(50, 40, str(fecha))
-            var.report.drawString(250, 40, str(titulo))
-            var.report.drawString(490, 40, str('Página %s/%s' % (var.report.getPageNumber(), pages)))
+            rootPath = ".\\informes"
+            if not os.path.exists(rootPath):
+                os.makedirs(rootPath)
+            fecha = datetime.today().strftime("%Y_%m_%d_%H_%M_%S")
+            nomepdfcli = fecha + "_listadoPropiedades.pdf"
+            pdf_path = os.path.join(rootPath, nomepdfcli)
+            print(pdf_path)
+            var.report = canvas.Canvas(pdf_path)
+            titulo = "Listado Propiedades"
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT codigo, tipoprop, muniprop, tipoperprop, precioventaprop, estadoprop FROM Propiedades order by muniprop")
+            queryCount = QtSql.QSqlQuery()
+            queryCount.prepare("Select count(*) from Propiedades")
+            if query.exec() and queryCount.exec() and queryCount.next():
+                total_propiedades = queryCount.value(0)
+                print(total_propiedades)
+                total_pages = Informes.getNumberPages(total_propiedades, ymax, ymin, ystep)
+                print(total_pages)
+                Informes.topInforme(titulo)
+                Informes.footInforme(titulo, total_pages)
+                items = ["CÓDIGO", "TIPO", "MUNICIPIO", "OPERACIÓN", "PRECIO", "DISPONIBILIDAD"]
+                var.report.setFont("Helvetica-Bold", size=10)
+
+                var.report.drawString(55, 650, str(items[0]))
+                var.report.drawString(125, 650, str(items[1]))
+                var.report.drawString(190, 650, str(items[2]))
+                var.report.drawString(285, 650, str(items[3]))
+                var.report.drawString(380, 650, str(items[4]))
+                var.report.drawString(450, 650, str(items[5]))
+                var.report.line(50, 645, 525, 645)
+
+                y = ymax
+                while query.next():
+                    if y <= ymin:
+                        var.report.drawString(450, 80, "Página siguiente...")
+                        var.report.showPage()
+                        Informes.footInforme(titulo, total_pages)
+                        Informes.topInforme(titulo)
+                        var.report.setFont("Helvetica-Bold", size=10)
+                        var.report.drawString(55, 650, str(items[0]))
+                        var.report.drawString(125, 650, str(items[1]))
+                        var.report.drawString(190, 650, str(items[2]))
+                        var.report.drawString(285, 650, str(items[3]))
+                        var.report.drawString(380, 650, str(items[4]))
+                        var.report.drawString(450, 650, str(items[5]))
+                        var.report.line(50, 645, 525, 645)
+                        y = ymax
+
+                    var.report.setFont("Helvetica", size=8)
+                    var.report.drawCentredString(xcodigo, y, str(query.value(0)))
+                    var.report.drawString(xtipo, y, str(query.value(1)).title())
+                    var.report.drawString(xmunicipio, y, str(query.value(2)).title())
+                    var.report.drawString(xoperacion - 3, y, str(query.value(3)).title())
+                    var.report.drawString(xprecio, y, str(query.value(4)).title())
+                    var.report.drawString(xdisponibilidad, y, str(query.value(5)).title())
+                    y -= ystep
+
+            var.report.save()
+
+            for file in os.listdir(rootPath):
+                if file.endswith(nomepdfcli):
+                    os.startfile(pdf_path)
 
         except Exception as error:
-            print('Error en pie informe de cualquier tipo: ', error)
-
-    def topInforme(titulo):
-        try:
-            ruta_logo = '.\\img\\logo.png'
-            logo = Image.open(ruta_logo)
-
-            # Asegúrate de que el objeto 'logo' sea de tipo 'PngImageFile'
-            if isinstance(logo, Image.Image):
-                var.report.line(50, 800, 525, 800)
-                var.report.setFont('Helvetica-Bold', size=14)
-                var.report.drawString(55, 785, 'Inmobiliaria Teis')
-                var.report.drawString(230, 675, titulo)
-                var.report.line(50, 665, 525, 665)
-
-                # Dibuja la imagen en el informe
-                var.report.drawImage(ruta_logo, 480, 725, width=40, height=40)
-
-                var.report.setFont('Helvetica', size=9)
-                var.report.drawString(55, 770, 'CIF: A12345678')
-                var.report.drawString(55, 755, 'Avda. Galicia - 101')
-                var.report.drawString(55, 740, 'Vigo - 36216 - España')
-                var.report.drawString(55, 725, 'Teléfono: 986 132 456')
-                var.report.drawString(55, 710, 'e-mail: cartesteisr@mail.com')
-            else:
-                print(f'Error: No se pudo cargar la imagen en {ruta_logo}')
-        except Exception as error:
-            print('Error en cabecera informe:', error)
+            print(error)

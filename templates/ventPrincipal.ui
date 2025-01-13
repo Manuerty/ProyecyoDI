@@ -3363,6 +3363,7 @@
      <string>Informes</string>
     </property>
     <addaction name="actionListado_Clientes"/>
+    <addaction name="actionListado_Propiedades"/>
    </widget>
    <addaction name="menuSalir"/>
    <addaction name="menuGesti_n"/>
@@ -3512,6 +3513,11 @@
   <action name="actionListado_Clientes">
    <property name="text">
     <string>Listado Clientes</string>
+   </property>
+  </action>
+  <action name="actionListado_Propiedades">
+   <property name="text">
+    <string>Listado Propiedades</string>
    </property>
   </action>
  </widget>
