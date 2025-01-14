@@ -15,6 +15,7 @@ import informes
 class Main(QtWidgets.QMainWindow):
 
     def __init__(self):
+        conexion.Conexion.db_conexion(self)
         super(Main, self).__init__()
         var.ui = Ui_ventPrincipal()
         var.ui.setupUi(self)
@@ -29,7 +30,6 @@ class Main(QtWidgets.QMainWindow):
         var.current_page_prop = 0
         var.items_per_page_prop = 15
         self.setStyleSheet(style.load_stylesheet())
-        conexion.Conexion.db_conexion(self)
         clientes.Clientes.cargaTablaClientes(self)
         propiedades.Propiedades.cargaTablaPropiedades(self)
         vendedor.Vendedor.cargarTablaVendedores(self)

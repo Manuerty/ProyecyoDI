@@ -6,7 +6,6 @@ import os, shutil
 import var
 from PIL import Image
 from PyQt6 import QtWidgets,QtSql,QtCore
-import sqlite3
 import math
 
 
@@ -21,7 +20,6 @@ class Informes:
     @staticmethod
     def getNumberPages(amount, ymax, ymin, ystep):
         number_per_page = math.ceil((ymax - ymin) / ystep)
-        print(number_per_page)
         return math.ceil(amount / number_per_page)
 
     @staticmethod
@@ -49,7 +47,7 @@ class Informes:
                 var.report.line(50, 800, 525, 800)
                 var.report.setFont('Helvetica-Bold', size=14)
                 var.report.drawString(55, 785, 'Inmobiliaria Teis')
-                var.report.drawString(230, 675, titulo)
+                var.report.drawCentredString(300, 675, titulo)
                 var.report.line(50, 665, 525, 665)
 
                 # Dibuja la imagen en el informe
@@ -84,7 +82,6 @@ class Informes:
             fecha = datetime.today().strftime("%Y_%m_%d_%H_%M_%S")
             nomepdfcli = fecha + "_listadoclientes.pdf"
             pdf_path = os.path.join(rootPath, nomepdfcli)
-            print(pdf_path)
             var.report = canvas.Canvas(pdf_path)
             titulo = "Listado clientes"
             query = QtSql.QSqlQuery()
@@ -93,9 +90,7 @@ class Informes:
             queryCount.prepare("Select count(*) from clientes")
             if query.exec() and queryCount.exec() and queryCount.next():
                 total_clientes = queryCount.value(0)
-                print(total_clientes)
                 total_pages = Informes.getNumberPages(total_clientes, ymax, ymin, ystep)
-                print(total_pages)
                 Informes.topInforme(titulo)
                 Informes.footInforme(titulo, total_pages)
                 items = ["DNI", "APELLIDOS", "NOMBRE", "MOVIL", "PROVINCIA", "MUNICIPIO"]
@@ -146,7 +141,7 @@ class Informes:
             print(error)
 
     @staticmethod
-    def reportPropiedades():
+    def reportPropiedades(municipio):
         xcodigo = 72.5
         xtipo = 125
         xmunicipio = 190
@@ -163,21 +158,19 @@ class Informes:
             fecha = datetime.today().strftime("%Y_%m_%d_%H_%M_%S")
             nomepdfcli = fecha + "_listadoPropiedades.pdf"
             pdf_path = os.path.join(rootPath, nomepdfcli)
-            print(pdf_path)
             var.report = canvas.Canvas(pdf_path)
-            titulo = "Listado Propiedades"
+            titulo = "Listado Propiedades de " + municipio
             query = QtSql.QSqlQuery()
-            query.prepare("SELECT codigo, tipoprop, muniprop, tipoperprop, precioventaprop, estadoprop FROM Propiedades order by muniprop")
+            query.prepare("SELECT codigo, tipoprop, dirprop, tipoperprop, precioventaprop, estadoprop FROM Propiedades where muniprop = :municipio order by dirprop")
+            query.bindValue(":municipio", municipio)
             queryCount = QtSql.QSqlQuery()
             queryCount.prepare("Select count(*) from Propiedades")
             if query.exec() and queryCount.exec() and queryCount.next():
                 total_propiedades = queryCount.value(0)
-                print(total_propiedades)
                 total_pages = Informes.getNumberPages(total_propiedades, ymax, ymin, ystep)
-                print(total_pages)
                 Informes.topInforme(titulo)
                 Informes.footInforme(titulo, total_pages)
-                items = ["CÓDIGO", "TIPO", "MUNICIPIO", "OPERACIÓN", "PRECIO", "DISPONIBILIDAD"]
+                items = ["CÓDIGO", "TIPO", "DIRECCIÓN", "OPERACIÓN", "PRECIO", "DISPONIBILIDAD"]
                 var.report.setFont("Helvetica-Bold", size=10)
 
                 var.report.drawString(55, 650, str(items[0]))

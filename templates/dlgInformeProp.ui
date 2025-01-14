@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>372</width>
+    <width>370</width>
     <height>243</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -117,21 +117,15 @@
          </spacer>
         </item>
         <item>
-         <widget class="QFontComboBox" name="cmbMuniInforme">
+         <widget class="QComboBox" name="cmbMuniInforme">
           <property name="minimumSize">
            <size>
-            <width>225</width>
+            <width>255</width>
             <height>0</height>
            </size>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>300</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="currentText">
-           <string/>
+          <property name="editable">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
