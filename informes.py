@@ -146,8 +146,8 @@ class Informes:
         xtipo = 125
         xmunicipio = 190
         xoperacion = 305
-        xprecio = 380
-        xdisponibilidad = 465
+        xprecioventa = 415
+        xprecioalquiler = 500
         ymax = 630
         ymin = 90
         ystep = 50
@@ -161,7 +161,7 @@ class Informes:
             var.report = canvas.Canvas(pdf_path)
             titulo = "Listado Propiedades de " + municipio
             query = QtSql.QSqlQuery()
-            query.prepare("SELECT codigo, tipoprop, dirprop, tipoperprop, precioventaprop, estadoprop FROM Propiedades where muniprop = :municipio order by dirprop")
+            query.prepare("SELECT codigo, tipoprop, dirprop, tipoperprop, precioventaprop, precioalquilerprop FROM Propiedades where muniprop = :municipio order by dirprop")
             query.bindValue(":municipio", municipio)
             queryCount = QtSql.QSqlQuery()
             queryCount.prepare("Select count(*) from Propiedades")
@@ -170,7 +170,7 @@ class Informes:
                 total_pages = Informes.getNumberPages(total_propiedades, ymax, ymin, ystep)
                 Informes.topInforme(titulo)
                 Informes.footInforme(titulo, total_pages)
-                items = ["CÓDIGO", "TIPO", "DIRECCIÓN", "OPERACIÓN", "PRECIO", "DISPONIBILIDAD"]
+                items = ["CÓDIGO", "TIPO", "DIRECCIÓN", "OPERACIÓN", "VENTA", "ALQUILER"]
                 var.report.setFont("Helvetica-Bold", size=10)
 
                 var.report.drawString(55, 650, str(items[0]))
@@ -203,8 +203,8 @@ class Informes:
                     var.report.drawString(xtipo, y, str(query.value(1)).title())
                     var.report.drawString(xmunicipio, y, str(query.value(2)).title())
                     var.report.drawString(xoperacion - 3, y, str(query.value(3)).title())
-                    var.report.drawString(xprecio, y, str(query.value(4)).title())
-                    var.report.drawString(xdisponibilidad, y, str(query.value(5)).title())
+                    var.report.drawRightString(xprecioventa, y, str(query.value(4)).title() + " €")
+                    var.report.drawRightString(xprecioalquiler, y, str(query.value(5)).title() + " €")
                     y -= ystep
 
             var.report.save()
