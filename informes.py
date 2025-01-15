@@ -203,8 +203,10 @@ class Informes:
                     var.report.drawString(xtipo, y, str(query.value(1)).title())
                     var.report.drawString(xmunicipio, y, str(query.value(2)).title())
                     var.report.drawString(xoperacion - 3, y, str(query.value(3)).title())
-                    var.report.drawRightString(xprecioventa, y, str(query.value(4)).title() + " €")
-                    var.report.drawRightString(xprecioalquiler, y, str(query.value(5)).title() + " €")
+                    precio_alquiler = "-" if not query.value(4) else str(query.value(4))
+                    precio_venta = "-" if not query.value(5) else str(query.value(5))
+                    var.report.drawRightString(xprecioalquiler, y, precio_alquiler + " €")
+                    var.report.drawRightString(xprecioventa, y, precio_venta + " €")
                     y -= ystep
 
             var.report.save()
