@@ -145,6 +145,8 @@ class Eventos():
                 var.ui.txtFechaBajaProp.setText(str(data))
             elif var.panel == 2 and var.btn == 0:
                 var.ui.txtAltaVen.setText(str(data))
+            elif var.panel == 3 and var.btn == 0:
+                var.ui.txtFechaFac.setText(str(data))
 
             time.sleep(0.125)
             var.uicalendar.hide()
