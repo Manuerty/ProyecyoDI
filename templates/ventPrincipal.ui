@@ -4071,6 +4071,46 @@
       <property name="frameShadow">
        <enum>QFrame::Sunken</enum>
       </property>
+      <widget class="QTableWidget" name="tableWidget_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>1081</width>
+         <height>461</height>
+        </rect>
+       </property>
+       <column>
+        <property name="text">
+         <string>IdVenta</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>IdPropiedad</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Tipo</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Dirección</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Localidad</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Precio</string>
+        </property>
+       </column>
+      </widget>
      </widget>
     </widget>
    </widget>
