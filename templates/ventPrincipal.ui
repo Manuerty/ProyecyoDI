@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1780</width>
-    <height>992</height>
+    <width>1789</width>
+    <height>944</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -29,7 +29,7 @@
      <rect>
       <x>79</x>
       <y>17</y>
-      <width>1531</width>
+      <width>1641</width>
       <height>888</height>
      </rect>
     </property>
@@ -51,7 +51,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="PesClientes">
      <attribute name="title">
@@ -3325,8 +3325,8 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>10</y>
-        <width>351</width>
+        <y>20</y>
+        <width>431</width>
         <height>251</height>
        </rect>
       </property>
@@ -3520,7 +3520,7 @@
        <rect>
         <x>20</x>
         <y>290</y>
-        <width>351</width>
+        <width>431</width>
         <height>571</height>
        </rect>
       </property>
@@ -3530,14 +3530,44 @@
       <property name="frameShadow">
        <enum>QFrame::Sunken</enum>
       </property>
+      <widget class="QTableWidget" name="tableWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>411</width>
+         <height>551</height>
+        </rect>
+       </property>
+       <column>
+        <property name="text">
+         <string>Factura</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>DNI</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Fecha</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Gestion</string>
+        </property>
+       </column>
+      </widget>
      </widget>
      <widget class="QFrame" name="frame_3">
       <property name="geometry">
        <rect>
-        <x>400</x>
+        <x>470</x>
         <y>10</y>
         <width>1101</width>
-        <height>251</height>
+        <height>261</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -4029,7 +4059,7 @@
      <widget class="QFrame" name="frame_4">
       <property name="geometry">
        <rect>
-        <x>400</x>
+        <x>470</x>
         <y>290</y>
         <width>1101</width>
         <height>481</height>
@@ -4050,7 +4080,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1780</width>
+     <width>1789</width>
      <height>21</height>
     </rect>
    </property>
