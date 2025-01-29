@@ -126,7 +126,7 @@ class Facturas():
             elif var.ui.txtidvenfac.text() == "" or var.ui.txtidvenfac.text() is None:
                 eventos.Eventos.crearMensajeError("Error al grabar venta",
                                                   "Recuerda seleccionar un vendedor antes de grabar una venta")
-            elif conexion.Conexion.altaVenta(nuevaVenta) and conexion.Conexion.actual<izaPropiedadVenta(nuevaVenta[1]):
+            elif conexion.Conexion.altaVenta(nuevaVenta) and conexion.Conexion.actualizaPropiedadVenta(nuevaVenta[1]):
                 eventos.Eventos.crearMensajeInfo("Venta grabada", "Se ha grabado una nueva venta")
                 Facturas.cargaTablaVentas()
                 propiedad_instancia = propiedades.Propiedades()
