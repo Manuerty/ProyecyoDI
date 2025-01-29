@@ -3396,7 +3396,7 @@
           </widget>
          </item>
          <item row="1" column="2">
-          <widget class="QLabel" name="lblfac">
+          <widget class="QLabel" name="lblNumFactura">
            <property name="minimumSize">
             <size>
              <width>75</width>
@@ -3456,21 +3456,21 @@
           </widget>
          </item>
          <item row="3" column="2">
-          <widget class="QLineEdit" name="txtCliFac">
+          <widget class="QLineEdit" name="txtDniFactura">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
          <item row="2" column="2">
-          <widget class="QLineEdit" name="txtFechaFac">
+          <widget class="QLineEdit" name="txtFechaFactura">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
          <item row="4" column="2">
-          <widget class="QPushButton" name="btnGrabarFatura">
+          <widget class="QPushButton" name="btnGrabarFactura">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -3530,7 +3530,7 @@
       <property name="frameShadow">
        <enum>QFrame::Sunken</enum>
       </property>
-      <widget class="QTableWidget" name="tabFacturas">
+      <widget class="QTableWidget" name="tablafacturas">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -3539,6 +3539,15 @@
          <height>551</height>
         </rect>
        </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderHighlightSections">
+        <bool>false</bool>
+       </attribute>
        <column>
         <property name="text">
          <string>Factura</string>
@@ -3616,7 +3625,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="txtApellidosVenta"/>
+                <widget class="QLineEdit" name="txtApelClieVentas"/>
                </item>
                <item>
                 <spacer name="horizontalSpacer_52">
@@ -3642,7 +3651,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="txtNombreVenta"/>
+                <widget class="QLineEdit" name="txtNomCliVentas"/>
                </item>
                <item>
                 <spacer name="horizontalSpacer_53">
@@ -3743,7 +3752,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="lblCodigoVenta">
+                    <widget class="QLabel" name="lblCodigoPropVentas">
                      <property name="minimumSize">
                       <size>
                        <width>75</width>
@@ -3794,7 +3803,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="txtTipoVenta"/>
+                    <widget class="QLineEdit" name="txtTipoPropVentas"/>
                    </item>
                    <item>
                     <spacer name="horizontalSpacer_50">
@@ -3820,7 +3829,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="txtPrecioVenta"/>
+                    <widget class="QLineEdit" name="txtPrecioVentas"/>
                    </item>
                    <item>
                     <spacer name="horizontalSpacer_51">
@@ -3866,7 +3875,7 @@
                         </spacer>
                        </item>
                        <item>
-                        <widget class="QLineEdit" name="txtVendedorVenta">
+                        <widget class="QLineEdit" name="txtVendedorVentas">
                          <property name="minimumSize">
                           <size>
                            <width>75</width>
@@ -3913,7 +3922,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="txtDirVenta">
+                    <widget class="QLineEdit" name="txtDireccionPropVentas">
                      <property name="minimumSize">
                       <size>
                        <width>500</width>
@@ -3936,7 +3945,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="txtLocalidadVenta">
+                    <widget class="QLineEdit" name="txtLocalidadVentas">
                      <property name="minimumSize">
                       <size>
                        <width>256</width>
@@ -3987,7 +3996,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="btnGrabarVentas">
+            <widget class="QPushButton" name="btnGrabarVenta">
              <property name="minimumSize">
               <size>
                <width>100</width>
@@ -4071,7 +4080,7 @@
       <property name="frameShadow">
        <enum>QFrame::Sunken</enum>
       </property>
-      <widget class="QTableWidget" name="tabVentas">
+      <widget class="QTableWidget" name="tablaVentas">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -4121,7 +4130,7 @@
      <x>0</x>
      <y>0</y>
      <width>1789</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSalir">

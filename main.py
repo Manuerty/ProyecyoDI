@@ -11,6 +11,7 @@ import var
 import clientes
 import propiedades
 import informes
+import facturas
 
 class Main(QtWidgets.QMainWindow):
 
@@ -33,6 +34,7 @@ class Main(QtWidgets.QMainWindow):
         clientes.Clientes.cargaTablaClientes(self)
         propiedades.Propiedades.cargaTablaPropiedades(self)
         vendedor.Vendedor.cargarTablaVendedores(self)
+        facturas.Facturas.mostrarTablaFacturas()
 
 
 
@@ -45,6 +47,9 @@ class Main(QtWidgets.QMainWindow):
         var.ui.tablaProp.clicked.connect(propiedades.Propiedades.cargaOnePropiedad)
         eventos.Eventos.resizeTablaVendedores(self)
         var.ui.tablaVen.clicked.connect(vendedor.Vendedor.cargarOneVendedor)
+        facturas.Facturas.mostrarTablaFacturas()
+        var.ui.tablafacturas.clicked.connect(facturas.Facturas.cargaOneFactura)
+
 
         '''
         Zona de eventos del menuBar
@@ -86,6 +91,8 @@ class Main(QtWidgets.QMainWindow):
         var.ui.btnGrabarVen.clicked.connect(vendedor.Vendedor.altaVendedor)
         var.ui.BtnDeleteVen.clicked.connect(vendedor.Vendedor.bajaVendedor)
         var.ui.BtnModifVen.clicked.connect(vendedor.Vendedor.modifVendedor)
+        var.ui.btnGrabarFactura.clicked.connect(facturas.Facturas.altaFactura)
+        var.ui.btnGrabarVenta.clicked.connect(facturas.Facturas.checkDatosFacturas)
 
 
 

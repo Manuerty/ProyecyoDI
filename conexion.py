@@ -676,5 +676,63 @@ class Conexion:
                 listado.append(fila)
         return listado
 
+    @staticmethod
+    def guardarFactura(nuevaFactura):
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare(
+                "INSERT INTO FACTURAS (fechafac, dnifac) "
+                "VALUES (:fechafac, :dnifac)")
+            query.bindValue(":fechafac", str(nuevaFactura[0]))
+            query.bindValue(":dnifac", str(nuevaFactura[1]))
+            return query.exec()
+
+        except Exception as e:
+            print("error altaFactura en conexion", e)
+
+    @staticmethod
+    def listadofacturas():
+        try:
+            listado = []
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT * FROM facturas ORDER BY id ASC")
+            if query.exec():
+                while query.next():
+                    fila = [query.value(i) for i in range(query.record().count())]
+                    listado.append(fila)
+            return listado
+        except Exception as e:
+            print("error listadoFacturas en conexion", e)
+
+    @staticmethod
+    def deleteFactura(id):
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("Delete from facturas where id = :id")
+            query.bindValue(":id", str(id))
+            if query.exec():
+                return True
+            else:
+                return False
+        except Exception as error:
+            print("Error al eliminar la factura", error)
+
+    @staticmethod
+    def getLastIdFactura():
+        """
+
+        :return:
+        :rtype:
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("select id from facturas order by id desc")
+            if query.exec() and query.next():
+                return query.value(0)
+            else:
+                print(query.lastError().text())
+        except Exception as exec:
+            print("Error al guardar la factura", exec)
+
 
 

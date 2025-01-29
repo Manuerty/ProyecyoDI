@@ -146,7 +146,7 @@ class Eventos():
             elif var.panel == 2 and var.btn == 0:
                 var.ui.txtAltaVen.setText(str(data))
             elif var.panel == 3 and var.btn == 0:
-                var.ui.txtFechaFac.setText(str(data))
+                var.ui.txtFechaFactura.setText(str(data))
 
             time.sleep(0.125)
             var.uicalendar.hide()
@@ -499,3 +499,36 @@ class Eventos():
 
         except Exception as error:
             print("error en exportar json clientes", error)
+
+    @staticmethod
+    def resizeTablafacturas():
+        """
+
+        """
+        try:
+            header = var.ui.tablafacturas.horizontalHeader()
+            for i in range(header.count()):
+                if i not in (0, 3):
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+                else:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+
+                header_item = var.ui.tablafacturas.horizontalHeaderItem(i)
+                font = header_item.font()
+                font.setBold(True)
+                header_item.setFont(font)
+        except Exception as e:
+            print("error en resize tabla clientes: ", e)
+
+    @staticmethod
+    def mostrarMensajeConfimarcion(mbox, titulo, mensaje):
+        mbox.setIcon(QtWidgets.QMessageBox.Icon.Question)
+        mbox.setModal(True)
+        mbox.setWindowTitle(titulo)
+        mbox.setWindowIcon(QtGui.QIcon("./img/logo.svg"))
+        mbox.setText(mensaje)
+        mbox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No)
+        mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.No)
+        mbox.button(QtWidgets.QMessageBox.StandardButton.Yes).setText('Sí')
+        mbox.button(QtWidgets.QMessageBox.StandardButton.No).setText('No')
+        return mbox.exec()
