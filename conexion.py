@@ -677,62 +677,172 @@ class Conexion:
         return listado
 
     @staticmethod
-    def guardarFactura(nuevaFactura):
+    def altaFactura(registro):
         try:
             query = QtSql.QSqlQuery()
-            query.prepare(
-                "INSERT INTO FACTURAS (fechafac, dnifac) "
-                "VALUES (:fechafac, :dnifac)")
-            query.bindValue(":fechafac", str(nuevaFactura[0]))
-            query.bindValue(":dnifac", str(nuevaFactura[1]))
-            return query.exec()
-
+            query.prepare("INSERT INTO FACTURAS (fechafac, dnifac) VALUES (:fechafac, :dnifac)")
+            query.bindValue(":fechafac", registro[0])
+            query.bindValue(":dnifac", registro[1])
+            if query.exec():
+                return True
+            else:
+                return False
         except Exception as e:
-            print("error altaFactura en conexion", e)
+            print("Error al dar de alta factura en conexion:", e)
+            return False
 
     @staticmethod
-    def listadofacturas():
+    def listadoFacturas():
         try:
             listado = []
             query = QtSql.QSqlQuery()
-            query.prepare("SELECT * FROM facturas ORDER BY id ASC")
+            query.prepare("SELECT id, dnifac, fechafac FROM facturas")
             if query.exec():
                 while query.next():
                     fila = [query.value(i) for i in range(query.record().count())]
                     listado.append(fila)
             return listado
         except Exception as e:
-            print("error listadoFacturas en conexion", e)
+            print("Error listando facturas en listadoFacturas - conexión", e)
 
     @staticmethod
-    def deleteFactura(id):
+    def bajaFactura(idFactura):
+        try:
+            query1 = QtSql.QSqlQuery()
+            query1.prepare("Select count(*) from ventas where facventa = :facventa")
+            query1.bindValue(":facventa", str(idFactura))
+            if query1.exec() and query1.next() and query1.value(0) == 0:
+                query = QtSql.QSqlQuery()
+                query.prepare("DELETE FROM facturas WHERE id = :id")
+                query.bindValue(":id", str(idFactura))
+                if query.exec():
+                    return True
+                else:
+                    error = query.lastError()
+                    if error is not None:
+                        print("Error en la ejecución de la consulta:", error.text())
+                    return False
+            else:
+                eventos.Eventos.crearMensajeError("Error baja factura",
+                                                  "No se puede eliminar la factura porque tiene ventas asociadas")
+        except Exception as e:
+            print("Error eliminando factura en bajaFactura - conexión:", e)
+            return False
+
+    @staticmethod
+    def cargaOneFactura(idFactura):
+        try:
+            registro = []
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT * FROM facturas WHERE id = :id")
+            query.bindValue(":id", idFactura)
+            if query.exec():
+                while query.next():
+                    for i in range(query.record().count()):
+                        registro.append(str(query.value(i)))
+            return registro
+        except Exception as e:
+            print("Error cargando factura en cargaOneFactura - conexión", e)
+
+    '''
+        Zona de ventas
+    '''
+
+    @staticmethod
+    def altaVenta(registro):
         try:
             query = QtSql.QSqlQuery()
-            query.prepare("Delete from facturas where id = :id")
-            query.bindValue(":id", str(id))
+            query.prepare("INSERT INTO ventas (facventa, codprop, agente) VALUES (:facventa, :codprop, :agente)")
+            query.bindValue(":facventa", str(registro[0]))
+            query.bindValue(":codprop", str(registro[1]))
+            query.bindValue(":agente", str(registro[2]))
+            if query.exec():
+                return True
+            else:
+                print("Error en la ejecución de la consulta:", query.lastError().text())
+                return False
+        except Exception as e:
+            print("Error al dar de alta factura en conexion:", e)
+            return False
+
+    @staticmethod
+    def listadoVentas(idFactura):
+        try:
+            listado = []
+            query = QtSql.QSqlQuery()
+            query.prepare(
+                "SELECT v.idven, v.codprop, p.dirprop, p.muniprop, p.tipoprop, "
+                "p.precioventaprop FROM ventas AS v INNER JOIN propiedades as p on v.codprop = p.codigo WHERE v.facventa = :facventa")
+            query.bindValue(":facventa", str(idFactura))
+            if query.exec():
+                while query.next():
+                    fila = [query.value(i) for i in range(query.record().count())]
+                    listado.append(fila)
+            return listado
+        except Exception as e:
+            print("Error listando facturas en listadoFacturas - conexión", e)
+
+    @staticmethod
+    def datosOneVenta(idVenta):
+        try:
+            registro = []
+            query = QtSql.QSqlQuery()
+            query.prepare(
+                "SELECT v.agente, v.codprop, p.tipoprop, p.precioventaprop,"
+                " p.muniprop, p.dirprop  FROM ventas as v "
+                "INNER JOIN propiedades as p ON v.codprop = p.codigo WHERE v.idven = :idventa")
+            query.bindValue(":idventa", str(idVenta))
+            if query.exec():
+                while query.next():
+                    for i in range(query.record().count()):
+                        registro.append(query.value(i))
+            else:
+                print("Error en la ejecución de la consulta:", query.lastError().text())
+            return registro
+        except Exception as e:
+            print("Error en datosOneVenta en conexion", e)
+
+    @staticmethod
+    def actualizaPropiedadVenta(codigoPropiedad):
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("UPDATE propiedades SET estadoprop = 'Vendido', bajaprop = :fechaBaja WHERE codigo = :codigo")
+            query.bindValue(":codigo", str(codigoPropiedad))
+            query.bindValue(":fechaBaja", datetime.now().strftime("%d/%m/%Y"))
             if query.exec():
                 return True
             else:
                 return False
-        except Exception as error:
-            print("Error al eliminar la factura", error)
+        except Exception as e:
+            print("Error al vender una Propiedad en conexion.", e)
 
-    @staticmethod
-    def getLastIdFactura():
-        """
-
-        :return:
-        :rtype:
-        """
+    def bajaVenta(idVenta):
         try:
             query = QtSql.QSqlQuery()
-            query.prepare("select id from facturas order by id desc")
-            if query.exec() and query.next():
-                return query.value(0)
+            query.prepare("DELETE FROM ventas WHERE idven = :idventa")
+            query.bindValue(":idventa", str(idVenta))
+            if query.exec():
+                return True
             else:
-                print(query.lastError().text())
-        except Exception as exec:
-            print("Error al guardar la factura", exec)
+                return False
+        except Exception as e:
+            print("Error al eliminar una venta en conexion.", e)
+            return False
+
+    @staticmethod
+    def altaPropiedadVenta(codigoPropiedad):
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare(
+                "UPDATE propiedades SET estadoprop = 'Disponible', bajaprop = :fechaBaja WHERE codigo = :codigo")
+            query.bindValue(":codigo", str(codigoPropiedad))
+            query.bindValue(":fechaBaja", QtCore.QVariant())
+            if query.exec():
+                return True
+            else:
+                return False
+        except Exception as e:
+            print("Error al vender una Propiedad en conexion.", e)
 
 
 

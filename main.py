@@ -34,7 +34,8 @@ class Main(QtWidgets.QMainWindow):
         clientes.Clientes.cargaTablaClientes(self)
         propiedades.Propiedades.cargaTablaPropiedades(self)
         vendedor.Vendedor.cargarTablaVendedores(self)
-        facturas.Facturas.mostrarTablaFacturas()
+        facturas.Facturas.cargaTablaFacturas()
+        facturas.Facturas.cargaTablaVentas()
 
 
 
@@ -47,8 +48,11 @@ class Main(QtWidgets.QMainWindow):
         var.ui.tablaProp.clicked.connect(propiedades.Propiedades.cargaOnePropiedad)
         eventos.Eventos.resizeTablaVendedores(self)
         var.ui.tablaVen.clicked.connect(vendedor.Vendedor.cargarOneVendedor)
-        facturas.Facturas.mostrarTablaFacturas()
-        var.ui.tablafacturas.clicked.connect(facturas.Facturas.cargaOneFactura)
+        eventos.Eventos.resizeTablaFacturas()
+        facturas.Facturas.cargaTablaVentas()
+        eventos.Eventos.resizeTablaVentas()
+        var.ui.tablaFacturas.clicked.connect(facturas.Facturas.cargaOneFactura)
+        var.ui.tablaVentas.clicked.connect(facturas.Facturas.cargaOneVenta)
 
 
         '''
@@ -92,7 +96,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.BtnDeleteVen.clicked.connect(vendedor.Vendedor.bajaVendedor)
         var.ui.BtnModifVen.clicked.connect(vendedor.Vendedor.modifVendedor)
         var.ui.btnGrabarFactura.clicked.connect(facturas.Facturas.altaFactura)
-        var.ui.btnGrabarVenta.clicked.connect(facturas.Facturas.checkDatosFacturas)
+        var.ui.btnGrabarVenta.clicked.connect(facturas.Facturas.altaVenta)
 
 
 
@@ -110,6 +114,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.txtDniVen.editingFinished.connect(lambda: vendedor.Vendedor.checkDNI(var.ui.txtDniVen.text()))
         var.ui.txtMovilVen.editingFinished.connect(lambda: vendedor.Vendedor.checktelefono(var.ui.txtMovilVen.text()))
         var.ui.txtEmailVen.editingFinished.connect(lambda: vendedor.Vendedor.checkEmail(var.ui.txtEmailVen.text()))
+        var.ui.txtFechaFactura.setText(datetime.today().strftime('%d/%m/%Y'))
 
 
 

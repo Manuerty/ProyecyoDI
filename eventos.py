@@ -13,6 +13,7 @@ from PyQt6 import QtWidgets, QtGui
 import zipfile
 import shutil
 import eventos
+import facturas
 import var
 import re
 import locale
@@ -301,9 +302,42 @@ class Eventos():
                         dato.setChecked(False)
 
                 eventos.Eventos.cargarProvinciasProp(self)
+                Eventos.cargarTipoProp()
+            elif current_index == 2:
+                vendedor = [var.ui.lblVen, var.ui.txtDniVen, var.ui.txtNomVen, var.ui.txtAltaVen,
+                            var.ui.txtBajaVen, var.ui.txtMovilVen, var.ui.txtEmailVen, var.ui.cmbDelegVen]
 
-        except Exception as error:
-            print("Error en limpiar panel", error)
+                for i, dato in enumerate(vendedor):
+                    if i != 7:
+                        dato.setText("")
+                    else:
+                        dato.setCurrentIndex(0)
+
+                Eventos.cargarDelegacion()
+
+            elif current_index == 3:
+                    ventas = [var.ui.lblNumFactura, var.ui.txtdniclifac, var.ui.txtFechaFactura, var.ui.txtnomeclifac,
+                          var.ui.txtapelclifac,
+                          var.ui.txtidvenfac, var.ui.txtcodpropfac, var.ui.txttipopropfac, var.ui.txtpreciofac,
+                          var.ui.txtmunipropfac,
+                          var.ui.txtdirpropfac]
+                    for i, dato in enumerate(ventas):
+                        if i != 2:
+                            dato.setText("")
+                        else:
+                            dato.setText(datetime.today().strftime('%d/%m/%Y'))
+                    facturas.Facturas.cargaTablaVentas()
+            else:
+                print("panPrincipal es nulo")
+        except Exception as e:
+            print(f"Se ha producido una excepción: {e}")
+
+
+    def cargarDelegacion(self):
+        var.ui.cmbDelegVen.clear()
+        listado = conexion.Conexion().listaProv(self)
+        var.ui.cmbDelegVen.addItems(listado)
+
 
     def clearCampos(self):
         var.ui.txtDniCli.setText(None)
@@ -501,34 +535,35 @@ class Eventos():
             print("error en exportar json clientes", error)
 
     @staticmethod
-    def resizeTablafacturas():
-        """
-
-        """
+    def resizeTablaFacturas():
         try:
-            header = var.ui.tablafacturas.horizontalHeader()
+            header = var.ui.tablaFacturas.horizontalHeader()
             for i in range(header.count()):
-                if i not in (0, 3):
+                if i != 0:
                     header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
                 else:
                     header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
-
-                header_item = var.ui.tablafacturas.horizontalHeaderItem(i)
-                font = header_item.font()
-                font.setBold(True)
-                header_item.setFont(font)
+                header_items = var.ui.tablaFacturas.horizontalHeaderItem(i)
+                if header_items is not None:
+                    font = header_items.font()
+                    font.setBold(True)
+                    header_items.setFont(font)
         except Exception as e:
-            print("error en resize tabla clientes: ", e)
+            print("error en resize tabla clientes ", e)
 
     @staticmethod
-    def mostrarMensajeConfimarcion(mbox, titulo, mensaje):
-        mbox.setIcon(QtWidgets.QMessageBox.Icon.Question)
-        mbox.setModal(True)
-        mbox.setWindowTitle(titulo)
-        mbox.setWindowIcon(QtGui.QIcon("./img/logo.svg"))
-        mbox.setText(mensaje)
-        mbox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No)
-        mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.No)
-        mbox.button(QtWidgets.QMessageBox.StandardButton.Yes).setText('Sí')
-        mbox.button(QtWidgets.QMessageBox.StandardButton.No).setText('No')
-        return mbox.exec()
+    def resizeTablaVentas():
+        try:
+            header = var.ui.tablaVentas.horizontalHeader()
+            for i in range(header.count()):
+                if i != 0:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+                else:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+                header_items = var.ui.tablaVentas.horizontalHeaderItem(i)
+                if header_items is not None:
+                    font = header_items.font()
+                    font.setBold(True)
+                    header_items.setFont(font)
+        except Exception as e:
+            print("error en resize tabla clientes ", e)

@@ -3456,7 +3456,7 @@
           </widget>
          </item>
          <item row="3" column="2">
-          <widget class="QLineEdit" name="txtDniFactura">
+          <widget class="QLineEdit" name="txtdniclifac">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
@@ -3530,7 +3530,7 @@
       <property name="frameShadow">
        <enum>QFrame::Sunken</enum>
       </property>
-      <widget class="QTableWidget" name="tablafacturas">
+      <widget class="QTableWidget" name="tablaFacturas">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -3625,7 +3625,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="txtApelClieVentas"/>
+                <widget class="QLineEdit" name="txtapelclifac"/>
                </item>
                <item>
                 <spacer name="horizontalSpacer_52">
@@ -3651,7 +3651,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="txtNomCliVentas"/>
+                <widget class="QLineEdit" name="txtnomeclifac"/>
                </item>
                <item>
                 <spacer name="horizontalSpacer_53">
@@ -3752,7 +3752,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="lblCodigoPropVentas">
+                    <widget class="QLabel" name="txtcodpropfac">
                      <property name="minimumSize">
                       <size>
                        <width>75</width>
@@ -3803,7 +3803,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="txtTipoPropVentas"/>
+                    <widget class="QLineEdit" name="txttipopropfac"/>
                    </item>
                    <item>
                     <spacer name="horizontalSpacer_50">
@@ -3829,7 +3829,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="txtPrecioVentas"/>
+                    <widget class="QLineEdit" name="txtpreciofac"/>
                    </item>
                    <item>
                     <spacer name="horizontalSpacer_51">
@@ -3875,7 +3875,7 @@
                         </spacer>
                        </item>
                        <item>
-                        <widget class="QLineEdit" name="txtVendedorVentas">
+                        <widget class="QLineEdit" name="txtidvenfac">
                          <property name="minimumSize">
                           <size>
                            <width>75</width>
@@ -3922,7 +3922,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="txtDireccionPropVentas">
+                    <widget class="QLineEdit" name="txtdirpropfac">
                      <property name="minimumSize">
                       <size>
                        <width>500</width>
@@ -3945,7 +3945,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="txtLocalidadVentas">
+                    <widget class="QLineEdit" name="txtmunipropfac">
                      <property name="minimumSize">
                       <size>
                        <width>256</width>
@@ -4089,6 +4089,12 @@
          <height>461</height>
         </rect>
        </property>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderHighlightSections">
+        <bool>false</bool>
+       </attribute>
        <column>
         <property name="text">
          <string>IdVenta</string>

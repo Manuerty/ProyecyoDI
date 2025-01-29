@@ -188,7 +188,7 @@ class Clientes:
             listado = [var.ui.txtDniCli, var.ui.txtAltaCli, var.ui.txtBajaCli,  var.ui.txtApelCli,
                         var.ui.txtNomCli, var.ui.txtEmailCli, var.ui.txtMovilCli,
                         var.ui.txtDirCli, var.ui.cmbProCli,var.ui.cmbMuniCli ]
-            var.ui.txtDniFactura.setText(registro[0])
+            var.ui.txtdniclifac.setText(registro[0])
             for i in range(len(listado)):
                 if i ==  8 or i == 9 :
                     listado[i].setCurrentText(registro[i])

@@ -3,6 +3,7 @@ from xml.sax.handler import property_interning_dict
 
 import conexion
 import eventos
+import facturas
 import var
 from PyQt6 import QtWidgets, QtGui, QtCore
 
@@ -196,6 +197,7 @@ class Propiedades():
                        var.ui.rbtVendidoProp, var.ui.chkIntercambioProp,
                        var.ui.chkAlquilerProp,  var.ui.chkVentaProp,
                        var.ui.txtPropietarioProp, var.ui.txtMovilpropietarioProp]
+            listadoVentas = []
             for i in range(len(listado)):
                 if i in (4, 5, 7):
                     listado[i].setCurrentText(registro[i])
@@ -213,6 +215,8 @@ class Propiedades():
                     listado[17].setChecked("Intercambio" in registro[14])
                     listado[18].setChecked("Alquiler" in registro[14])
                     listado[19].setChecked("Venta" in registro[14])
+                    if "Venta" in registro[14] and "Venta" not in listadoVentas:
+                        listadoVentas.append("Venta")
                 elif i == 20:
                     listado[i].setText(registro[16])
                 elif i == 21:
@@ -220,6 +224,19 @@ class Propiedades():
                 else:
                     listado[i].setText(str(registro[i]))  # Convert to string
 
+            listadoVentas.append(registro[0])
+            listadoVentas.append(registro[6])
+            listadoVentas.append(registro[11])
+            listadoVentas.append(registro[3])
+            listadoVentas.append(registro[5])
+            if "Disponible" in registro and "Disponible" not in listadoVentas:
+                listadoVentas.append("Disponible")
+            if "Alquilado" in registro and "Alquilado" not in listadoVentas:
+                listadoVentas.append("Alquilado")
+            if "Vendido" in registro and "Vendido" not in listadoVentas:
+                listadoVentas.append("Vendido")
+            if listadoVentas[0] == "Venta" and listadoVentas[6] == "Disponible":
+                facturas.Facturas.cargarPropiedadVenta(listadoVentas)
         except Exception as e:
             print("Error cargando UNA propiedad en propiedades.", e)
 

@@ -149,6 +149,7 @@ class Vendedor:
                         listado[i].setText(str(registro[i]))  # Convert to string
                     else:
                         listado[i].setText(registro[i])
+                var.ui.txtidvenfac.setText(str(registro[0]))
                 return registro
             except Exception as error:
                 print("Error al cargar one vendedor", error)
