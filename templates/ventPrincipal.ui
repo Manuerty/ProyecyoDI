@@ -4125,6 +4125,11 @@
          <string>Precio</string>
         </property>
        </column>
+       <column>
+        <property name="text">
+         <string>Gestion</string>
+        </property>
+       </column>
       </widget>
       <widget class="QWidget" name="">
        <property name="geometry">
