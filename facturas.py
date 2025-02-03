@@ -142,6 +142,7 @@ class Facturas():
         listado = conexion.Conexion.listadoVentas(idFactura)
         var.ui.tablaVentas.setRowCount(len(listado))
         index = 0
+        subtotal = 0
         for registro in listado:
             var.ui.tablaVentas.setItem(index, 0, QtWidgets.QTableWidgetItem(str(registro[0])))
             var.ui.tablaVentas.setItem(index, 1, QtWidgets.QTableWidgetItem(str(registro[1])))
@@ -183,7 +184,17 @@ class Facturas():
             if var.ui.tablaVentas.item(index, 5):
                 var.ui.tablaVentas.item(index, 5).setTextAlignment(
                     QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
+            subtotal += registro[5]
             index += 1
+
+            iva = subtotal * 0.21
+            total = subtotal + iva
+            subTotalStr = f"{subtotal:,.1f} €"
+            ivaStr = f"{iva:,.1f} €"
+            totalStr = f"{total:,.1f} €"
+            var.ui.lblSubtotalFactura.setText(subTotalStr)
+            var.ui.lblImpuestasFacturas.setText(ivaStr)
+            var.ui.lblTotalFactura.setText(totalStr)
 
     @staticmethod
     def cargaOneVenta():

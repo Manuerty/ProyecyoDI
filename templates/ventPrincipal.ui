@@ -4071,7 +4071,7 @@
         <x>470</x>
         <y>290</y>
         <width>1101</width>
-        <height>481</height>
+        <height>531</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -4086,7 +4086,7 @@
          <x>10</x>
          <y>10</y>
          <width>1081</width>
-         <height>461</height>
+         <height>441</height>
         </rect>
        </property>
        <attribute name="verticalHeaderVisible">
@@ -4125,6 +4125,90 @@
          <string>Precio</string>
         </property>
        </column>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>880</x>
+         <y>460</y>
+         <width>201</width>
+         <height>59</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_44">
+          <item>
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>Subtotal:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblSubtotalFactura">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(189, 189, 189);</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_43">
+          <item>
+           <widget class="QLabel" name="label_28">
+            <property name="text">
+             <string>Impuestos:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblImpuestasFacturas">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(189, 189, 189);</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_42">
+          <item>
+           <widget class="QLabel" name="label_29">
+            <property name="text">
+             <string>Total:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblTotalFactura">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(189, 189, 189);</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </widget>
     </widget>
