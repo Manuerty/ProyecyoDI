@@ -12,19 +12,41 @@ import eventos
 
 class Clientes:
     def checkDNI(dni):
+        """
+        :param dni: Es el DNI del cliente que se desea validar.
+        :type dni: String
+        :return: None
+        :rtype: None
+
+        Este método se encarga de validar si el DNI introducido es válido, mediante un
+        proceso de verificación que utiliza un evento de validación preexistente.
+        Si el DNI es válido, se resalta el campo de texto correspondiente con un color de fondo
+        adecuado. Si no es válido, se cambia el color de fondo a rojo y se limpia el campo de texto.
+
+        Utiliza el método `validarDNIcli` de la clase `Eventos` para realizar la validación del DNI.
+
+        Ejemplo:
+            checkDNI("12345678Z")
+        """
         try:
+            # Convertimos el DNI a mayúsculas y lo asignamos al campo de texto
             dni = str(dni).upper()
             var.ui.txtDniCli.setText(str(dni))
+
+            # Validamos el DNI con un evento específico
             check = eventos.Eventos.validarDNIcli(dni)
+
+            # Si el DNI es válido, se cambia el color de fondo del campo de texto a amarillo
             if check:
                 var.ui.txtDniCli.setStyleSheet('background-color: rgb(255,255,220)')
             else:
+                # Si el DNI no es válido, se cambia el color de fondo a rosa y se limpia el campo de texto
                 var.ui.txtDniCli.setStyleSheet('background-color:#FFC0CB;')
                 var.ui.txtDniCli.setText(None)
                 var.ui.txtDniCli.setFocus()
         except Exception as error:
+            # Si ocurre algún error durante la ejecución, lo capturamos y mostramos el mensaje
             print("error en validar dni ", error)
-
 
     def checkEmail(mail):
         try:
