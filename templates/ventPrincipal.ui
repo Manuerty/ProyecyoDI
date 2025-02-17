@@ -51,7 +51,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="PesClientes">
      <attribute name="title">
@@ -4226,7 +4226,7 @@
        <widget class="QFrame" name="frame_5">
         <property name="minimumSize">
          <size>
-          <width>1210</width>
+          <width>1560</width>
           <height>210</height>
          </size>
         </property>
@@ -5251,6 +5251,22 @@
         </layout>
        </widget>
       </item>
+      <item row="1" column="2">
+       <spacer name="horizontalSpacer_63">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>388</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item row="1" column="0">
        <widget class="QFrame" name="frame_6">
         <property name="minimumSize">
@@ -5308,7 +5324,7 @@
        <widget class="QFrame" name="frame_8">
         <property name="minimumSize">
          <size>
-          <width>900</width>
+          <width>1250</width>
           <height>0</height>
          </size>
         </property>
@@ -5384,19 +5400,6 @@
          </item>
         </layout>
        </widget>
-      </item>
-      <item row="1" column="2">
-       <spacer name="horizontalSpacer_63">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>388</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </widget>
