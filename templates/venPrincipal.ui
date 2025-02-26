@@ -7807,7 +7807,7 @@
    <property name="icon">
     <iconset>
      <normaloff>../img/salir.ico</normaloff>
-     <normalon>../../../../../../a23yelkovq/.designer/img/salir.svg</normalon>../img/salir.ico</iconset>
+     <normalon>../../../../../../a23manuelcr/.designer/img/salir.svg</normalon>../img/salir.ico</iconset>
    </property>
    <property name="text">
     <string>Salir</string>
@@ -7817,7 +7817,7 @@
    <property name="icon">
     <iconset>
      <normaloff>../img/reload.ico</normaloff>
-     <normalon>../../../../../../a23yelkovq/.designer/img/reload.ico</normalon>../img/reload.ico</iconset>
+     <normalon>../../../../../../a23manuelcr/.designer/img/reload.ico</normalon>../img/reload.ico</iconset>
    </property>
    <property name="text">
     <string>Limpiar</string>

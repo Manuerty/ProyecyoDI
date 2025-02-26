@@ -1,188 +1,32 @@
-
-#btnBuscarCli{
-background-color: #13b2a6;
-    font-weight: bold;
-    color: white;
-    border-radius: 5px;
-}
-
-#btnBuscarCli:hover {
-    background-color: #11a194;
-}
-
-#btnBuscarCli:pressed {
-    background-color: #0f897e;
-    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
-    padding-top: 2px;
-}
-
-#btnBuscarCli:checked {
-    background-color: #0f897e;
-    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
-    padding-top: 2px;
-}
-
-
-
-
-#btnBuscarTipoProp{
-background-color: #13b2a6;
-    font-weight: bold;
-    color: white;
-    border-radius: 5px;
-}
-
-#btnBuscarTipoProp:hover {
-    background-color: #11a194;
-}
-
-#btnBuscarTipoProp:pressed {
-    background-color: #0f897e;
-    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
-    padding-top: 2px;
-}
-
-#btnBuscarTipoProp:checked {
-    background-color: #0f897e;
-    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
-    padding-top: 2px;
-}
-
-
-#BtnAnteriorProp {
-    background-color: #13b2a6;
-    font-weight: bold;
-    color: white;
-    border-radius: 5px;
-}
-
-#BtnAnteriorProp:hover {
-    background-color: #11a194;
-}
-
-#BtnAnteriorProp:pressed {
-    background-color: #0f897e;
-    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
-    padding-top: 2px;
-}
-
-#BtnAnteriorProp:disabled {
-    background-color: rgba(19, 178, 166, 0.5); /* Fondo más opaco */
-    color: gray; /* Texto gris */
-}
-
-#BtnSiguienteProp {
-    background-color: #13b2a6;
-    font-weight: bold;
-    color: white;
-    border-radius: 5px;
-}
-
-#BtnSiguienteProp:hover {
-    background-color: #11a194;
-}
-
-#BtnSiguienteProp:pressed {
-    background-color: #0f897e;
-    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
-    padding-top: 2px;
-}
-
-#BtnSiguienteProp:disabled {
-    background-color: rgba(19, 178, 166, 0.5); /* Fondo más opaco */
-    color: gray; /* Texto gris */
-}
-
-#BtnAnteriorCli {
-    background-color: #13b2a6;
-    font-weight: bold;
-    color: white;
-    border-radius: 5px;
-}
-
-#BtnAnteriorCli:hover {
-    background-color: #11a194;
-}
-
-#BtnAnteriorCli:pressed {
-    background-color: #0f897e;
-    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
-    padding-top: 2px;
-}
-
-#BtnAnteriorCli:disabled {
-    background-color: rgba(19, 178, 166, 0.5); /* Fondo más opaco */
-    color: gray; /* Texto gris */
-}
-
-#BtnSiguienteCli {
-    background-color: #13b2a6;
-    font-weight: bold;
-    color: white;
-    border-radius: 5px;
-}
-
-#BtnSiguienteCli:hover {
-    background-color: #11a194;
-}
-
-#BtnSiguienteCli:pressed {
-    background-color: #0f897e;
-    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
-    padding-top: 2px;
-}
-
-#BtnSiguienteCli:disabled {
-    background-color: rgba(19, 178, 166, 0.5); /* Fondo más opaco */
-    color: gray; /* Texto gris */
-}
-
-
-/*---- Estilo boton de filtrado por Tipo de propiedad ------*/
-#btnBuscarTipoProp {
-    background-color: #FFFFFF;
-    border-radius: 5px;
-}
-#btnBuscarTipoProp:hover {
-    background-color: #CCC;
-    border-radius: 5px;
-}
-#btnBuscarTipoProp:checked {
-    background-color: #dFdFdF;
-    border-radius: 5px;
-}
-QMainWindow{
+/*--------- Estilo para QMainWindow -----*/
+QMainWindow {
     background-color: #d7eff6;
 }
 
-QTabWidget{
+/*----    Estilo para QTabWidget       -----*/
+QTabWidget {
     background-color: none;
 }
 
-QMenuBar{
+/*----    Estilo para QMenuBar       -----*/
+QMenuBar {
     background-color: whitesmoke;
 }
 
-QPushButton{
-    background-color: #13b2a6;
-    font-weight: bold;
-    color: white;
-    border-radius: 5px;
+/*----    Estilo para QToolBar       -----*/
+QToolBar {
+    background-color: #EEE;
 }
 
-QPushButton:hover {
-    background-color: #11a194;
+/*----    Estilo para tablas       -----*/
+QTableWidget::item:alternate {
+    background-color: #eFEfEf;
 }
-
-QPushButton:pressed {
-    background-color: #0f897e;
-    padding-left: 2px; /* Para dar la sensación de que el botón se hunde */
-    padding-top: 2px;
+QTableWidget::item:selected {
+    background-color: #ccc;
+    color: black;
 }
-
-
-
-QHeaderView::section{
+QHeaderView::section {
     background-color: #FFFBE7;
     color: black;
     font-size: 16px;
@@ -191,29 +35,79 @@ QHeaderView::section{
     border: 1px solid black;
 }
 
-QRadioButton:disabled{
-        color: rgba(0, 0, 0, 0.3); /* Color más claro */
+/*----    Estilo para botones       -----*/
+QPushButton {
+    background-color: #13b2a6;
+    font-weight: bold;
+    color: white;
+    border-radius: 5px;
+}
+QPushButton:hover {
+    background-color: #11a194;
+}
+QPushButton:pressed {
+    background-color: #0f897e;
+    padding-left: 2px;
+    padding-top: 2px;
+}
+QPushButton:disabled {
+    background-color: rgba(19, 178, 166, 0.5);
+    color: gray;
 }
 
+/*------- Estilo para Radio Button ----------*/
+QRadioButton:disabled {
+    color: rgba(0, 0, 0, 0.3);
+}
 
-/* Checkbox deshabilitado sin estar marcado */
+/*---- Estilo para botones específicos ------*/
+#btnBuscaTipoProp, #btnBuscarTipoProp, #btnBuscarCli, #BtnAnteriorProp, #BtnSiguienteProp, #BtnAnteriorCli, #BtnSiguienteCli {
+    background-color: #13b2a6;
+    font-weight: bold;
+    color: white;
+    border-radius: 5px;
+}
+#btnBuscaTipoProp:hover, #btnBuscarTipoProp:hover, #btnBuscarCli:hover, #BtnAnteriorProp:hover, #BtnSiguienteProp:hover, #BtnAnteriorCli:hover, #BtnSiguienteCli:hover {
+    background-color: #11a194;
+}
+#btnBuscaTipoProp:pressed, #btnBuscarTipoProp:pressed, #btnBuscarCli:pressed, #BtnAnteriorProp:pressed, #BtnSiguienteProp:pressed, #BtnAnteriorCli:pressed, #BtnSiguienteCli:pressed {
+    background-color: #0f897e;
+    padding-left: 2px;
+    padding-top: 2px;
+}
+#btnBuscaTipoProp:checked, #btnBuscarTipoProp:checked, #btnBuscarCli:checked {
+    background-color: #0f897e;
+    padding-left: 2px;
+    padding-top: 2px;
+}
+
+#btnBuscarDni, #btnBuscaMovil {
+    background-color: none;
+}
+
+QPushButton#botonEliminar {
+    background-color: transparent;
+    border: none;
+}
+QPushButton#botonEliminar:hover {
+    background-color: rgba(255, 0, 0, 0.1);
+}
+QPushButton#botonEliminar:pressed {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+/*----    Estilo para cuadros de texto al pasar el ratón    -----*/
+QLineEdit:hover {
+    background-color: #F5F5F5;
+}
+
+/*----    Estilo para QCheckBox    -----*/
 QCheckBox:disabled {
-    color: rgba(0, 0, 0, 0.3); /* Color más claro */
+    color: rgba(0, 0, 0, 0.3);
 }
-
-/* Checkbox deshabilitado y marcado */
 QCheckBox:disabled:checked {
-    color: black; /* Color normal */
+    color: black;
 }
-
-/* Checkmark azul para checkbox marcado y deshabilitado */
 QCheckBox::indicator:disabled:checked {
     image: url(data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23007AFF' d='M20.66 5.34a1 1 0 010 1.41l-10 10a1 1 0 01-1.41 0l-4-4a1 1 0 011.41-1.41L10 14.59l9.25-9.25a1 1 0 011.41 0z'/></svg>);
 }
-
-
-
-
-
-
-
