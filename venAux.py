@@ -1,22 +1,24 @@
 from datetime import datetime
 
-from PyQt6 import QtSql
-from PyQt6.QtCore import QFile
-from PyQt6.QtWidgets import QFileDialog, QCompleter
+from PyQt6.uic.Compiler.qtproxies import QtWidgets, QtCore
 
-import informes
-from dlgAbout import Ui_dlg_About
-from dlgCalendar import *
-import var
+import conexion
+import dlgGestion
 import eventos
+import informes
+import var
 import propiedades
-from dlgGestionProp import *
-from dlgInformeProp import *
-
+from dlgAbout import Ui_Dialog
+from dlgCalendar import *
+from dlgGestion import Ui_dlg_tipoprop
+from dlgInformeProp import Ui_dlgInformeProp
 
 
 class Calendar(QtWidgets.QDialog):
     def __init__(self):
+        """
+        Constructor de la clase Calendar. Usado para abrir un popup con un calendario.
+        """
         super(Calendar, self).__init__()
         var.uicalendar = Ui_dlgCalendar()
         var.uicalendar.setupUi(self)
@@ -24,70 +26,46 @@ class Calendar(QtWidgets.QDialog):
         mes = datetime.now().month
         ano = datetime.now().year
 
-        var.uicalendar.Calendar.setSelectedDate((QtCore.QDate(ano,mes,dia)))
+        var.uicalendar.Calendar.setSelectedDate(QtCore.QDate(ano,mes,dia))
         var.uicalendar.Calendar.clicked.connect(eventos.Eventos.cargaFecha)
-
 
 class FileDialogAbrir(QtWidgets.QFileDialog):
     def __init__(self):
-        super(FileDialogAbrir, self).__init__()
+        """
+        Constructor de la clase FileDialog. Genera una ventana de selección de ficheros en el equipo.
+        """
+        super(FileDialogAbrir,self).__init__()
 
-
-class dlgGestionProp(QtWidgets.QDialog):
+class dlg_Tipo_prop(QtWidgets.QDialog):
     def __init__(self):
-        super(dlgGestionProp, self).__init__()
-        self.ui = Ui_dlgGestionProp()
+        """
+        Constructor de la clase dlg_Tipo_prop. Genera una ventana emergente para gestionar los tipos de propiedades usadas en la aplicación.
+        """
+        super(dlg_Tipo_prop,self).__init__()
+        self.ui = Ui_dlg_tipoprop()
         self.ui.setupUi(self)
-        self.ui.btnAltaTipoProp.clicked.connect(propiedades.Propiedades.altaTipoPropiedad)
-        self.ui.btnDelTipoProp.clicked.connect(propiedades.Propiedades.bajaTipoPropiedad)
+        self.ui.btnAltaTipoprop.clicked.connect(lambda: propiedades.Propiedades.altaTipoPropiedad(self))
+        self.ui.btnDelTipoprop.clicked.connect(lambda: propiedades.Propiedades.bajaTipoPropiedad(self))
+        propiedades.Propiedades.cargarTipopropGestion(self)
+        self.ui.cmbTipopropGestion.activated.connect(lambda: propiedades.Propiedades.seleccionarTipoGestion(self))
 
-class dlgAbout(QtWidgets.QDialog):
+class Dlg_About(QtWidgets.QDialog):
     def __init__(self):
-        super(dlgAbout, self).__init__()
-        self.ui = Ui_dlg_About()
+        """
+        Constructor de la clase Dlg_About. Abre una ventana con datos sobre la aplicación.
+        """
+        super(Dlg_About,self).__init__()
+        self.ui = Ui_Dialog()
         self.ui.setupUi(self)
-        self.ui.btnCerrarAbout.clicked.connect(eventos.Eventos.cerrarAbout)
+        self.ui.btnAceptar.clicked.connect(self.close)
 
-class dlgInformeProp(QtWidgets.QDialog):
+class Dlg_InformeProp(QtWidgets.QDialog):
     def __init__(self):
-        super(dlgInformeProp, self).__init__()
+        """
+        Constructor de la clase Dlg_InformeProp. Abre una ventana que permite seleccionar al usuario un municipio para crear un informe sobre las propiedades presentes en ese municipio.
+        """
+        super(Dlg_InformeProp,self).__init__()
         self.ui = Ui_dlgInformeProp()
         self.ui.setupUi(self)
-
-        # Inicializa el combo box con un elemento vacío
-        self.ui.cmbMuniInforme.addItem("")
-
-        # Obtén la lista de municipios
-        municipios = dlgInformeProp.listaProvForInforme()
-
-        # Agrega cada municipio individualmente al combo box
-        for municipio in municipios:
-            self.ui.cmbMuniInforme.addItem(municipio)
-
-        # Configura el autocompletado con la lista de municipios
-        completar = QCompleter(municipios, self)
-        completar.setCaseSensitivity(QtCore.Qt.CaseSensitivity.CaseInsensitive)
-        completar.setFilterMode(QtCore.Qt.MatchFlag.MatchContains)
-        self.ui.cmbMuniInforme.setCompleter(completar)
-
-        # Configura el botón de generar informe
-        self.ui.btnGenerarInformeProp.clicked.connect(self.generateReport)
-
-    @staticmethod
-    def listaProvForInforme():
-        listaprov = []
-        query = QtSql.QSqlQuery()
-        query.prepare("SELECT municipio FROM municipios")
-        if query.exec():
-            while query.next():
-                listaprov.append(query.value(0))
-        else:
-            print(query.lastError().text())
-        return listaprov
-
-
-    def generateReport(self):
-        municipio = self.ui.cmbMuniInforme.currentText()
-        informes.Informes.reportPropiedades(municipio)
-        self.close()
-
+        propiedades.Propiedades.cargaMuniInformeProp(self)
+        self.ui.btnInformeProp.clicked.connect(lambda: informes.Informes.reportPropiedades(self.ui.cmbInformeMuniProp.currentText()))

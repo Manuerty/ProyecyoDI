@@ -1,244 +1,284 @@
-from PyQt6 import QtGui
+import sys
+
+from PyQt6.QtWidgets import QHBoxLayout, QWidget
 
 import conexion
 import eventos
 import propiedades
 import var
-from PyQt6 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore, QtGui
 
-
-class Facturas():
+class Facturas:
 
     @staticmethod
     def altaFactura():
+        """
+
+        Método para dar de alta una factura. Comprueba que se haya seleccionado antes a un cliente, que existan una fecha seleccionada para la factura y que no haya seleccionada una factura ya creada previamente al crear la nueva.
+
+        """
         try:
-            nuevaFactura = [var.ui.txtFechaFactura.text(), var.ui.txtdniclifac.text()]
+            nuevaFactura = [var.ui.txtFechaFactura.text(),var.ui.txtdniclifac.text()]
             if var.ui.txtdniclifac.text() == "" or var.ui.txtdniclifac.text() is None:
-                mbox = eventos.Eventos.crearMensajeError("Error al grabar factura",
-                                                  "Recuerda seleccionar un cliente antes de grabar una factura")
-                mbox.exec()
+                eventos.Eventos.crearMensajeError("Error al grabar factura","Recuerda seleccionar un cliente antes de grabar una factura")
             elif var.ui.txtFechaFactura.text() == "" or var.ui.txtFechaFactura.text() is None:
-                mbox = eventos.Eventos.crearMensajeError("Error al grabar factura",
-                                                  "No es posible grabar una factura sin seleccionar una fecha")
-                mbox.exec()
+                eventos.Eventos.crearMensajeError("Error al grabar factura","No es posible grabar una factura sin seleccionar una fecha")
+            elif var.ui.lblNumFactura.text() != "" and var.ui.lblNumFactura.text() is not None:
+                eventos.Eventos.crearMensajeError("Error","No es posible crear una nueva factura si hay otra factura seleccionada. Recuerde limpiar el panel para crear una nueva factura.")
             elif conexion.Conexion.altaFactura(nuevaFactura):
-                mbox = eventos.Eventos.crearMensajeInfo("Factura grabada", "Se ha grabado una nueva factura")
-                mbox.exec()
+                eventos.Eventos.crearMensajeInfo("Factura grabada","Se ha grabado una nueva factura")
                 Facturas.cargaTablaFacturas()
             else:
-                mbox = eventos.Eventos.crearMensajeError("Error", "No se ha podido grabar factura")
-                mbox.exec()
+                eventos.Eventos.crearMensajeError("Error","No se ha podido grabar factura")
         except Exception as e:
-            print("factura", e)
+            print("factura",e)
+
 
     @staticmethod
     def cargaTablaFacturas():
+        """
+
+        Método para mostrar todas las facturas existentes en la base de datos. Se muestra el id de la factura, el dni del cliente, la fecha de creación de la factura y un botón para eliminarla
+
+        """
         try:
-            listado = conexion.Conexion.listadoFacturas()
+            listado = var.claseConexion.listadoFacturas()
             var.ui.tablaFacturas.setRowCount(len(listado))
             index = 0
             for registro in listado:
-                var.ui.tablaFacturas.setItem(index, 0, QtWidgets.QTableWidgetItem(str(registro[0])))
-                var.ui.tablaFacturas.setItem(index, 1, QtWidgets.QTableWidgetItem(registro[1]))
-                var.ui.tablaFacturas.setItem(index, 2, QtWidgets.QTableWidgetItem(registro[2]))
-                var.ui.tablaClientes.item(index, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
-                var.ui.tablaClientes.item(index, 1).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-                var.ui.tablaClientes.item(index, 2).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
-                botondelfac = QtWidgets.QPushButton()
-                botondelfac.setFixedSize(30, 24)
-                botondelfac.setIcon(QtGui.QIcon('img/papelera.ico'))
-                botondelfac.setProperty("row", index)
-                botondelfac.clicked.connect(
-                    lambda checked, idFactura=str(registro[0]): Facturas.eliminarFactura(idFactura))
-                contenedor = QtWidgets.QWidget()
-                layout = QtWidgets.QHBoxLayout()
-                layout.addWidget(botondelfac)
+                var.ui.tablaFacturas.setItem(index, 0, QtWidgets.QTableWidgetItem(str(registro[0]))) #idFactura
+                var.ui.tablaFacturas.setItem(index, 1, QtWidgets.QTableWidgetItem(registro[1])) #dniCliente
+                var.ui.tablaFacturas.setItem(index, 2, QtWidgets.QTableWidgetItem(registro[2])) #fechaFactura
+                var.ui.tablaFacturas.item(index, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
+                var.ui.tablaFacturas.item(index, 1).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+                var.ui.tablaFacturas.item(index, 2).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+
+                #creamos el boton
+                var.botondel = QtWidgets.QPushButton()
+                var.botondel.setFixedSize(25,25)
+                var.botondel.setIconSize(QtCore.QSize(25, 25))
+                var.botondel.setObjectName("botonEliminar")
+                var.botondel.setIcon(QtGui.QIcon('./img/basura.png'))
+
+                #creamos layout para centrar el boton
+                layout = QHBoxLayout()
+                layout.addWidget(var.botondel)
                 layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
                 layout.setContentsMargins(0, 0, 0, 0)
-                contenedor.setLayout(layout)
-                var.ui.tablaFacturas.setCellWidget(index, 3, contenedor)
+                layout.setSpacing(0)
+
+                # Crear un widget contenedor para el layout y agregarlo a la celda
+                container = QWidget()
+                container.setLayout(layout)
+                var.ui.tablaFacturas.setCellWidget(index, 3, container)
+                var.botondel.clicked.connect(lambda checked, idFactura=registro[0]: Facturas.eliminarFactura(idFactura))
+
                 index += 1
+
         except Exception as e:
             print("Error cargaFacturas en cargaTablaFacturas", e)
 
     @staticmethod
-    def cargaOneFactura():
-        try:
-            fila = var.ui.tablaFacturas.currentRow()
-            idFactura = var.ui.tablaFacturas.item(fila, 0).text()
-            if idFactura:
-                factura = conexion.Conexion.cargaOneFactura(idFactura)
-                var.ui.lblNumFactura.setText(factura[0])
-                var.ui.txtFechaFactura.setText(factura[1])
-                var.ui.txtdniclifac.setText(factura[2])
-            else:
-                mbox = eventos.Eventos.crearMensajeError("Error", "No se ha podido cargar la factura")
-                mbox.exec()
-            Facturas.cargarClienteVenta()
-        except Exception as e:
-            print("Error en cargaOneFactura", e)
-
-    @staticmethod
     def eliminarFactura(idFactura):
+        """
+
+        :param idFactura: identificador de factura
+        :type idFactura: int
+
+        Método que elimina una factura, comprobando que no existan ventas asociadas.
+
+        """
         try:
-            if conexion.Conexion.bajaFactura(idFactura):
-                mbox = eventos.Eventos.crearMensajeInfo("Factura eliminada", "Se ha eliminado la factura")
-                mbox.exec()
-                Facturas.cargaTablaFacturas()
+            mbox = eventos.Eventos.crearMensajeConfirmacion('Eliminar factura', "¿Desea eliminar la factura seleccionada? Tenga en cuenta que la acción es irreversible.")
+            if mbox.exec() == QtWidgets.QMessageBox.StandardButton.Yes:
+                if var.claseConexion.facturaHasVentas(idFactura):
+                    eventos.Eventos.crearMensajeError("Error","No es posible eliminar una factura que contenga ventas.")
+                elif var.claseConexion.deleteFactura(idFactura):
+                    eventos.Eventos.crearMensajeInfo("Factura eliminada correctamente","Se ha eliminado la factura seleccionada.")
+                    Facturas.cargaTablaFacturas()
+                    Facturas.cargaTablaVentas(idFactura)
+                else:
+                    eventos.Eventos.crearMensajeError("Error al eliminar factura","No se ha podido eliminar la factura.")
             else:
-                mbox = eventos.Eventos.crearMensajeError("Error", "No se ha podido eliminar la factura")
-                mbox.exec()
+                mbox.hide()
+
         except Exception as e:
-            print("Error en eliminarFactura", e)
+            print("Error al eliminar factura en ",e)
 
     @staticmethod
-    def cargarClienteVenta():
-        try:
-            dniCliente = var.ui.txtdniclifac.text()
-            if conexion.Conexion.datosOneCliente(dniCliente):
-                datosCliente = conexion.Conexion.datosOneCliente(dniCliente)
-                var.ui.txtnomeclifac.setText(datosCliente[4])
-                var.ui.txtapelclifac.setText(datosCliente[3])
-                Facturas.cargaTablaVentas()
-                return True
-            else:
-                mbox = eventos.Eventos.crearMensajeError("Error", "No se ha podido cargar el cliente")
-                mbox.exec()
-                return False
-        except Exception as e:
-            print("Error en cargarClienteVenta", e)
+    def cargaOneFactura():
+        """
 
-    @staticmethod
-    def cargarPropiedadVenta(propiedad):
+        Método para leer los datos de una factura seleccionada de la tabla y cargarlos en los campos respectivos del panel de Facturas. Tambíen limpia los campos relacionados con las ventas cuando se selecciona una factura de la tabla para permitir grabar nuevas ventas asociadas.
+
+        """
         try:
-            if str(propiedad[6]).lower() == "disponible":
-                var.ui.txtcodpropfac.setText(str(propiedad[1]))
-                var.ui.txttipopropfac.setText(str(propiedad[2]))
-                var.ui.txtpreciofac.setText(str(propiedad[3]) + " €")
-                var.ui.txtdirpropfac.setText(str(propiedad[4]).title())
-                var.ui.txtmunipropfac.setText(str(propiedad[5]))
-                return True
-            else:
-                mbox = eventos.Eventos.crearMensajeError("Error", "La propiedad seleccionada no está disponible")
-                mbox.exec()
-                return False
+            var.ui.btnGrabarVenta.setDisabled(False)
+            var.ui.btnInformeFactura.setDisabled(False)
+            fila = var.ui.tablaFacturas.selectedItems()
+            datos = [dato.text() for dato in fila]
+            registro = var.claseConexion.datosOneFactura(str(datos[0]))
+            listado = [var.ui.lblNumFactura,var.ui.txtFechaFactura,var.ui.txtdniclifac]
+            for i in range (len(listado)):
+                listado[i].setText(str(registro[i]))
+
+            datosCliente = var.claseConexion.datosOneCliente(str(datos[1]))
+            var.ui.txtnomeclifac.setText(str(datosCliente[3]))
+            var.ui.txtapelclifac.setText(str(datosCliente[4]))
+
+            camposVenta = [var.ui.txtidvenfac,var.ui.txtcodpropfac,var.ui.txtpreciofac, var.ui.txttipopropfac, var.ui.txtmunipropfac, var.ui.txtdirpropfac]
+
+            for i in range (len(camposVenta)):
+                camposVenta[i].clear()
+
+            var.ui.txtpreciofac.setStyleSheet('border-bottom: 1px solid black; background-color: rgb(255, 255, 255);')
+            Facturas.cargaTablaVentas(registro[0])
+
         except Exception as e:
-            print("Error en cargarPropiedadVenta", e)
+            print("Error al cargar una factura en facturas",e)
+
 
     @staticmethod
     def altaVenta():
-        try:
-            nuevaVenta = [var.ui.lblNumFactura.text(), var.ui.txtcodpropfac.text(), var.ui.txtidvenfac.text()]
-            if var.ui.txtcodpropfac.text() == "" or var.ui.txtcodpropfac.text() is None:
-                mbox = eventos.Eventos.crearMensajeError("Error al grabar venta",
-                                                  "Recuerda seleccionar una propiedad antes de grabar una venta")
-                mbox.exec()
-            elif var.ui.txtidvenfac.text() == "" or var.ui.txtidvenfac.text() is None:
-                mbox = eventos.Eventos.crearMensajeError("Error al grabar venta",
-                                                  "Recuerda seleccionar un vendedor antes de grabar una venta")
-                mbox.exec()
-            elif conexion.Conexion.altaVenta(nuevaVenta) and conexion.Conexion.actualizaPropiedadVenta(nuevaVenta[1]):
-                mbox = eventos.Eventos.crearMensajeInfo("Venta grabada", "Se ha grabado una nueva venta")
-                mbox.exec()
-                Facturas.cargaTablaVentas()
-                propiedad_instancia = propiedades.Propiedades()
-                propiedad_instancia.cargaTablaPropiedades()
-            else:
-                mbox = eventos.Eventos.crearMensajeError("Error", "No se ha podido grabar venta")
-                mbox.exec()
-        except Exception as e:
-            print("venta", e)
+        """
+
+        Método para dar de alta una nueva venta. Comprueba y avisa al usuario en los siguientes casos: que se haya seleccionado una factura de la tabla, que se haya seleccionado a un vendedor y que se haya seleccionado una propiedad disponible para venta.
+
+        """
+        nuevaVenta = [var.ui.lblNumFactura.text(),var.ui.txtcodpropfac.text(), var.ui.txtidvenfac.text()]
+        precio = var.ui.txtpreciofac.text()
+        isVendida = var.claseConexion.propiedadIsVendida(var.ui.txtcodpropfac.text())
+        if nuevaVenta[0] == "":
+            eventos.Eventos.crearMensajeError("Error","Recuerde seleccionar una factura de la tabla de facturas.")
+        elif nuevaVenta[2] == "":
+            eventos.Eventos.crearMensajeError("Error","No es posible crear una nueva venta si no se ha seleccionado a un vendedor previamente.")
+        elif nuevaVenta[1] == "":
+            eventos.Eventos.crearMensajeError("Error","No se posible crear una nueva venta si no se ha seleccionado una propiedad")
+        elif precio == "":
+            eventos.Eventos.crearMensajeError("Error","La propiedad seleccionada no está disponible para venta. Se debe modificar la actual o seleccionar otra disponible para venta.")
+        elif isVendida:
+            eventos.Eventos.crearMensajeError("Error","La propiedad seleccionada ya está vendida. No es posible añadirla de nuevo a una venta.")
+        elif var.claseConexion.altaVenta(nuevaVenta) and var.claseConexion.venderPropiedad(nuevaVenta[1]):
+            eventos.Eventos.crearMensajeInfo("Aviso","Se ha grabado una venta exitosamente.")
+            Facturas.cargaTablaVentas(var.ui.lblNumFactura.text())
+            propiedades.Propiedades.cargarTablaPropiedades()
+        else:
+            eventos.Eventos.crearMensajeError("Error","Se ha producido un error inesperado")
 
     @staticmethod
-    def cargaTablaVentas():
-        idFactura = var.ui.lblNumFactura.text()
-        listado = conexion.Conexion.listadoVentas(idFactura)
-        var.ui.tablaVentas.setRowCount(len(listado))
-        index = 0
-        subtotal = 0
-        for registro in listado:
-            var.ui.tablaVentas.setItem(index, 0, QtWidgets.QTableWidgetItem(str(registro[0])))
-            var.ui.tablaVentas.setItem(index, 1, QtWidgets.QTableWidgetItem(str(registro[1])))
-            var.ui.tablaVentas.setItem(index, 2, QtWidgets.QTableWidgetItem(str(registro[2])))
-            var.ui.tablaVentas.setItem(index, 3, QtWidgets.QTableWidgetItem(str(registro[3])))
-            var.ui.tablaVentas.setItem(index, 4, QtWidgets.QTableWidgetItem(str(registro[4])))
-            var.ui.tablaVentas.setItem(index, 5, QtWidgets.QTableWidgetItem(str(registro[5]) + " € "))
+    def cargaTablaVentas(idFactura):
+        """
 
-            botondelfac = QtWidgets.QPushButton()
-            botondelfac.setFixedSize(30, 24)
-            botondelfac.setIcon(QtGui.QIcon('img/papelera.ico'))
-            botondelfac.setProperty("row", index)
-            botondelfac.clicked.connect(
-                lambda checked, idVenta=str(registro[0]), idpropiedad=str(registro[1]): Facturas.eliminarVenta(idVenta,
-                                                                                                               idpropiedad))
-            contenedor = QtWidgets.QWidget()
-            layout = QtWidgets.QHBoxLayout()
-            layout.addWidget(botondelfac)
-            layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-            layout.setContentsMargins(0, 0, 0, 0)
-            contenedor.setLayout(layout)
-            var.ui.tablaVentas.setCellWidget(index, 6, contenedor)
+        :param idFactura: identificador de factura
+        :type idFactura: int
 
-            if var.ui.tablaVentas.item(index, 0):
-                var.ui.tablaVentas.item(index, 0).setTextAlignment(
-                    QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignVCenter)
-            if var.ui.tablaVentas.item(index, 1):
-                var.ui.tablaVentas.item(index, 1).setTextAlignment(
-                    QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
-            if var.ui.tablaVentas.item(index, 2):
-                var.ui.tablaVentas.item(index, 2).setTextAlignment(
-                    QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
-            if var.ui.tablaVentas.item(index, 3):
-                var.ui.tablaVentas.item(index, 3).setTextAlignment(
-                    QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
-            if var.ui.tablaVentas.item(index, 4):
-                var.ui.tablaVentas.item(index, 4).setTextAlignment(
-                    QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
-            if var.ui.tablaVentas.item(index, 5):
-                var.ui.tablaVentas.item(index, 5).setTextAlignment(
-                    QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
-            subtotal += registro[5]
-            index += 1
+        Método que carga los datos de ventas asociadas a una factura cuando esta es seleccionada de la tabla de facturas.
 
-            iva = subtotal * 0.21
+        """
+        try:
+            listado = var.claseConexion.listadoVentas(idFactura)
+            var.ui.tablaVentas.setRowCount(len(listado))
+            index = 0
+            subtotal = 0
+            for registro in listado:
+                var.ui.tablaVentas.setItem(index, 0, QtWidgets.QTableWidgetItem(str(registro[0]))) #idVenta
+                var.ui.tablaVentas.setItem(index, 1, QtWidgets.QTableWidgetItem(str(registro[1]))) #codigoPropiedad
+                var.ui.tablaVentas.setItem(index, 2, QtWidgets.QTableWidgetItem(registro[2])) #direccion
+                var.ui.tablaVentas.setItem(index, 3, QtWidgets.QTableWidgetItem(registro[3])) #municipio
+                var.ui.tablaVentas.setItem(index, 4, QtWidgets.QTableWidgetItem(registro[4])) #tipo
+                precio_venta = f"{registro[5]:,.1f} €"
+                var.ui.tablaVentas.setItem(index, 5, QtWidgets.QTableWidgetItem(precio_venta)) #precio
+                var.ui.tablaVentas.item(index, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+                var.ui.tablaVentas.item(index, 1).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+                var.ui.tablaVentas.item(index, 2).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
+                var.ui.tablaVentas.item(index, 3).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft.AlignVCenter)
+                var.ui.tablaVentas.item(index, 4).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+                var.ui.tablaVentas.item(index, 5).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+
+                #creamos el boton
+                var.botondelven = QtWidgets.QPushButton()
+                var.botondelven.setFixedSize(20,20)
+                var.botondelven.setIconSize(QtCore.QSize(20, 20))
+                var.botondelven.setObjectName("botonEliminar")
+                var.botondelven.setIcon(QtGui.QIcon('./img/delete.png'))
+
+                #creamos layout para centrar el boton
+                layout = QHBoxLayout()
+                layout.addWidget(var.botondelven)
+                layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+                layout.setContentsMargins(0, 0, 0, 0)
+                layout.setSpacing(0)
+
+                # Crear un widget contenedor para el layout y agregarlo a la celda
+                container = QWidget()
+                container.setLayout(layout)
+                var.ui.tablaVentas.setCellWidget(index, 6, container)
+                var.botondelven.clicked.connect(lambda checked, idVenta=registro[0], codProp=registro[1]: Facturas.eliminarVenta(idVenta,codProp, idFactura))
+
+                subtotal += registro[5]
+
+                index += 1
+
+            iva = subtotal * 0.1
             total = subtotal + iva
             subTotalStr = f"{subtotal:,.1f} €"
             ivaStr = f"{iva:,.1f} €"
             totalStr = f"{total:,.1f} €"
-            var.ui.lblSubtotalFactura.setText(subTotalStr)
-            var.ui.lblImpuestasFacturas.setText(ivaStr)
-            var.ui.lblTotalFactura.setText(totalStr)
+            var.ui.lblSubtotal.setText(subTotalStr)
+            var.ui.lblIva.setText(ivaStr)
+            var.ui.lblTotal.setText(totalStr)
+
+        except Exception as e:
+            print("Error cargaVentas en cargaTablaVentas", e)
+
+    @staticmethod
+    def eliminarVenta(idVenta,codProp, idFactura):
+        """
+
+        :param idVenta: identificador de venta
+        :type idVenta: int
+        :param codProp: código identificador de propiedad
+        :type codProp: int
+        :param idFactura: identificador de una factura
+        :type idFactura: int
+
+        Método que elimina una venta seleccionada de la tabla de ventas. Le pregunta al usuario antes de confirmar la eliminación. También modifica el estado de la propiedad y vuelve a cargar la tabla de ventas tras la eliminación.
+
+        """
+        try:
+            mbox = eventos.Eventos.crearMensajeConfirmacion('Eliminar factura', "¿Desea eliminar la factura seleccionada? Tenga en cuenta que la acción es irreversible.")
+            if mbox.exec() == QtWidgets.QMessageBox.StandardButton.Yes:
+                if var.claseConexion.deleteVenta(idVenta, codProp):
+                    eventos.Eventos.crearMensajeInfo("Aviso","Se ha eliminado la venta correctamente.")
+                    Facturas.cargaTablaVentas(idFactura)
+                else:
+                    eventos.Eventos.crearMensajeError("Error","Se ha producido un error no esperado, no se ha eliminado la venta.")
+
+        except Exception as e:
+            print("Error eliminar venta en facturas", str(e))
+
 
     @staticmethod
     def cargaOneVenta():
-        try:
-            fila = var.ui.tablaVentas.currentRow()
-            idVenta = var.ui.tablaVentas.item(fila, 0).text()
-            if idVenta:
-                venta = conexion.Conexion.datosOneVenta(idVenta)
-                var.ui.txtidvenfac.setText(venta[0])
-                var.ui.txtcodpropfac.setText(str(venta[1]))
-                var.ui.txttipopropfac.setText(venta[2])
-                var.ui.txtpreciofac.setText(str(venta[3]) + " € ")
-                var.ui.txtmunipropfac.setText(venta[4])
-                var.ui.txtdirpropfac.setText(venta[5])
-            else:
-                mbox = eventos.Eventos.crearMensajeError("Error", "No se ha podido cargar la venta")
-                mbox.exec()
-        except Exception as e:
-            print("Error en cargaOneVenta", e)
+        """
 
-    def eliminarVenta(idVenta, idpropiedad):
-        try:
-            if conexion.Conexion.bajaVenta(idVenta) and conexion.Conexion.altaPropiedadVenta(str(idpropiedad)):
-                mbox = eventos.Eventos.crearMensajeInfo("Venta eliminada", "Se ha eliminado la venta")
-                mbox.exec()
-                Facturas.cargaTablaVentas()
-                propiedad_instancia = propiedades.Propiedades()
-                propiedad_instancia.cargaTablaPropiedades()
-            else:
-                mbox = eventos.Eventos.crearMensajeError("Error", "No se ha podido eliminar la venta")
-                mbox.exec()
-        except Exception as e:
-            print("Error en eliminarVenta", e)
+        Método que carga los datos una venta los respectivos campos del panel Facturas cuando se selecciona de la tabla de ventas.
 
+        """
+        try:
+
+            var.ui.btnGrabarVenta.setDisabled(True)
+            fila = var.ui.tablaVentas.selectedItems()
+            datos = [dato.text() for dato in fila]
+            registro = var.claseConexion.datosOneVenta(str(datos[0]))
+            listado = [var.ui.txtidvenfac,var.ui.txtcodpropfac, var.ui.txttipopropfac, var.ui.txtpreciofac, var.ui.txtmunipropfac, var.ui.txtdirpropfac]
+            var.ui.txtpreciofac.setStyleSheet('border-bottom: 1px solid black; background-color: rgb(255, 255, 255);')
+            for i in range (len(listado)):
+                if i != 3:
+                    listado[i].setText(str(registro[i]))
+                else:
+                    precioVenta = f"{registro[i]:,.1f} €"
+                    listado[i].setText(precioVenta)
+
+        except Exception as e:
+            print("Error al cargar UNA venta en facturas",e)

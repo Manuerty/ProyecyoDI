@@ -1,408 +1,65 @@
 import csv
 import json
-import os.path
+import os
 import sys
+import time
+import re
 from datetime import datetime
 
-from PyQt6.QtGui import QIcon
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import QHeaderView, QCompleter
+from PyQt6.QtWidgets import QHeaderView
+
+import locale
 
 import clientes
 import conexion
-import time
-from PyQt6 import QtWidgets, QtGui
+import conexionserver
+import var
+from PyQt6 import QtWidgets, QtGui, QtCore
 import zipfile
 import shutil
-import eventos
-import facturas
-import var
-import re
-import locale
 
+import vendedores
 
-locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
-locale.setlocale(locale.LC_MONETARY, 'es_ES.UTF-8')
+#Establecer configuracion regional
 
+locale.setlocale(locale.LC_TIME,'es_ES.UTF-8')
+locale.setlocale(locale.LC_MONETARY,'es_ES.UTF-8')
 
 class Eventos():
+    @staticmethod
+    def mensajeSalir():
+        """
 
+        Método que crea un mensaje de salida cuando queremos cerrar el programa, pidiendo confirmación. Si se confirma cierra el programa.
 
-    def mensajeSalir(self=None):
-        mbox = QtWidgets.QMessageBox()
-        mbox.setIcon(QtWidgets.QMessageBox.Icon.Question)
-        mbox.setWindowIcon(QtGui.QIcon('./img/logo.ico'))
-        mbox.setWindowTitle("Salir")
-        mbox.setText("¿Desea usted salir?")
-        mbox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No)
-        mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.No)
-        mbox.button(QtWidgets.QMessageBox.StandardButton.Yes).setText("Si")
-        mbox.button(QtWidgets.QMessageBox.StandardButton.No).setText("No")
+        """
+        mbox = Eventos.crearMensajeConfirmacion('Salir', "¿Desea salir?")
 
         if mbox.exec() == QtWidgets.QMessageBox.StandardButton.Yes:
             sys.exit()
         else:
             mbox.hide()
 
-
-    def cargarProvincias(self):
-        var.ui.cmbProCli.clear()
-        listado = conexion.Conexion.listaProv(self)
-        var.ui.cmbProCli.addItems(listado)
-
-    def cargarMunicipios(self):
-        var.ui.cmbMuniCli.clear()
-        provincia = var.ui.cmbProCli.currentText()
-        listado = conexion.Conexion.listaMuni(provincia)
-        var.ui.cmbMuniCli.addItems(listado)
-
-    def cargarProvinciasProp(self):
-            var.ui.cmbProvProp.clear()
-            listado = conexion.Conexion.listaProv(self)
-            var.ui.cmbProvProp.addItems(listado)
-
-    def cargarMunicipiosProp(self):
-        var.ui.cmbMuniProp.clear()
-        provincia = var.ui.cmbProvProp.currentText()
-        listado = conexion.Conexion.listaMuni(provincia)
-        var.ui.cmbMuniProp.addItems(listado)
-
-    def cargarProvinciasVen(self):
-        var.ui.cmbDelegVen.clear()
-        listado = conexion.Conexion.listaProv(self)
-        var.ui.cmbDelegVen.addItems(listado)
-
-    def validarDNIcli(dni):
-        try:
-            dni = str(dni).upper()
-            var.ui.txtDniCli.setText(str(dni))
-            tabla = "TRWAGMYFPDXBNJZSQVHLCKE"
-            dig_ext = "XYZ"
-            reemp_dig_ext = {'X': '0', 'Y': '1', 'Z': '2'}
-            numeros = "1234567890"
-            if len(dni) == 9:
-                dig_control = dni[8]
-                dni = dni[:8]
-                if dni[0] in dig_ext:
-                    dni = dni.replace(dni[0], reemp_dig_ext[dni[0]])
-                if len(dni) == len([n for n in dni if n in numeros]) and tabla[int(dni) % 23] == dig_control:
-                    return True
-                else:
-                    return False
-            else:
-                return False
-        except Exception as error:
-            print("error en validar dni ", error)
-
-    def validarDNIven(dni):
-        try:
-            dni = str(dni).upper()
-            var.ui.txtDniVen.setText(str(dni))
-            tabla = "TRWAGMYFPDXBNJZSQVHLCKE"
-            dig_ext = "XYZ"
-            reemp_dig_ext = {'X': '0', 'Y': '1', 'Z': '2'}
-            numeros = "1234567890"
-            if len(dni) == 9:
-                dig_control = dni[8]
-                dni = dni[:8]
-                if dni[0] in dig_ext:
-                    dni = dni.replace(dni[0], reemp_dig_ext[dni[0]])
-                if len(dni) == len([n for n in dni if n in numeros]) and tabla[int(dni) % 23] == dig_control:
-                    return True
-                else:
-                    return False
-            else:
-                return False
-        except Exception as error:
-            print("error en validar dni ", error)
-
-    def chekTelefono(dni):
-        try:
-            dni = dni.lower()
-            regex = r'^(?:\+34|0034)?[\s.-]?[67]\d{2}[\s.-]?\d{3}[\s.-]?\d{3}$'
-            if re.match(regex, dni):
-                return True
-            else:
-                return False
-        except Exception as error:
-            print("error en checkDNI ", error)
-
-    def abrirCalendar(pan, btn):
-        try:
-            var.panel = pan
-            var.btn = btn
-            var.uicalendar.show()
-        except Exception as error:
-            print("error en abrir calendar ", error)
-
-    def cargaFecha(qDate):
-        try:
-            data = ('{:02d}/{:02d}/{:4d}'.format(qDate.day(), qDate.month(), qDate.year()))
-            if var.panel == 0 and var.btn == 0:
-                var.ui.txtAltaCli.setText(str(data))
-            elif var.panel == 0 and var.btn == 1:
-                var.ui.txtBajaCli.setText(str(data))
-            elif var.panel == 1 and var.btn == 0:
-                var.ui.txtFechaAltaProp.setText(str(data))
-            elif var.panel == 1 and var.btn == 1:
-                var.ui.txtFechaBajaProp.setText(str(data))
-            elif var.panel == 2 and var.btn == 0:
-                var.ui.txtAltaVen.setText(str(data))
-            elif var.panel == 3 and var.btn == 0:
-                var.ui.txtFechaFactura.setText(str(data))
-
-            time.sleep(0.125)
-            var.uicalendar.hide()
-            return data
-        except Exception as error:
-            print("error en cargar fecha: ", error)
-
-    def validarMail(mail):
-        mail = mail.lower()
-        regex = r'[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,5}'
-        if re.match(regex, mail) or mail == '':
-            return True
-        else:
-            return False
-
-    def resizeTablaClientes(self):
-        try:
-            header = var.ui.tablaClientes.horizontalHeader()
-            for i in range(header.count()):
-                if i == 1 or i == 2 or i == 4 or i == 5:
-                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
-                else:
-                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
-
-                header_item = var.ui.tablaClientes.horizontalHeaderItem(i)
-                if header_item is not None:
-                    font = header_item.font()
-                    font.setBold(True)
-                    header_item.setFont(font)
-        except Exception as e:
-            print("error en resize tabla clientes", e)
-
-    def resizeTablaPropiedades(self):
-        try:
-            header = var.ui.tablaProp.horizontalHeader()
-            for i in range(header.count()):
-                if i == 1 or i == 2:
-                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
-                else:
-                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
-
-                header_item = var.ui.tablaProp.horizontalHeaderItem(i)
-                if header_item is not None:
-                    font = header_item.font()
-                    font.setBold(True)
-                    header_item.setFont(font)
-        except Exception as e:
-            print("error en resize tabla prop", e)
-
-    def resizeTablaVendedores(self):
-        try:
-            header = var.ui.tablaVen.horizontalHeader()
-            for i in range(header.count()):
-                if i == 1 or i == 2 or i == 4 or i == 5:
-                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
-                else:
-                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
-
-                header_item = var.ui.tablaVen.horizontalHeaderItem(i)
-                if header_item is not None:
-                    font = header_item.font()
-                    font.setBold(True)
-                    header_item.setFont(font)
-        except Exception as e:
-            print("error en resize tabla vendedores", e)
-
-    def crearBackUp(self):
-        try:
-            fecha = datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
-            copia = str(fecha) + '_backup.zip'
-            directorio, fichero = var.dlgabrir.getSaveFileName(None, "Guardar Copia de Seguridad", copia, '.zip')
-            if var.dlgabrir.accept and fichero:
-                fichzip = zipfile.ZipFile(fichero, "w")
-                fichzip.write('bbdd.sqlite', os.path.basename('bbdd.sqlite'), zipfile.ZIP_DEFLATED)
-                fichzip.close()
-                shutil.move(fichero, directorio)
-                mbox = QtWidgets.QMessageBox()
-                mbox.setIcon(QtWidgets.QMessageBox.Icon.Information)
-                mbox.setWindowTitle('Copia de Seguridad')
-                mbox.setWindowIcon(QIcon('./img/logo.ico'))
-                mbox.setText('Copia de Seguridad creada correctamente')
-                mbox.setStandardButtons(
-                    QtWidgets.QMessageBox.StandardButton.Ok)
-                mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
-                mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
-                mbox.exec()
-
-
-        except Exception as error:
-            print("error en crear backup", error)
-
-    def restaurarBackUp(self):
-        try:
-            filename = var.dlgabrir.getOpenFileName(None, "Restaurar Copia de Seguridad", "", '*.zip;;All Files(*)')
-            file = filename[0]
-            if file:
-                with zipfile.ZipFile(file, 'r') as bbdd:
-                    bbdd.extractall(pwd=None)
-                bbdd.close()
-            mbox = QtWidgets.QMessageBox()
-            mbox.setIcon(QtWidgets.QMessageBox.Icon.Information)
-            mbox.setWindowTitle('Copia de Seguridad')
-            mbox.setWindowIcon(QIcon('./img/logo.ico'))
-            mbox.setText('Copia de Seguridad restaurada correctamente')
-            mbox.setStandardButtons(
-                QtWidgets.QMessageBox.StandardButton.Ok)
-            mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
-            mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
-            mbox.exec()
-            conexion.Conexion.db_conexion(self)
-            eventos.Eventos.cargarProvincias(self)
-            clientes.Clientes.cargaTablaClientes(self)
-        except Exception as error:
-            print("Eroor al restaurar el BackUp", error)
-
-    def limpiarPanel(self):
-        try:
-            current_index = var.ui.panPrincipal.currentIndex()
-
-            if current_index == 0:
-                objetospanelcli = [var.ui.txtDniCli, var.ui.txtAltaCli, var.ui.txtApelCli, var.ui.txtNomCli,
-                            var.ui.txtEmailCli, var.ui.txtMovilCli,var.ui.txtDirCli, var.ui.cmbProCli,
-                            var.ui.cmbMuniCli, var.ui.txtBajaCli]
-                for i, dato in enumerate(objetospanelcli):
-                    if i == 7 or i == 8:
-                        pass
-                    else:
-                        dato.setText('')
-
-                eventos.Eventos.cargarProvincias(self)
-            elif current_index == 1:
-                listado = [var.ui.lblProp, var.ui.txtFechaAltaProp, var.ui.txtFechaBajaProp, var.ui.txtDirProp,
-                           var.ui.cmbProvProp, var.ui.cmbMuniProp, var.ui.txtCpProp, var.ui.cmbTipoProp,
-                           var.ui.spinNumhabitProp,
-                           var.ui.spinNumbanProp, var.ui.txtSuperficieProp, var.ui.txtPrecioVProp,
-                           var.ui.txtPrecioAProp,
-                           var.ui.textDescriptProp, var.ui.rbtDisponibleProp, var.ui.rbtAlquiladoProp,
-                           var.ui.rbtVendidoProp, var.ui.chkIntercambioProp,
-                           var.ui.chkAlquilerProp, var.ui.chkVentaProp,
-                           var.ui.txtPropietarioProp, var.ui.txtMovilpropietarioProp]
-
-                for i, dato in enumerate(listado):
-                    if i not in {4,5,7,8,9,14,15,16,17,18,19}:
-                        dato.setText('')
-                    if i in {8,9}:
-                        dato.setValue(0)
-                    if i in {14}:
-                        dato.setChecked(True)
-                    if i in {15,16}:
-                        dato.setChecked(False)
-                    if i in {17,18,19}:
-                        dato.setChecked(False)
-
-                eventos.Eventos.cargarProvinciasProp(self)
-                Eventos.cargarTipoProp()
-            elif current_index == 2:
-                vendedor = [var.ui.lblVen, var.ui.txtDniVen, var.ui.txtNomVen, var.ui.txtAltaVen,
-                            var.ui.txtBajaVen, var.ui.txtMovilVen, var.ui.txtEmailVen, var.ui.cmbDelegVen]
-
-                for i, dato in enumerate(vendedor):
-                    if i != 7:
-                        dato.setText("")
-                    else:
-                        dato.setCurrentIndex(0)
-
-                Eventos.cargarDelegacion()
-
-            elif current_index == 3:
-                    ventas = [var.ui.lblNumFactura, var.ui.txtdniclifac, var.ui.txtFechaFactura, var.ui.txtnomeclifac,
-                          var.ui.txtapelclifac,
-                          var.ui.txtidvenfac, var.ui.txtcodpropfac, var.ui.txttipopropfac, var.ui.txtpreciofac,
-                          var.ui.txtmunipropfac,
-                          var.ui.txtdirpropfac]
-                    for i, dato in enumerate(ventas):
-                        if i != 2:
-                            dato.setText("")
-                        else:
-                            dato.setText(datetime.today().strftime('%d/%m/%Y'))
-                    facturas.Facturas.cargaTablaVentas()
-            else:
-                print("panPrincipal es nulo")
-        except Exception as e:
-            print(f"Se ha producido una excepción: {e}")
-
-
-    def cargarDelegacion(self):
-        var.ui.cmbDelegVen.clear()
-        listado = conexion.Conexion().listaProv(self)
-        var.ui.cmbDelegVen.addItems(listado)
-
-
-    def clearCampos(self):
-        var.ui.txtDniCli.setText(None)
-        var.ui.txtApelCli.setText(None)
-        var.ui.txtNomCli.setText(None)
-        var.ui.txtMovilCli.setText(None)
-        var.ui.txtEmailCli.setText(None)
-        var.ui.txtAltaCli.setText(None)
-        var.ui.txtDirCli.setText(None)
-        var.ui.cmbProCli.setCurrentIndex(0)
-
-    def clearCamposProp(self):
-        var.ui.lblProp.setText(None)
-        var.ui.txtFechaAltaProp.setText(None)
-        var.ui.txtDirProp.setText(None)
-        var.ui.cmbProvProp.setCurrentIndex(0)
-        var.ui.cmbMuniProp.setCurrentIndex(0)
-        var.ui.txtCpProp.setText(None)
-        var.ui.cmbTipoProp.setCurrentIndex(0)
-        var.ui.spinNumhabitProp.setValue(0)
-        var.ui.spinNumbanProp.setValue(0)
-        var.ui.txtSuperficieProp.setText(None)
-        var.ui.txtPrecioVProp.setText(None)
-        var.ui.txtPrecioAProp.setText(None)
-        var.ui.textDescriptProp.setText(None)
-        var.ui.txtPropietarioProp.setText(None)
-        var.ui.txtMovilpropietarioProp.setText(None)
-        var.ui.chkAlquilerProp.setChecked(False)
-        var.ui.chkIntercambioProp.setChecked(False)
-        var.ui.chkVentaProp.setChecked(False)
-        var.ui.rbtAlquiladoProp.setChecked(False)
-        var.ui.rbtVendidoProp.setChecked(False)
-
-    def abrirTipoProp(self):
-        try:
-            var.dlggestion.show()
-        except Exception as error:
-            print("error en abrir tipo propiedad", error)
-
-    def abrirAbout(self):
-        try:
-            var.dlgabout.show()
-        except Exception as error:
-            print("error en abrir about", error)
-
-    def cerrarAbout(self):
-        try:
-            var.dlgabout.close()
-        except Exception as error:
-            print("error en abrir about", error)
-
-
-    def cargarTipoProp(self):
-        try:
-            registro = conexion.Conexion.cargarTipoProp(self)
-            var.ui.cmbTipoProp.clear()
-            var.ui.cmbTipoProp.addItems(registro)
-        except Exception as error:
-            print('Error cargarTipoProp: %s ' % str(error))
-
     @staticmethod
-    def crearMensajeSalida(titulo_ventana, mensaje):
+    def crearMensajeConfirmacion(titulo_ventana, mensaje):
+        """
+
+        :param titulo_ventana: nombre de la ventana a crear
+        :type titulo_ventana: str
+        :param mensaje: mensaje de aviso en la ventana
+        :type mensaje: str
+        :return: devuelve la ventana de confirmación
+        :rtype: QMessageBox
+
+        Método que crea una ventana emergente que permite al usuario confirmar una acción crítica
+
+        """
         mbox = QtWidgets.QMessageBox()
         mbox.setIcon(QtWidgets.QMessageBox.Icon.Question)
-        mbox.setWindowIcon(QtGui.QIcon('./img/icono.svg'))
+        mbox.setWindowIcon(QtGui.QIcon('./img/icono.png'))
         mbox.setText(mensaje)
         mbox.setWindowTitle(titulo_ventana)
         mbox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No)
@@ -413,129 +70,379 @@ class Eventos():
 
     @staticmethod
     def crearMensajeInfo(titulo_ventana, mensaje):
+        """
+
+        :param titulo_ventana: nombre de la ventana a crear
+        :type titulo_ventana: str
+        :param mensaje: mensaje de aviso en la ventana
+        :type mensaje: str
+
+        Método que ejecuta una ventana de información con un aviso
+
+        """
         mbox = QtWidgets.QMessageBox()
         mbox.setIcon(QtWidgets.QMessageBox.Icon.Information)
-        mbox.setWindowIcon(QtGui.QIcon('img/icono.svg'))
+        mbox.setWindowIcon(QtGui.QIcon('img/icono.png'))
         mbox.setWindowTitle(titulo_ventana)
         mbox.setText(mensaje)
         mbox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
         mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
         mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
-        return mbox
+        mbox.exec()
 
     @staticmethod
     def crearMensajeError(titulo_ventana, mensaje):
+        """
+
+        :param titulo_ventana: nombre de la ventana a crear
+        :type titulo_ventana: str
+        :param mensaje: mensaje de aviso en la ventana
+        :type mensaje: str
+
+        Método que ejecuta una ventana de error con un aviso
+
+        """
         mbox = QtWidgets.QMessageBox()
         mbox.setIcon(QtWidgets.QMessageBox.Icon.Critical)
-        mbox.setWindowIcon(QtGui.QIcon('img/icono.svg'))
+        mbox.setWindowIcon(QtGui.QIcon('img/icono.png'))
         mbox.setWindowTitle(titulo_ventana)
         mbox.setText(mensaje)
         mbox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
         mbox.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
         mbox.button(QtWidgets.QMessageBox.StandardButton.Ok).setText('Aceptar')
-        return mbox
+        mbox.exec()
+
+    @staticmethod
+    def cargarProv():
+        """
+
+        Método que carga todas las provincias en los diferentes comboBox del programa destinados a ellas
+
+        """
+        var.ui.cmbProvcli.clear()
+        var.ui.cmbProvprop.clear()
+        var.ui.cmbDeleVen.clear()
+        listado = var.claseConexion.listaProv()
+        var.provincias = listado
+
+        var.ui.cmbProvcli.addItems(listado)
+        var.ui.cmbProvprop.addItems(listado)
+        var.ui.cmbDeleVen.addItems(listado)
 
 
+    @staticmethod
+    def cargaMunicli():
+        """
 
-    def exportCSVProp(self):
+        Método que carga los municipios de una provincia seleccionada en el panel de clientes y añade un completer al comboBox para facilitar la selección del municipio
+
+        """
+        var.ui.cmbMunicli.clear()
+        provinciaCli = var.ui.cmbProvcli.currentText()
+        listado = var.claseConexion.listaMunicipio(provinciaCli)
+        var.ui.cmbMunicli.addItems(listado)
+
+        var.municli = listado
+
+        completer = QtWidgets.QCompleter(var.municli, var.ui.cmbMunicli)
+        completer.setCaseSensitivity(QtCore.Qt.CaseSensitivity.CaseInsensitive)
+        completer.setFilterMode(QtCore.Qt.MatchFlag.MatchContains)
+        var.ui.cmbMunicli.setCompleter(completer)
+
+    @staticmethod
+    def cargaMuniprop():
+        """
+
+        Método que carga los municipios de una provincia seleccionada en el panel de propiedades y añade un completer al comboBox para facilitar la selección del municipio
+
+        """
+        var.ui.cmbMuniprop.clear()
+        provinciaProp = var.ui.cmbProvprop.currentText()
+        listado = var.claseConexion.listaMunicipio(provinciaProp)
+        var.ui.cmbMuniprop.addItems(listado)
+
+        var.muniprop = listado
+
+        completer = QtWidgets.QCompleter(var.muniprop, var.ui.cmbMuniprop)
+        completer.setCaseSensitivity(QtCore.Qt.CaseSensitivity.CaseInsensitive)
+        completer.setFilterMode(QtCore.Qt.MatchFlag.MatchContains)
+        var.ui.cmbMuniprop.setCompleter(completer)
+
+    @staticmethod
+    def checkMunicipioCli():
+        """
+
+        Método que restablece el primer municipio de la lista en caso de que la opción escrita en el comboBox del panel de clientes no exista
+
+        """
+        if var.ui.cmbMunicli.currentText() not in var.municli:
+            var.ui.cmbMunicli.setCurrentIndex(0)
+
+    @staticmethod
+    def checkProvinciaCli():
+        """
+
+        Método que restablece la primera provincia de la lista en caso de que la opción escrita en el comboBox del panel de clientes no exista
+
+        """
+        if var.ui.cmbProvcli.currentText() not in var.provincias:
+            var.ui.cmbProvcli.setCurrentIndex(0)
+
+    @staticmethod
+    def checkMunicipioProp():
+        """
+
+        Método que restablece el primer municipio de la lista en caso de que la opción escrita en el comboBox del panel de propiedades no exista
+
+        """
+        if var.ui.cmbMuniprop.currentText() not in var.muniprop:
+            var.ui.cmbMuniprop.setCurrentIndex(0)
+
+    @staticmethod
+    def checkProvinciaProp():
+        """
+
+        Método que restablece la primera provincia de la lista en caso de que la opción escrita en el comboBox del panel de propiedades no exista
+
+        """
+        if var.ui.cmbProvprop.currentText() not in var.provincias:
+            var.ui.cmbProvprop.setCurrentIndex(0)
+
+    @staticmethod
+    def checkProvinciaVen():
+        """
+
+        Método que restablece la primera provincia de la lista en caso de que la opción escrita en el comboBox del panel de vendedores no exista
+
+        """
+        if var.ui.cmbDeleVen.currentText() not in var.provincias:
+            var.ui.cmbDeleVen.setCurrentIndex(0)
+
+    @staticmethod
+    def isDniValido(dni):
+        """
+
+        :param dni: el dni de un cliente o un vendedor
+        :type dni: str
+        :return: éxito si el dato introducido sigue el formato NIF
+        :rtype: bool
+
+        Método que comprueba que el dato introducido como Dni sigue el formato NIF
+
+        """
         try:
-            fecha = datetime.today().strftime('%Y_%m_%d_%H_%M_%S')
-            file = (str(fecha) + '_propiedades.csv')
-            directorio, fichero = var.dlgabrir.getSaveFileName(None, "Exportar Datos en CSV", file, '.csv')
-            if fichero:
-                registros = conexion.Conexion.listadoPropiedadesExport(self)
-                with open (fichero, "w", newline='', encoding= 'utf-8') as csvfile:
-                    writer = csv.writer(csvfile)
-                    writer.writerow(["Codigo", "Alta", "Baja", "Direccion", "Provincia", "Municipio", "CP", "Tipo", "Habitaciones",
-                    "Banos", "Superficie", "Precio Venta", "Precio Alquiler","Descripción",  "Operación", "Estado", "Propietario", "Movil"])
-                    for registro in registros:
-                        writer.writerow(registro)
-                shutil.move(fichero, directorio)
+            dni = str(dni).upper()
+            var.ui.txtDnicli.setText(str(dni))
+            tabla = "TRWAGMYFPDXBNJZSQVHLCKE"
+            dig_ext = "XYZ"
+            reemp_dig_ext = {'X': '0', 'Y': '1', 'Z': '2'}
+            if len(dni) == 9:
+                dig_control = dni[8]
+                dni = dni[:8]
+                if dni[0] in dig_ext:
+                    dni = dni.replace(dni[0], reemp_dig_ext[dni[0]])
+                if dni.isdigit() and tabla[int(dni) % 23] == dig_control:
+                    return True
+                else:
+                    return False
             else:
-                eventos.Eventos.crearMensajeError('Exportar CSV', 'No se ha seleccionado ningún fichero')
+                return False
 
         except Exception as error:
-            print("error en exportar csv propiedades", error)
+            print("error en validar dni ", error)
 
-    def exportJSONProp(self):
+    @staticmethod
+    def isMovilValido(movil):
+        """
+
+        :param movil: movil de cliente o de vendedor
+        :type movil: int
+        :return: éxito si sigue el formato móvil con 9 números empezando por 6 o 7
+        :rtype: bool
+        """
+        regex = r"^[67]\d{8}$"
+        return re.fullmatch(regex, movil)
+
+    @staticmethod
+    def cargarTick():
+        """
+
+        :return: devuelve la imagen de un tick verde
+        :rtype: QPixmap
+
+        Método que crea un pixmap con la imagen de un tick verde y la devuelve
+
+        """
+        pixmap = QPixmap("img/tick.svg")
+        return pixmap
+
+    @staticmethod
+    def cargarCruz():
+        """
+
+        :return: devuelve la imagen de una cruz roja
+        :rtype: QPixmap
+
+        Método que crea un pixmap con la imagen de una cruz roja y la devuelve
+
+        """
+        pixmap = QPixmap("img/cruz.svg")
+        return pixmap
+
+    @staticmethod
+    def abrirCalendar(pan, btn):
+        """
+
+        :param pan: panel actual
+        :type pan: int
+        :param btn: boton correspondiente en el panel
+        :type btn: int
+
+        Método que abre una ventana de calendario y setea el botón seleccionado y el panel actual
+
+        """
         try:
-            var.historiaprop = 0
-            fecha = datetime.today().strftime('%Y_%m_%d_%H_%M_%S')
-            file = (str(fecha) + '_propiedades.json')
-            directorio, fichero = var.dlgabrir.getSaveFileName(None, "Exportar Datos en JSON", file, '.json')
-            if fichero:
-                keys = ['codigo', 'alta', 'baja', 'direccion', 'provincia', 'municipio', 'cp', 'tipo', 'habitaciones',
-                        'banos', 'superficie', 'precioventa', 'precioalquiler', 'descripcion', 'operacion', 'estado', 'propietario', 'movil']
-                registros = conexion.Conexion.listadoPropiedadesExport(self)
-                lista_propiedades = [dict(zip(keys, registro)) for registro in registros]
-                with open (fichero, "w", encoding= 'utf-8') as jsonfile:
-                    json.dump(lista_propiedades, jsonfile, ensure_ascii=False, indent=4)
-                shutil.move(fichero, directorio)
-            else:
-                eventos.Eventos.crearMensajeError('Exportar JSON', 'No se ha seleccionado ningún fichero')
+            var.panel = pan
+            var.btn = btn
+            var.uicalendar.show()
         except Exception as error:
-            print("error en exportar json porpiedades" , error)
+            print("error en abrir calendar ", error)
 
-    def exportCSVClientes(self):
+    @staticmethod
+    def cargaFecha(qDate):
+        """
+
+        :param qDate: día seleccionado
+        :type qDate: datetime
+        :return: datos formateados del día seleccionado
+        :rtype: str
+
+        Método que formatea el día seleccionado en el calendario y lo setea en el campo del panel corresponiente donde se haya llamado al calendario
+
+        """
         try:
-            fecha = datetime.today().strftime('%Y_%m_%d_%H_%M_%S')
-            file = (str(fecha) + '_clientes.csv')
-            directorio, fichero = var.dlgabrir.getSaveFileName(None, "Exportar Datos en CSV", file, '.csv')
-            if fichero:
-                registros = conexion.Conexion.listadoClientesExport(self)
-                with open (fichero, "w", newline='', encoding= 'utf-8') as csvfile:
-                    writer = csv.writer(csvfile)
-                    writer.writerow(["DNI", "Fecha de Alta", "Fecha de Baja", "Apellidos", "Nombre","Email", "Telefono", "Direccion", "Provincia", "Municipio"])
-                    for registro in registros:
-                        writer.writerow(registro)
-                shutil.move(fichero, directorio)
-            else:
-                eventos.Eventos.crearMensajeError('Exportar CSV', 'No se ha seleccionado ningún fichero')
+            data = ('{:02d}/{:02d}/{:4d}'.format(qDate.day(), qDate.month(), qDate.year()))
+            if var.panel == 0 and var.btn == 0:
+                var.ui.txtAltacli.setText(str(data))
+            elif var.panel == 1 and var.btn == 0:
+                var.ui.txtAltaprop.setText(str(data))
+            elif var.panel == 2 and var.btn == 0:
+                var.ui.txtAltaVen.setText(str(data))
+            elif var.panel == 0 and var.btn == 1:
+                var.ui.txtBajacli.setText(str(data))
+            elif var.panel == 1 and var.btn == 1:
+                var.ui.txtBajaprop.setText(str(data))
+            elif var.panel == 2 and var.btn == 1:
+                var.ui.txtBajaVen.setText(str(data))
+            elif var.panel == 3 and var.btn == 0:
+                var.ui.txtFechaFactura.setText(str(data))
+            elif var.panel == 4 and var.btn == 0:
+                var.ui.txtfechainicioalq.setText(str(data))
+            elif var.panel == 4 and var.btn == 1:
+                var.ui.txtfechafinalq.setText(str(data))
 
+            time.sleep(0.5)
+            var.uicalendar.hide()
+            return data
         except Exception as error:
-            print("error en exportar csv clientes", error)
+            print("error en cargar fecha: ", error)
 
+    @staticmethod
+    def isMailValido(mail):
+        """
 
-    def exportJSONClientes(self):
+        :param mail: el email de un cliente o un vendedor
+        :type mail: str
+        :return: éxito al seguir el formato de un mail (una o más palabras separadas por un punto, seguidas por una arroba, seguida de al menos dos palabras separadas por punto)
+        :rtype: bool
+
+        Método que comprueba que un email sigue un formato específico
+
+        """
+        mail = mail.lower()
+        regex = r'^([a-z0-9]+[\._])*[a-z0-9]+[@](\w+[.])*\w+$'
+        if re.match(regex, mail) or mail == "":
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def resizeTablaClientes():
+        """
+
+        Método que formatea la cabecera de la tabla de clientes
+
+        """
         try:
-            var.historiacli = 0
-            fecha = datetime.today().strftime('%Y_%m_%d_%H_%M_%S')
-            file = (str(fecha) + '_clientes.json')
-            directorio, fichero = var.dlgabrir.getSaveFileName(None, "Exportar Datos en JSON", file, '.json')
-            if fichero:
-                keys = ['dni', 'alta', 'baja', 'apellidos', 'nombre', 'email', 'telefono', 'direccion', 'provincia', 'municipio']
-                registros = conexion.Conexion.listadoClientesExport(self)
-                lista_clientes = [dict(zip(keys, registro)) for registro in registros]
-                with open (fichero, "w", encoding= 'utf-8') as jsonfile:
-                    json.dump(lista_clientes, jsonfile, ensure_ascii=False, indent=4)
-                shutil.move(fichero, directorio)
-            else:
-                eventos.Eventos.crearMensajeError('Exportar JSON', 'No se ha seleccionado ningún fichero')
+            header = var.ui.tablaClientes.horizontalHeader()
+            for i in range(header.count()):
+                if i not in (0,3,6):
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+                else:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
 
-        except Exception as error:
-            print("error en exportar json clientes", error)
+                header_items = var.ui.tablaClientes.horizontalHeaderItem(i)
+                font = header_items.font()
+                font.setBold(True)
+                header_items.setFont(font)
 
-    def exportJSONVendedor(self):
+        except Exception as e:
+            print("error en resize tabla clientes ", e)
+
+
+    @staticmethod
+    def resizeTablaPropiedades():
+        """
+
+        Método que formatea la cabecera de la tabla de propiedades
+
+        """
         try:
-            var.historiacli = 0
-            fecha = datetime.today().strftime('%Y_%m_%d_%H_%M_%S')
-            file = (str(fecha) + '_vendedores.json')
-            directorio, fichero = var.dlgabrir.getSaveFileName(None, "Exportar Datos en JSON", file, '.json')
-            if fichero:
-                keys = ['id', 'dni', 'nombre y apellidos', 'fecha de alta', 'fecha de baja', 'numero', 'email', 'delegacion']
-                registros = conexion.Conexion.listadoVendedoresExport(self)
-                lista_vendedores = [dict(zip(keys, registro)) for registro in registros]
-                with open (fichero, "w", encoding= 'utf-8') as jsonfile:
-                    json.dump(lista_vendedores, jsonfile, ensure_ascii=False, indent=4)
-                shutil.move(fichero, directorio)
-            else:
-                eventos.Eventos.crearMensajeError('Exportar JSON', 'No se ha seleccionado ningún fichero')
+            header = var.ui.tablaProp.horizontalHeader()
+            for i in range(header.count()):
+                if i in (1,2,7):
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+                else:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
 
-        except Exception as error:
-            print("error en exportar json clientes", error)
+                header_items = var.ui.tablaProp.horizontalHeaderItem(i)
+                font = header_items.font()
+                font.setBold(True)
+                header_items.setFont(font)
+
+        except Exception as e:
+            print("error en resize tabla propiedades ", e)
+
+    @staticmethod
+    def resizeTablaVendedores():
+        """
+
+        Método que formatea la cabecera de la tabla de vendedores
+
+        """
+        try:
+            header = var.ui.tablaVendedores.horizontalHeader()
+            for i in range(header.count()):
+                if i not in (0,2,4):
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+                else:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+
+                header_items = var.ui.tablaVendedores.horizontalHeaderItem(i)
+                font = header_items.font()
+                font.setBold(True)
+                header_items.setFont(font)
+
+        except Exception as e:
+            print("error en resize tabla vendedores ", e)
 
     @staticmethod
     def resizeTablaFacturas():
+        """
+
+        Método que formatea la cabecera de la tabla de facturas
+
+        """
         try:
             header = var.ui.tablaFacturas.horizontalHeader()
             for i in range(header.count()):
@@ -543,27 +450,436 @@ class Eventos():
                     header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
                 else:
                     header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+
                 header_items = var.ui.tablaFacturas.horizontalHeaderItem(i)
-                if header_items is not None:
-                    font = header_items.font()
-                    font.setBold(True)
-                    header_items.setFont(font)
+                font = header_items.font()
+                font.setBold(True)
+                header_items.setFont(font)
+
         except Exception as e:
-            print("error en resize tabla clientes ", e)
+            print("error en resize tabla facturas ", e)
 
     @staticmethod
     def resizeTablaVentas():
+        """
+
+        Método que formatea la cabecera de la tabla de ventas
+
+        """
         try:
             header = var.ui.tablaVentas.horizontalHeader()
             for i in range(header.count()):
-                if i != 0:
+                if i not in (0,1):
                     header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
                 else:
                     header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+
                 header_items = var.ui.tablaVentas.horizontalHeaderItem(i)
-                if header_items is not None:
-                    font = header_items.font()
-                    font.setBold(True)
-                    header_items.setFont(font)
+                font = header_items.font()
+                font.setBold(True)
+                header_items.setFont(font)
+
         except Exception as e:
-            print("error en resize tabla clientes ", e)
+            print("error en resize tabla ventas ", e)
+
+    @staticmethod
+    def resizeTablaContratos():
+        """
+
+        Método que formatea la cabecera de la tabla de ventas
+
+        """
+        try:
+            header = var.ui.tablacontratosalq.horizontalHeader()
+            for i in range(header.count()):
+                if i == 1:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+                else:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+
+                header_items = var.ui.tablacontratosalq.horizontalHeaderItem(i)
+                font = header_items.font()
+                font.setBold(True)
+                header_items.setFont(font)
+
+        except Exception as e:
+            print("error en resize tabla contratos ", e)
+
+    @staticmethod
+    def resizeTablaMensualidades():
+        """
+
+        Método que formatea la cabecera de la tabla de ventas
+
+        """
+        try:
+            header = var.ui.tablaMensualidades.horizontalHeader()
+            for i in range(header.count()):
+                if i not in (0,1):
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+                else:
+                    header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+
+                header_items = var.ui.tablaMensualidades.horizontalHeaderItem(i)
+                font = header_items.font()
+                font.setBold(True)
+                header_items.setFont(font)
+
+        except Exception as e:
+            print("error en resize tabla mensualidades ", e)
+
+    @staticmethod
+    def crearBackup():
+        """
+
+        Método para crear una copia de la base de datos en un directorio seleccionado por el usuario
+
+        """
+        try:
+            fecha = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+            copia = str(fecha)+'_backup.zip'
+            directorio, fichero = var.dlgAbrir.getSaveFileName(None, "Guardar Copia Seguridad", copia, '.zip')
+            if var.dlgAbrir.accept and fichero:
+                fichzip = zipfile.ZipFile(fichero, 'w')
+                fichzip.write("bbdd.sqlite",os.path.basename("bbdd.sqlite"),zipfile.ZIP_DEFLATED)
+                fichzip.close()
+                shutil.move(fichero, directorio)
+
+                mbox = Eventos.crearMensajeInfo('Copia de seguridad',"Copia de seguridad creada.")
+                mbox.exec()
+
+        except Exception as error:
+            print("error en crear backup: ", error)
+
+
+
+    @staticmethod
+    def restaurarBackup():
+        """
+
+        Método que restablece la base de datos seleccionada por el usuario
+
+        """
+        try:
+            filename= var.dlgAbrir.getOpenFileName(None, "Restaurar Copia Seguridad","","*.zip;;All Files (*)")
+            file = filename[0]
+            if file:
+                with zipfile.ZipFile(file, 'r') as bbdd:
+                    bbdd.extractall(pwd=None)
+                bbdd.close()
+                mbox = Eventos.crearMensajeInfo('Copia de seguridad',"Copia de seguridad restaurada.")
+                mbox.exec()
+                conexion.Conexion.db_conexion()
+                Eventos.cargarProv()
+                clientes.Clientes.cargaTablaClientes()
+        except Exception as error:
+            print("error en restaurar backup: ", error)
+
+    @staticmethod
+    def limpiarPanel():
+        """
+
+        Método que limpia todos los campos de datos del programa o los restablece a su opción por defecto
+
+        """
+        panelActual = var.ui.panPrincipal.currentIndex()
+        if panelActual == 0:
+            Eventos.limpiarPanelClientes()
+        elif panelActual == 1:
+            Eventos.limpiarPanelPropiedades()
+        elif panelActual == 2:
+            Eventos.limpiarPanelVendedores()
+        elif panelActual == 3:
+            Eventos.limpiarPanelVentas()
+        elif panelActual == 4:
+            Eventos.limpiarPanelAlquileres()
+
+    @staticmethod
+    def limpiarPanelAlquileres():
+        """
+        Método que limpia todos los campos de datos del panel de alquileres o los restablece a su opción por defecto
+
+        """
+        import alquileres
+        objetosPanelAlquileres = [var.ui.lblnumalq, var.ui.txtnomeclialq, var.ui.txtapelclialq, var.ui.txtdniclialq,
+                                  var.ui.txtidvenalq, var.ui.txtcodpropalq, var.ui.txtdirpropalq, var.ui.txtmunipropalq,
+                                  var.ui.txttipopropalq, var.ui.txtprecioalq, var.ui.txtfechainicioalq,
+                                  var.ui.txtfechafinalq]
+        for dato in objetosPanelAlquileres:
+            dato.setText("")
+        var.ui.txtprecioalq.setStyleSheet('border-bottom: 1px solid black; background-color: rgb(255, 255, 255);')
+        alquileres.Alquileres.cargarTablaContratos()
+        var.ui.btnCrearContrato.setDisabled(False)
+        alquileres.Alquileres.cargarTablaMensualidades(0, 0, 0)
+        var.ui.btnModificarContrato.setDisabled(True)
+
+    @staticmethod
+    def limpiarPanelVentas():
+        """
+        Método que limpia todos los campos de datos del panel de ventas o los restablece a su opción por defecto
+
+        """
+        import facturas
+
+        var.ui.txtFechaFactura.setText(datetime.now().strftime("%d/%m/%Y"))
+        objetosPanelVentas = [var.ui.lblNumFactura, var.ui.txtdniclifac, var.ui.txtnomeclifac, var.ui.txtapelclifac,
+                              var.ui.txtidvenfac, var.ui.txtcodpropfac, var.ui.txttipopropfac, var.ui.txtpreciofac,
+                              var.ui.txtmunipropfac, var.ui.txtdirpropfac, var.ui.lblSubtotal, var.ui.lblIva,
+                              var.ui.lblTotal]
+        for dato in objetosPanelVentas:
+            dato.setText("")
+        var.ui.txtpreciofac.setStyleSheet('border-bottom: 1px solid black; background-color: rgb(255, 255, 255);')
+        facturas.Facturas.cargaTablaVentas(0)
+        var.ui.btnGrabarVenta.setDisabled(True)
+        var.ui.btnInformeFactura.setDisabled(True)
+
+    @staticmethod
+    def limpiarPanelVendedores():
+        """
+        Método que limpia todos los campos de datos del panel de vendedores o los restablece a su opción por defecto
+
+        """
+        objetosPanelVendedores = [var.ui.lblIdVen, var.ui.txtDniVen, var.ui.txtNomVen, var.ui.txtAltaVen,
+                                  var.ui.txtBajaVen,
+                                  var.ui.txtMovilVen, var.ui.txtEmailVen, var.ui.cmbDeleVen]
+        for i, dato in enumerate(objetosPanelVendedores):
+            if i == 7:
+                pass
+            else:
+                dato.setText("")
+        Eventos.cargarProv()
+        var.ui.chkHistoriaVen.setChecked(False)
+        vendedores.Vendedores.cargaTablaVendedores()
+
+    @staticmethod
+    def limpiarPanelPropiedades():
+        """
+        Método que limpia todos los campos de datos del panel de propiedades o los restablece a su opción por defecto
+
+        """
+        import propiedades
+        objetosPanelProp = [var.ui.lblProp, var.ui.txtAltaprop, var.ui.txtBajaprop, var.ui.txtDirprop,
+                            var.ui.cmbProvprop,
+                            var.ui.cmbMuniprop, var.ui.cmbTipoprop,
+                            var.ui.spinHabprop, var.ui.spinBanosprop, var.ui.txtSuperprop, var.ui.txtPrecioAlquilerprop,
+                            var.ui.txtPrecioVentaprop,
+                            var.ui.txtCpprop, var.ui.areatxtDescriprop, var.ui.rbtDisponprop, var.ui.rbtAlquilprop,
+                            var.ui.chkVentaprop, var.ui.chkInterprop,
+                            var.ui.chkAlquilprop, var.ui.rbtVentaprop, var.ui.txtNomeprop, var.ui.txtMovilprop]
+        for i, dato in enumerate(objetosPanelProp):
+            if i in (4, 5, 6):
+                pass
+            elif i in (7, 8):
+                dato.setValue(0)
+            elif i == 13:
+                dato.setPlainText("")
+            elif i == 14:
+                dato.setChecked(True)
+            elif i in (15, 16, 17, 18, 19):
+                dato.setChecked(False)
+            else:
+                dato.setText("")
+        var.ui.btnBuscaTipoProp.setChecked(False)
+        propiedades.Propiedades.cargarTablaPropiedades()
+
+    @staticmethod
+    def limpiarPanelClientes():
+        """
+        Método que limpia todos los campos de datos del panel de clientes o los restablece a su opción por defecto
+
+        """
+        objetosPanelCli = [var.ui.txtDnicli, var.ui.txtAltacli, var.ui.txtApelcli, var.ui.txtNomcli,
+                           var.ui.txtEmailcli, var.ui.txtMovilcli, var.ui.txtDircli, var.ui.cmbProvcli,
+                           var.ui.cmbMunicli, var.ui.txtBajacli]
+        for i, dato in enumerate(objetosPanelCli):
+            if i in (7, 8):
+                pass
+            else:
+                dato.setText("")
+        var.ui.lblTickcli.clear()
+        var.ui.txtDnicli.setStyleSheet(
+            'border: 1px solid black; border-radius: 5px; background-color: rgb(254, 255, 210)')
+        var.ui.txtDnicli.setPlaceholderText("")
+        var.ui.txtMovilcli.setPlaceholderText("")
+        var.ui.txtMovilcli.setStyleSheet('border: 1px solid black; border-radius: 5px;')
+        var.ui.txtEmailcli.setPlaceholderText("")
+        var.ui.txtEmailcli.setStyleSheet('border: 1px solid black; border-radius: 5px;')
+
+    @staticmethod
+    def abrirTipoprop():
+        """
+
+        Método que muestra la ventana de gestión de tipo de propiedades
+
+        """
+        try:
+            var.dlggestion.show()
+        except Exception as e:
+            print("error en abrir tipo prop: ", e)
+
+    @staticmethod
+    def exportCSVprop():
+        """
+
+        Método para exportar en formato csv los datos de las propiedades presentes en la base de datos
+
+        """
+        try:
+            fecha = datetime.today()
+            fecha = fecha.strftime('%Y_%m_%d_%H_%M_%S')
+            file = str(fecha)+'_DatosPropiedades.csv'
+            directorio, fichero = var.dlgAbrir.getSaveFileName(None, "Exporta Datos a CSV", file, '.csv')
+            if fichero:
+                registros = var.claseConexion.cargarAllPropiedadesBD()
+                with open(fichero, 'w', newline='', encoding='utf-8') as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow(["Codigo","Alta","Baja","Dirección","Provincia","Municipio","Tipo","Nº habitaciones","Nº Baños","Superficie","Precio Alquiler","Precio Compra","Código postal", "Observaciones","Operación","Estado","Propietario","Móvil"])
+                    for registro in registros:
+                        writer.writerow(registro)
+                shutil.move(fichero, directorio)
+            else:
+                Eventos.crearMensajeError("Error","Se ha producido un error al exportar los datos en formato CSV.")
+        except Exception as e:
+            print("error en exportar cvs tipo prop: ", e)
+
+    @staticmethod
+    def exportJSONprop():
+        """
+
+        Método para exportar en formato JSON los datos de las propiedades presentes en la base de datos
+
+        """
+        try:
+            fecha = datetime.today()
+            fecha = fecha.strftime('%Y_%m_%d_%H_%M_%S')
+            file = str(fecha)+'_DatosPropiedades.json'
+            directorio, fichero = var.dlgAbrir.getSaveFileName(None, "Exporta Datos a JSON", file, '.json')
+            if fichero:
+                keys = ["Codigo","Alta","Baja","Dirección","Provincia","Municipio","Tipo","Nº habitaciones","Nº Baños","Superficie","Precio Alquiler","Precio Compra","Código postal", "Observaciones","Operación","Estado","Propietario","Móvil"]
+                registros = var.claseConexion.cargarAllPropiedadesBD()
+                lista_propiedades = [dict(zip(keys, registro)) for registro in registros]
+                with open(fichero, 'w', newline='', encoding='utf-8') as jsonFile:
+                    json.dump(lista_propiedades, jsonFile, ensure_ascii=False, indent=4)
+                shutil.move(fichero, directorio)
+            else:
+                Eventos.crearMensajeError("Error","Se ha producido un error al exportar los datos en formato JSON.")
+        except Exception as e:
+            print("error en exportar cvs tipo prop: ", e)
+
+    @staticmethod
+    def abrir_informeProp():
+        """
+
+        Método que muestra la ventana emergente para seleccionar municipio al crear un informe de propiedades
+
+        """
+        try:
+            var.dlgInformeProp.show()
+        except Exception as e:
+            print("error en abrir informe propiedades: ", e)
+
+
+    @staticmethod
+    def abrir_about():
+        """
+
+        Método que muestra la ventana emergente con datos sobre el programa
+
+        """
+        try:
+            var.dlgabout.show()
+        except Exception as e:
+            print("error en abrir about: ", e)
+
+
+    @staticmethod
+    def siguienteCli():
+        """
+        Método para actualizar el índice de la página actual en el panel de clientes a la siguiente
+
+        """
+        var.paginaActualCli += 1
+        clientes.Clientes.cargaTablaClientes()
+
+    @staticmethod
+    def anteriorCli():
+        """
+        Método para actualizar el índice de la página actual en el panel de clientes a la anterior
+
+        """
+        if var.paginaActualCli > 0:
+            var.paginaActualCli -= 1
+            clientes.Clientes.cargaTablaClientes()
+
+    @staticmethod
+    def siguienteProp():
+        """
+        Método para actualizar el índice de la página actual en el panel de propiedades a la siguiente
+
+        """
+        import propiedades
+        var.paginaActualProp += 1
+        propiedades.Propiedades.cargarTablaPropiedades()
+
+    @staticmethod
+    def anteriorProp():
+        """
+        Método para actualizar el índice de la página actual en el panel de propiedades a la anterior
+
+        """
+        import propiedades
+        if var.paginaActualProp > 0:
+            var.paginaActualProp -= 1
+            propiedades.Propiedades.cargarTablaPropiedades()
+
+    @staticmethod
+    def cambiarCliMaxpPagina():
+        """
+
+        Método que se encarga de que el número máximo de clientes por página que se establece no pase de 15
+
+        """
+        var.paginaActualCli = 0
+        var.maxClientesPagina = int(var.ui.spinClipPag.text())
+        if var.maxClientesPagina > 15:
+            var.maxClientesPagina = 15
+        clientes.Clientes.cargaTablaClientes()
+
+    @staticmethod
+    def cambiarPropMaxpPagina():
+        """
+
+        Método que se encarga de que el número máximo de propiedades por página que se establece no pase de 10
+
+        """
+        import propiedades
+        var.paginaActualProp = 0
+        var.maxPropPagina = int(var.ui.spinProppPag.text())
+        if var.maxPropPagina > 10:
+            var.maxPropPagina = 10
+        propiedades.Propiedades.cargarTablaPropiedades()
+
+
+    @staticmethod
+    def exportJSONven():
+        """
+
+        Método para exportar los datos de vendedores en formato JSON
+
+        """
+        try:
+            fecha = datetime.today()
+            fecha = fecha.strftime('%Y_%m_%d_%H_%M_%S')
+            file = str(fecha)+'_DatosVendedores.json'
+            directorio, fichero = var.dlgAbrir.getSaveFileName(None, "Exporta Datos a JSON", file, '.json')
+            if fichero:
+                keys = ["Id","Dni","Nombre","Alta","Baja","Movil","Email","Delegacion"]
+                registros = var.claseConexion.cargarAllVendedoresBD()
+                lista_propiedades = [dict(zip(keys, registro)) for registro in registros]
+                with open(fichero, 'w', newline='', encoding='utf-8') as jsonFile:
+                    json.dump(lista_propiedades, jsonFile, ensure_ascii=False, indent=4)
+                shutil.move(fichero, directorio)
+            else:
+                Eventos.crearMensajeError("Error","Se ha producido un error al exportar los datos en formato JSON.")
+        except Exception as e:
+            print("error en exportar cvs tipo prop: ", e)

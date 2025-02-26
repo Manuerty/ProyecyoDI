@@ -1,18 +1,30 @@
-"""
-    archivo de variables locales
-"""
+'''
+
+Fichero de variables globales
+
+'''
 
 global ui
 global uicalendar
 global panel
-global dlgabrir
-global historico
 global dlggestion
+global dlgAbrir
+global btnvar
+global provincias
+global municli
+global muniprop
 global dlgabout
+global claseConexion
 global dlgInformeProp
-global current_page_cli
-global items_per_page_cli
-global current_page_prop
-global items_per_page_prop
+
+
 global report
 
+global lenClientes
+global lenPropiedades
+global paginaActualCli
+global paginaActualProp
+global maxClientesPagina
+global maxPropPagina
+maxClientesPagina = 10
+maxPropPagina = 7

@@ -13,12 +13,6 @@
     <height>185</height>
    </rect>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>312</width>
-    <height>185</height>
-   </size>
-  </property>
   <property name="maximumSize">
    <size>
     <width>312</width>
@@ -26,11 +20,11 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Seleccione Fecha</string>
+   <string>Seleccione fecha</string>
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../img/calendar.ico</normaloff>../img/calendar.ico</iconset>
+    <normaloff>../img/icono.png</normaloff>../img/icono.png</iconset>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -41,14 +35,8 @@
      <x>0</x>
      <y>0</y>
      <width>312</width>
-     <height>185</height>
+     <height>183</height>
     </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>312</width>
-     <height>185</height>
-    </size>
    </property>
    <property name="maximumSize">
     <size>
@@ -57,7 +45,7 @@
     </size>
    </property>
    <property name="gridVisible">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="verticalHeaderFormat">
     <enum>QCalendarWidget::NoVerticalHeader</enum>

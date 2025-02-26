@@ -1,41 +1,31 @@
 import os
 from datetime import datetime
 
-from PyQt6 import QtSql, QtWidgets, QtCore
+from PyQt6 import QtSql, QtWidgets, QtGui, QtCore
 
-
-import eventos
 import var
 
 
 
 class Conexion:
 
-    '''
-
-    método de una clase que no depende de una instancia específica de esa clase.
-    Se puede llamarlo directamente a través de la clase, sin necesidad de crear un objeto de esa clase.
-    Es útil en comportamientos o funcionalidades que son más a una clase en general que a una instancia en particular.
-
-    '''
-
     @staticmethod
-    def db_conexion(self = None):
+    def db_conexion():
         """
 
-        :param self: None
-        :type self:  None
-        :return: False or True
-        :rtype: Booleano
+        :return: conexion con la base de datos.
+        :rtype: bool
 
-        Modulo para establecer la conexion  a la base de datos
-        Si exito devuelve True, si no, False
+        Método para establecer conexión con la base de datos
+        Si éxito devuelve True, en caso contrario devuelve False.
+
         """
+        import eventos
         # Verifica si el archivo de base de datos existe
         if not os.path.isfile('bbdd.sqlite'):
-            QtWidgets.QMessageBox.critical(None, 'Error', 'El archivo de la base de datos no existe.',
-                                           QtWidgets.QMessageBox.StandardButton.Cancel)
+            eventos.Eventos.crearMensajeError("Error",'El archivo de la base de datos no existe.')
             return False
+
         # Crear la conexión con la base de datos SQLite
         db = QtSql.QSqlDatabase.addDatabase('QSQLITE')
         db.setDatabaseName('bbdd.sqlite')
@@ -46,30 +36,30 @@ class Conexion:
             query.exec("SELECT name FROM sqlite_master WHERE type='table';")
 
             if not query.next():  # Si no hay tablas
-                QtWidgets.QMessageBox.critical(None, 'Error', 'Base de datos vacía o no válida.',
-                                               QtWidgets.QMessageBox.StandardButton.Cancel)
+                eventos.Eventos.crearMensajeError("Error","Base de datos vacía o no válida.")
                 return False
+
             else:
-                QtWidgets.QMessageBox.information(None, 'Aviso', 'Conexión Base de Datos realizada',
-                                               QtWidgets.QMessageBox.StandardButton.Ok)
+                eventos.Eventos.crearMensajeInfo("Aviso","Conexión a la Base de Datos realizada")
                 return True
+
         else:
-            QtWidgets.QMessageBox.critical(None, 'Error', 'No se pudo abrir la base de datos.',
-                                           QtWidgets.QMessageBox.StandardButton.Cancel)
+            eventos.Eventos.crearMensajeError("Error","No se pudo abrir la base de datos.")
             return False
 
-
+    '''
+    GESTION DE CLIENTES
+    '''
 
     @staticmethod
-    def listaProv(self):
+    def listaProv():
         """
 
-        :param self:  None
-        :type self:  None
-        :return: lista proivincias
-        :rtype: bytearray
+        :return: lista de provincias
+        :rtype: list
 
-        Modulo para obtener la lista de provincias
+        Método que devuelve la lista de provincias
+
         """
         listaprov = []
         query = QtSql.QSqlQuery()
@@ -80,42 +70,44 @@ class Conexion:
         return listaprov
 
     @staticmethod
-    def listaMuni(provincia):
+    def listaMunicipio(provincia):
         """
 
-        :param provincia: nombre provincia
-        :type provincia: bytearray
-        :return: lista municipios
-        :rtype: bytearray
+        :param provincia: nombre de la provincia
+        :type provincia: str
+        :return: lista de municipios de una provincia
+        :rtype: list
 
-        Modulo que devuelve listao de municipios de una provincia
+        Método que devuelve todos los municipios de una provincia
+
         """
-        query = QtSql.QSqlQuery()
-        query.prepare("SELECT * FROM municipios"
-                      " WHERE fk_idprov = (SELECT idprov FROM provincias WHERE provincia = :provincia)")
-        query.bindValue(":provincia", provincia)
-        listaprov = []
-        if query.exec():
-            while query.next():
-                listaprov.append(query.value(1))
-        return listaprov
+        try:
+            listamunicipio = []
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT * FROM municipios WHERE idprov = (SELECT idprov FROM provincias WHERE provincia = :provincia)")
+            query.bindValue(":provincia", provincia)
+            if query.exec():
+                while query.next():
+                    listamunicipio.append(query.value(1))
+            return listamunicipio
+        except Exception as e:
+            print("error al cargar municipios")
 
     @staticmethod
     def altaCliente(nuevocli):
         """
 
-        :param nuevocli: array con datos clientes
-        :type nuevocli: lista
-        :return: true o false
-        :rtype:  booleano
+        :param nuevocli: lista de datos del cliente
+        :type nuevocli: list
+        :return: éxito en la creación de un cliente
+        :rtype: bool
 
-        Metodo que inserta datos de un cliente en la BBDD
+        Método que inserta datos cliente en la base de datos
+
         """
         try:
             query = QtSql.QSqlQuery()
-            query.prepare(
-                "INSERT INTO CLIENTES (dnicli, altacli, apelcli, nomecli, emailcli, movilcli, dircli, provcli, municli) "
-                "VALUES (:dnicli, :altacli, :apelcli, :nomecli, :emailcli, :movilcli, :dircli, :provcli, :municli)")
+            query.prepare("INSERT into clientes (dnicli, altacli, apelcli, nomecli, emailcli, movilcli, dircli, provcli, municli) values (:dnicli, :altacli, :apelcli, :nomecli, :emailcli, :movilcli, :dircli, :provcli, :municli)")
             query.bindValue(":dnicli", str(nuevocli[0]))
             query.bindValue(":altacli", str(nuevocli[1]))
             query.bindValue(":apelcli", str(nuevocli[2]))
@@ -126,1310 +118,1348 @@ class Conexion:
             query.bindValue(":provcli", str(nuevocli[7]))
             query.bindValue(":municli", str(nuevocli[8]))
 
-
             if query.exec():
                 return True
             else:
                 return False
 
         except Exception as e:
-            print("error altaCliente", e)
+            print("Error alta cliente", e)
+
 
     @staticmethod
-    def altaVendedor(nuevoVendedor):
+    def listadoClientes():
         """
-        :param nuevoVendedor: array con los datos del vendedor
-        :type nuevoVendedor: lista
-        :return: true o false, dependiendo de si la inserción fue exitosa
-        :rtype: booleano
 
-        Método que inserta los datos de un nuevo vendedor en la base de datos.
+        :return: devuelve la lista de clientes
+        :rtype: list
+
+        Método que devuelve el listado total de clientes de la base de datos
+
         """
         try:
-            # Crear un objeto de tipo QSqlQuery para preparar la consulta SQL
+            listado = []
+            historico = var.ui.chkHistoriacli.isChecked()
+            if historico:
+                query = QtSql.QSqlQuery()
+                query.prepare("SELECT * FROM clientes ORDER BY apelcli, nomecli ASC")
+                if query.exec():
+                    while query.next():
+                        fila = [query.value(i) for i in range(query.record().count())]
+                        listado.append(fila)
+
+            else:
+                query = QtSql.QSqlQuery()
+                query.prepare("SELECT * FROM clientes WHERE bajacli is null ORDER BY apelcli, nomecli ASC")
+                if query.exec():
+                    while query.next():
+                        fila = [query.value(i) for i in range(query.record().count())]
+                        listado.append(fila)
+            return listado
+        except Exception as e:
+            print("Error al listar clientes")
+
+
+    @staticmethod
+    def datosOneCliente(dni):
+        """
+
+        :param dni: dni de un cliente
+        :type dni: str
+        :return: datos de un cliente
+        :rtype: list
+
+        Método que devuelve los datos de un cliente al introducir su dni
+
+        """
+        try:
+            registro = []
             query = QtSql.QSqlQuery()
-
-            # Preparar la consulta SQL de inserción
-            query.prepare(
-                "INSERT INTO  Vendedores(dniVendedor, nombreVendedor, movilVendedor, mailVendedor,delegacionVendedor,altaVendedor ) "
-                "VALUES (:dniVen, :nomVen, :movilVen, :mailVen, :delegVen, :altaVen)"
-            )
-
-            # Asociar los valores de la lista 'nuevoVendedor' con los parámetros de la consulta SQL
-            query.bindValue(":dniVen", str(nuevoVendedor[0]))  # DNI del vendedor
-            query.bindValue(":nomVen", str(nuevoVendedor[1]))  # Nombre del vendedor
-            query.bindValue(":movilVen", str(nuevoVendedor[2]))  # Teléfono móvil del vendedor
-            query.bindValue(":mailVen", str(nuevoVendedor[3]))  # Correo electrónico del vendedor
-            query.bindValue(":delegVen", str(nuevoVendedor[4]))  # Delegación del vendedor
-            query.bindValue(":altaVen", str(nuevoVendedor[5]))  # Fecha de alta del vendedor
-
-            # Ejecutar la consulta y devolver True si la inserción fue exitosa
+            query.prepare("SELECT * FROM clientes WHERE dnicli = :dni")
+            query.bindValue(":dni", str(dni))
             if query.exec():
+                while query.next():
+                    for i in range(query.record().count()):
+                        registro.append(str(query.value(i)))
+            return registro
+        except Exception as e:
+            print("Error al cargar UN cliente en la tabla.", e)
+
+
+    @staticmethod
+    def modifCliente(registro):
+        """
+
+        :param registro: datos de un cliente
+        :type registro: list
+        :return: éxito en la modificación de detos de un cliente
+        :rtype: bool
+
+        Método que modifica los datos de un cliente en la base de datos
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("select count(*) from clientes where dnicli = :dni")
+            query.bindValue(":dni", str(registro[0]))
+            if query.exec() and query.next():
+                count = query.value(0)
+                if count == 1: #verificamos que solo nos devuelve un resultado, la fila para el dni que buscamos
+
+                    query.prepare("UPDATE clientes set altacli= :altacli, apelcli = :apelcli, nomecli= :nomecli, emailcli = :emailcli, movilcli = :movilcli, dircli = :dircli, provcli=:provcli, municli=:municli, bajacli = :bajacli WHERE dnicli = :dni")
+                    query.bindValue(":dni", str(registro[0]))
+                    query.bindValue(":altacli", str(registro[1]))
+                    query.bindValue(":apelcli", str(registro[2]))
+                    query.bindValue(":nomecli", str(registro[3]))
+                    query.bindValue(":emailcli", str(registro[4]))
+                    query.bindValue(":movilcli", str(registro[5]))
+                    query.bindValue(":dircli", str(registro[6]))
+                    query.bindValue(":provcli", str(registro[7]))
+                    query.bindValue(":municli", str(registro[8]))
+                    if registro[9] == "":
+                        query.bindValue(":bajacli",QtCore.QVariant()) #QVariant añade un null a la BD
+                    else:
+                        query.bindValue(":bajacli", str(registro[9]))
+
+                    if query.exec():
+                        return True
+                else:
+                    return False
+            else:
+                return False
+        except Exception as e:
+            print("Error al modificar un cliente en conexion.", e)
+
+
+    @staticmethod
+    def bajaCliente(dni):
+        """
+
+        :param dni: dni de un cliente
+        :type dni: str
+        :return: éxito al dar de baja a un cliente
+        :rtype: bool
+
+        Método que añade fecha de baja a un cliente
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT COUNT(*) from clientes where dnicli = :dni")
+            query.bindValue(":dni", str(dni))
+            if query.exec() and query.next():
+                count = query.value(0)
+                if count == 1:
+                    query.prepare("UPDATE clientes SET bajacli = :bajacli WHERE dnicli = :dni")
+                    query.bindValue(":bajacli", datetime.now().strftime("%d/%m/%Y"))
+                    query.bindValue(":dni", str(dni))
+                    if query.exec():
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
+            else:
+                return False
+        except Exception as e:
+            print("Error en la conexión al dar de baja cliente", e)
+
+    '''
+    GESTION DE PROPIEDADES
+    '''
+    @staticmethod
+    def cargarMunicipios():
+        try:
+            listaMuni = []
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT * FROM MUNICIPIOS")
+            if query.exec():
+                while query.next():
+                    listaMuni.append(query.value(1))
+                return listaMuni
+        except Exception as e:
+            print('Error cargando municipios')
+
+
+
+    @staticmethod
+    def cargarTipoprop():
+        """
+
+        :return: todos los tipos de propiedad
+        :rtype: list
+
+        Método que devuelve todos los tipos de propiedad almacenados en la bd
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT tipo from tipopropiedad ")
+            if query.exec():
+                registro = []
+                while query.next():
+                    registro.append(str(query.value(0)))
+                return registro
+        except Exception as e:
+            print("error cargando tipos de propiedad", e)
+
+    @staticmethod
+    def altaTipoprop(tipo):
+        """
+
+        :param tipo: nuevo tipo de propiedad
+        :type tipo: str
+        :return: tipos de propiedad
+        :rtype: list
+
+        Método que introduce un nuevo tipo de propiedad y devuelve la lista de tipos de propiedad
+
+        """
+        try:
+            registro = []
+            query = QtSql.QSqlQuery()
+            query.prepare("INSERT into tipopropiedad (tipo) values (:tipo) ")
+            query.bindValue(":tipo", str(tipo))
+            if query.exec():
+                registro = Conexion.cargarTipoprop()
+                return registro
+            else:
+                return registro
+        except Exception as e:
+            print("Error en conexion al dar de alta tipo propiedad", e)
+
+    @staticmethod
+    def bajaTipoprop(tipo):
+        """
+
+        :param tipo: tipo de propiedad
+        :type tipo: str
+        :return: éxito o no en la eliminación de un tipo de propiedad
+        :rtype: bool
+
+        Método que elimina un tipo de propiedad
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("DELETE from tipopropiedad where tipo = :tipo ")
+            query.bindValue(":tipo", str(tipo))
+            if query.exec() and query.numRowsAffected() == 1:
                 return True
             else:
                 return False
         except Exception as e:
-            # Capturar y mostrar cualquier error que ocurra durante la ejecución
-            print("error altaCliente clase eventos", e)
+            print("Error en conexion al dar de baja tipo propiedad", e)
 
-    def listadoClientes(self):
+    @staticmethod
+    def altaPropiedad(propiedad):
         """
 
-        :return: devuelve listado de clientes
+        :param propiedad: datos de una propiedad
+        :type propiedad: list
+        :return: éxito al introducir propiedad en la base de datos
+        :rtype: bool
+
+        Método que introduce una nueva propiedad en la base de datos
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("INSERT into propiedades (alta,direccion,provincia,municipio,tipo_propiedad,num_habitaciones,num_banos,superficie,precio_alquiler,precio_venta,codigo_postal,descripcion,tipo_operacion,estado,nombre_propietario,movil) values (:alta,:direccion,:provincia,:municipio,:tipo_propiedad,:num_habitaciones,:num_banos,:superficie,:precio_alquiler,:precio_venta,:codigo_postal,:descripcion,:tipo_operacion,:estado,:nombre_propietario,:movil) ")
+            query.bindValue(":alta",str(propiedad[0]))
+            query.bindValue(":direccion",str(propiedad[1]))
+            query.bindValue(":provincia",str(propiedad[2]))
+            query.bindValue(":municipio",str(propiedad[3]))
+            query.bindValue(":tipo_propiedad",str(propiedad[4]))
+            query.bindValue(":num_habitaciones",str(propiedad[5]))
+            query.bindValue(":num_banos",str(propiedad[6]))
+            query.bindValue(":superficie",str(propiedad[7]))
+            query.bindValue(":precio_alquiler",str(propiedad[8]))
+            query.bindValue(":precio_venta",str(propiedad[9]))
+            query.bindValue(":codigo_postal",str(propiedad[10]))
+            query.bindValue(":descripcion",str(propiedad[11]))
+            query.bindValue(":tipo_operacion",str(propiedad[12]))
+            query.bindValue(":estado",str(propiedad[13]))
+            query.bindValue(":nombre_propietario",str(propiedad[14]))
+            query.bindValue(":movil",str(propiedad[15]))
+
+            if query.exec():
+                return True
+            else:
+                return False
+
+
+        except Exception as e:
+            print("Error al dar de alta propiedad en conexion",e)
+
+    @staticmethod
+    def modifProp(propiedad):
+        """
+
+        :param propiedad: datos de propiedad
+        :type propiedad: list
+        :return: éxito en la modificación de los datos de una propiedad
+        :rtype: bool
+
+        Método que modifica los datos de propiedad en la base de datos
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("select count(*) from propiedades where codigo = :codigo")
+            query.bindValue(":codigo", propiedad[0])
+            if query.exec() and query.next():
+                count = query.value(0)
+                if count == 1: #verificamos que solo nos devuelve un resultado, la fila para el codigo que buscamos
+
+                    query.prepare("UPDATE propiedades set alta = :alta, baja = :baja, direccion = :direccion, municipio = :municipio, provincia = :provincia, tipo_propiedad = :tipo_propiedad, num_habitaciones=:num_habitaciones, num_banos = :num_banos, superficie = :superficie, precio_alquiler = :precio_alquiler, precio_venta = :precio_venta, codigo_postal = :codigo_postal, descripcion = :descripcion, tipo_operacion = :tipo_operacion, estado=:estado, nombre_propietario =:nombre_propietario, movil =:movil WHERE codigo = :codigo")
+                    query.bindValue(":codigo",str(propiedad[0]))
+                    query.bindValue(":alta",str(propiedad[1]))
+                    query.bindValue(":direccion",str(propiedad[3]))
+                    query.bindValue(":provincia",str(propiedad[4]))
+                    query.bindValue(":municipio",str(propiedad[5]))
+                    query.bindValue(":tipo_propiedad",str(propiedad[6]))
+                    query.bindValue(":num_habitaciones",str(propiedad[7]))
+                    query.bindValue(":num_banos",str(propiedad[8]))
+                    query.bindValue(":superficie",str(propiedad[9]))
+                    query.bindValue(":precio_alquiler",str(propiedad[10]))
+                    query.bindValue(":precio_venta",str(propiedad[11]))
+                    query.bindValue(":codigo_postal",str(propiedad[12]))
+                    query.bindValue(":descripcion",str(propiedad[13]))
+                    query.bindValue(":tipo_operacion",str(propiedad[14]))
+                    query.bindValue(":estado",str(propiedad[15]))
+                    query.bindValue(":nombre_propietario",str(propiedad[16]))
+                    query.bindValue(":movil",str(propiedad[17]))
+                    if propiedad[2] == "":
+                        query.bindValue(":baja",QtCore.QVariant()) #QVariant añade un null a la BD
+                    else:
+                        query.bindValue(":baja",str(propiedad[2]))
+
+                    if query.exec():
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
+            else:
+                return False
+
+        except Exception as e:
+            print("Error al modificar propiedad en conexión.",e)
+
+    @staticmethod
+    def bajaProp(propiedad):
+        """
+
+        :param propiedad: datos de una propiedad
+        :type propiedad: list
+        :return: éxito al dar de baja a una propiedad
+        :rtype: bool
+
+        Método que añade una fecha de baja a una propiedad y modifica su estado
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("select count(*) from propiedades where codigo = :codigo")
+            query.bindValue(":codigo", propiedad[0])
+            if query.exec() and query.next():
+                count = query.value(0)
+                if count == 1: #verificamos que solo nos devuelve un resultado a consulta, por tanto la propiedad existe.
+                    query.prepare("update propiedades set baja =:baja, estado =:estado where codigo = :codigo ")
+                    query.bindValue(":codigo",str(propiedad[0]))
+                    query.bindValue(":baja",str(propiedad[2])) #dejamos el segundo espacio del array para fecha de alta, y comprobar mas tarde que no sea posterior a fecha de baja
+                    query.bindValue(":estado",str(propiedad[3]))
+                    if query.exec():
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
+            else:
+                return False
+
+        except Exception as e:
+            print("Error al dar de baja propiedad en conexión.",e)
+
+    @staticmethod
+    def listadoPropiedades():
+        """
+
+        :return: datos filtrados de todas las propiedades
         :rtype: list
 
-        Metodo que devuelve todos los clientes ordenados por apellidos y nombres
+        Método que devuelve los datos de todas las propiedades que cumplan con los filtros seleccionados
+
         """
         try:
             listado = []
-            historico = var.ui.chkHistoriaCli.isChecked()
-            filtrado = var.ui.btnBuscarCli.isChecked()
-            DniSeleccionado = var.ui.txtDniCli.text()
-            if not historico and not filtrado:
-                query = QtSql.QSqlQuery()
-                query.prepare("SELECT * FROM clientes WHERE bajacli is NULL ORDER BY apelcli, nomecli ASC ")
+            historico = var.ui.chkHistoriaprop.isChecked()
+            municipio = var.ui.cmbMuniprop.currentText()
+            filtrado = var.ui.btnBuscaTipoProp.isChecked()
+            tipoSeleccionado = var.ui.cmbTipoprop.currentText()
 
-                if query.exec():
-                    while query.next():
-                        fila = [query.value(i) for i in range(query.record().count())]
-                        listado.append(fila)
-                return listado
+            base_query = "SELECT * FROM propiedades"
+            condiciones = []
+            parametros_bind = {}
 
-            elif historico and not filtrado:
-                query = QtSql.QSqlQuery()
-                query.prepare("SELECT * FROM clientes ORDER BY apelcli, nomecli ASC ")
-                if query.exec():
-                    while query.next():
-                        fila = [query.value(i) for i in range(query.record().count())]
-                        listado.append(fila)
-                return listado
+            if not historico:
+                condiciones.append("baja is NULL")
+            if filtrado:
+                condiciones.append("tipo_propiedad = :tipo_propiedad")
+                parametros_bind[":tipo_propiedad"] = tipoSeleccionado
+                condiciones.append("municipio = :municipio")
+                parametros_bind[":municipio"] = municipio
+            elif not historico:
+                condiciones.append("estado = 'Disponible'")
 
-            elif historico and filtrado:
-                query = QtSql.QSqlQuery()
-                query.prepare("SELECT * FROM clientes WHERE dnicli = :dnicli ORDER BY apelcli, nomecli ASC ")
-                query.bindValue(":dnicli", DniSeleccionado)
-                if query.exec():
-                    while query.next():
-                        fila = [query.value(i) for i in range(query.record().count())]
-                        listado.append(fila)
-                return listado
+            if condiciones:
+                base_query += " WHERE " + " AND ".join(condiciones)
+            base_query += " ORDER BY municipio ASC"
 
-            elif not historico and filtrado:
-                query = QtSql.QSqlQuery()
-                query.prepare("SELECT * FROM clientes WHERE dnicli = :dnicli AND bajacli is NULL  ORDER BY apelcli, nomecli ASC ")
-                query.bindValue(":dnicli", DniSeleccionado)
-                if query.exec():
-                    while query.next():
-                        fila = [query.value(i) for i in range(query.record().count())]
-                        listado.append(fila)
-                return listado
+            query = QtSql.QSqlQuery()
+            query.prepare(base_query)
+            for clave, valor in parametros_bind.items():
+                query.bindValue(clave, valor)
 
-        except Exception as e:
-            print("Error listado en conexion", e)
+            if query.exec():
+                while query.next():
+                    fila = [query.value(i) for i in range(query.record().count())]
+                    listado.append(fila)
 
-    def listadoVendedores(self):
-        """
-
-                :return: devuelve listado de vendedores
-                :rtype: list
-
-                Metodo que devuelve todos los vendedores ordenados por id
-                """
-        try:
-            listado = []
-            historico = var.ui.chkHistoricoVen.isChecked()
-            filtrado = var.ui.btnBuscarCli.isChecked()
-            movilSeleccionado = var.ui.txtMovilVen.text()
-            if not historico and not filtrado:
-                query = QtSql.QSqlQuery()
-                query.prepare("SELECT * FROM Vendedores WHERE bajaVendedor is NULL ORDER BY idVendedor ASC ")
-
-                if query.exec():
-                    while query.next():
-                        fila = [query.value(i) for i in range(query.record().count())]
-                        listado.append(fila)
-                return listado
-
-            elif historico and not filtrado:
-                query = QtSql.QSqlQuery()
-                query.prepare("SELECT * FROM Vendedores ORDER BY idVendedor ASC ")
-                if query.exec():
-                    while query.next():
-                        fila = [query.value(i) for i in range(query.record().count())]
-                        listado.append(fila)
-                return listado
-
-            elif historico and filtrado:
-                query = QtSql.QSqlQuery()
-                query.prepare("SELECT * FROM Vendedores WHERE movilVendedor = :movilVen ORDER BY idVendedor ASC ")
-                query.bindValue(":movilVen", movilSeleccionado)
-                if query.exec():
-                    while query.next():
-                        fila = [query.value(i) for i in range(query.record().count())]
-                        listado.append(fila)
-                return listado
-
-            elif not historico and filtrado:
-                query = QtSql.QSqlQuery()
-                query.prepare("SELECT * FROM Vendedores WHERE movilVendedor = :movilVen AND bajaVendedor is NULL  ORDER BY idVendedor ASC ")
-                query.bindValue(":movilVen", movilSeleccionado)
-                if query.exec():
-                    while query.next():
-                        fila = [query.value(i) for i in range(query.record().count())]
-                        listado.append(fila)
-                return listado
-
-        except Exception as e:
-            print("Error listado en conexion", e)
-
-
-
-    def listadoPropiedades(self):
-        """
-
-                :return: devuelve listado de propiedades
-                :rtype: list
-
-                Metodo que devuelve todos las propiedades ordenadas por municipio
-                """
-        try:
-            listado = []
-            historico = var.ui.chkHistoriaProp.isChecked()
-            municipio = var.ui.cmbMuniProp.currentText()
-            filtrado = var.ui.btnBuscarTipoProp.isChecked()
-            tipoSeleccionado = var.ui.cmbTipoProp.currentText()
-            if not historico and filtrado:
-                query = QtSql.QSqlQuery()
-                query.prepare(
-                    "SELECT * FROM PROPIEDADES where bajaprop is null and estadoprop = 'Disponible' and tipoprop = :tipo_propiedad  and muniprop = :municipio order by muniprop asc")
-                query.bindValue(":tipo_propiedad", str(tipoSeleccionado))
-                query.bindValue(":municipio", str(municipio))
-                if query.exec():
-                    while query.next():
-                        fila = [query.value(i) for i in range(query.record().count())]
-                        listado.append(fila)
-            elif historico and not filtrado:
-                query = QtSql.QSqlQuery()
-                query.prepare("SELECT * FROM propiedades ORDER BY muniprop ASC")
-                if query.exec():
-                    while query.next():
-                        fila = [query.value(i) for i in range(query.record().count())]
-                        listado.append(fila)
-            elif historico and filtrado:
-                query = QtSql.QSqlQuery()
-                query.prepare(
-                    "SELECT * FROM PROPIEDADES where estadoprop = 'Disponible' and tipoprop = :tipo_propiedad and muniprop = :municipio order by muniprop asc")
-                query.bindValue(":tipo_propiedad", str(tipoSeleccionado))
-                query.bindValue(":municipio", str(municipio))
-                if query.exec():
-                    while query.next():
-                        fila = [query.value(i) for i in range(query.record().count())]
-                        listado.append(fila)
-            else:
-                query = QtSql.QSqlQuery()
-                query.prepare("SELECT * FROM propiedades where bajaprop is null ORDER BY muniprop ASC")
-                if query.exec():
-                    while query.next():
-                        fila = [query.value(i) for i in range(query.record().count())]
-                        listado.append(fila)
             return listado
 
         except Exception as e:
             print("Error al listar propiedades en listadoPropiedades", e)
 
-
-    def datosOneCliente(dni):
-        """
-        :param dni: String con el dni del cliente
-        :type dni: string
-        :return: retorna una lista con los datos del cliente
-        :rtype: list
-
-        Metodo que devuelve una lista con los datos de un cliente de la base de datosç
-
-        """
-        try:
-            registro = []
-            query = QtSql.QSqlQuery()
-            query.prepare('SELECT * FROM CLIENTES WHERE dnicli = :dnicli')
-            query.bindValue(':dnicli', str(dni))
-            if query.exec():
-                while query.next():
-                    for i in range(query.record().count()):
-                        registro.append(query.value(i))
-            return registro
-
-        except Exception as error:
-            print("error en datosOneCliente ", error)
-
-    def datosOneVendedor(id):
-        """
-        :param id: ID del vendedor que se desea consultar
-        :type id: entero o cadena
-        :return: Lista con los datos del vendedor encontrado, o una lista vacía si no se encuentra
-        :rtype: lista
-
-        Método que obtiene los datos de un vendedor específico a partir de su ID desde la base de datos.
-        """
-        try:
-            # Inicializar una lista vacía para almacenar los datos del vendedor
-            registro = []
-
-            # Crear un objeto de tipo QSqlQuery para realizar la consulta SQL
-            query = QtSql.QSqlQuery()
-
-            # Preparar la consulta SQL para obtener los datos del vendedor con el ID especificado
-            query.prepare('SELECT * FROM Vendedores WHERE idVendedor = :idVend')
-
-            # Asociar el valor del ID del vendedor con el parámetro de la consulta SQL
-            query.bindValue(':idVend', str(id))
-
-            # Ejecutar la consulta y procesar los resultados si es exitosa
-            if query.exec():
-                # Iterar sobre los registros devueltos por la consulta
-                while query.next():
-                    # Iterar sobre todas las columnas del registro y agregar los valores a la lista 'registro'
-                    for i in range(query.record().count()):
-                        registro.append(query.value(i))
-
-            # Retornar la lista con los datos del vendedor
-            return registro
-
-        except Exception as error:
-            # Capturar y mostrar cualquier error que ocurra durante la ejecución
-            print("error en datosOneCliente ", error)
-
+    @staticmethod
     def datosOnePropiedad(codigo):
         """
-        :param codigo: Código de la propiedad que se desea consultar
-        :type codigo: entero o cadena
-        :return: Lista con los datos de la propiedad encontrada, o una lista vacía si no se encuentra
-        :rtype: lista
 
-        Método que obtiene los datos de una propiedad específica a partir de su código desde la base de datos.
+        :param codigo: codigo de propiedad
+        :type codigo: int
+        :return: datos de una propiedad
+        :rtype: list
+
+        Método que devuelve los datos de la propiedad seleccionada
+
         """
         try:
-            # Inicializar una lista vacía para almacenar los datos de la propiedad
             registro = []
-
-            # Crear un objeto de tipo QSqlQuery para realizar la consulta SQL
             query = QtSql.QSqlQuery()
-
-            # Preparar la consulta SQL para obtener los datos de la propiedad con el código especificado
-            query.prepare('SELECT * FROM propiedades WHERE codigo = :codigo')
-
-            # Asociar el valor del código de la propiedad con el parámetro de la consulta SQL
-            query.bindValue(':codigo', str(codigo))
-
-            # Ejecutar la consulta y procesar los resultados si es exitosa
+            query.prepare("SELECT * FROM propiedades WHERE codigo = :codigo")
+            query.bindValue(":codigo", str(codigo))
             if query.exec():
-                # Iterar sobre los registros devueltos por la consulta
                 while query.next():
-                    # Iterar sobre todas las columnas del registro y agregar los valores a la lista 'registro'
                     for i in range(query.record().count()):
-                        registro.append(query.value(i))
-
-            # Retornar la lista con los datos de la propiedad
+                        registro.append(str(query.value(i)))
             return registro
-
-        except Exception as error:
-            # Capturar y mostrar cualquier error que ocurra durante la ejecución
-            print("error en datosOnePropiedad ", error)
-
-    def modifCliente(registro):
-        """
-        :param registro: array con los datos del cliente a modificar
-        :type registro: lista
-        :return: True si la modificación fue exitosa, False si ocurrió un error o no se encontró el cliente
-        :rtype: booleano
-
-        Método que actualiza los datos de un cliente existente en la base de datos, basado en su DNI.
-        """
-        try:
-            # Crear un objeto QSqlQuery para verificar si el cliente con el DNI especificado ya existe en la base de datos
-            query = QtSql.QSqlQuery()
-            query.prepare("select count(*) from clientes where dnicli = :dnicli")
-            query.bindValue(":dnicli", str(registro[0]))
-
-            # Ejecutar la consulta y verificar si el cliente existe
-            if query.exec():
-                if query.next() and query.value(0) > 0:
-
-                    # Si el cliente existe, proceder a actualizar sus datos
-                    query = QtSql.QSqlQuery()
-                    query.prepare(
-                        "UPDATE clientes SET altacli = :altacli , apelcli = :apelcli, nomecli = :nomecli, emailcli = :emailcli, movilcli = :movilcli, dircli = :dircli, provcli = :provcli, municli = :municli, bajacli = :bajacli WHERE dnicli = :dnicli")
-
-                    # Asociar los valores del array 'registro' a los parámetros de la consulta SQL
-                    query.bindValue(':dnicli', str(registro[0]))
-                    query.bindValue(':altacli', str(registro[1]))
-                    query.bindValue(':apelcli', str(registro[3]))
-                    query.bindValue(':nomecli', str(registro[4]))
-                    query.bindValue(':emailcli', str(registro[5]))
-                    query.bindValue(':movilcli', str(registro[6]))
-                    query.bindValue(':dircli', str(registro[7]))
-                    query.bindValue(':provcli', str(registro[8]))
-                    query.bindValue(':municli', str(registro[9]))
-
-                    # Comprobar si la fecha de baja está vacía, si lo está, no se asigna valor
-                    if registro[2] == "":
-                        query.bindValue(":bajacli", QtCore.QVariant())
-                    else:
-                        query.bindValue(":bajacli", str(registro[2]))
-
-                    # Ejecutar la actualización y devolver True si la operación fue exitosa
-                    if query.exec():
-                        return True
-                    else:
-                        return False
-                else:
-                    # Si el cliente no existe en la base de datos, retornar False
-                    return False
-            else:
-                # Si hubo un error en la consulta de verificación, retornar False
-                return False
-
-        except Exception as error:
-            # Capturar y mostrar cualquier error que ocurra durante la ejecución
-            print("error modificar cliente", error)
-
-    def modifVend(registro):
-        """
-        :param registro: array con los datos del vendedor a modificar
-        :type registro: lista
-        :return: True si la modificación fue exitosa, False si ocurrió un error o no se encontró el vendedor
-        :rtype: booleano
-
-        Método que actualiza los datos de un vendedor existente en la base de datos, basado en su ID.
-        """
-        try:
-            # Crear un objeto QSqlQuery para verificar si el vendedor con el ID especificado ya existe en la base de datos
-            query = QtSql.QSqlQuery()
-            query.prepare("select count(*) from Vendedores where idVendedor = :idVendedor")
-            query.bindValue(":idVendedor", str(registro[0]))
-
-            # Ejecutar la consulta y verificar si el vendedor existe
-            if query.exec():
-                if query.next() and query.value(0) > 0:
-
-                    # Si el vendedor existe, proceder a actualizar sus datos
-                    query = QtSql.QSqlQuery()
-                    query.prepare(
-                        "UPDATE Vendedores SET  nombreVendedor= :nombVend , altaVendedor = :altVen, movilVendedor = :movVend, mailVendedor = :emailVend, delegacionVendedor = :delegVend WHERE idVendedor = :idVend")
-
-                    # Asociar los valores del array 'registro' a los parámetros de la consulta SQL
-                    query.bindValue(':idVend', str(registro[0]))
-                    query.bindValue(':nombVend', str(registro[2]))
-                    query.bindValue(':altVen', str(registro[6]))
-                    query.bindValue(':movVend', str(registro[3]))
-                    query.bindValue(':emailVend', str(registro[4]))
-                    query.bindValue(':delegVend', str(registro[5]))
-
-                    # Ejecutar la actualización y devolver True si la operación fue exitosa
-                    if query.exec():
-                        return True
-                    else:
-                        # Si la ejecución de la actualización falla, mostrar un mensaje de error y retornar False
-                        print("error1")
-                        return False
-                else:
-                    # Si el vendedor no existe en la base de datos, mostrar un mensaje de error y retornar False
-                    print("error3")
-                    return False
-            else:
-                # Si hubo un error en la consulta de verificación, mostrar un mensaje de error y retornar False
-                print("error2")
-                return False
-
-        except Exception as error:
-            # Capturar y mostrar cualquier error que ocurra durante la ejecución
-            print("error modificar cliente", error)
-
-    def modifPropiedad(registro):
-        """
-        :param registro: array con los datos de la propiedad a modificar
-        :type registro: lista
-        :return: True si la modificación fue exitosa, False si ocurrió un error o no se encontró la propiedad
-        :rtype: booleano
-
-        Método que actualiza los datos de una propiedad existente en la base de datos, basado en su código.
-        """
-        try:
-            # Crear un objeto QSqlQuery para verificar si la propiedad con el código especificado ya existe en la base de datos
-            query = QtSql.QSqlQuery()
-            query.prepare("select count(*) from propiedades where codigo = :codigo")
-            query.bindValue(":codigo", str(registro[0]))
-
-            # Ejecutar la consulta y verificar si la propiedad existe
-            if query.exec():
-                if query.next() and query.value(0) > 0:
-
-                    # Si la propiedad existe, proceder a actualizar sus datos
-                    query = QtSql.QSqlQuery()
-                    query.prepare(
-                        "UPDATE propiedades SET altaprop = :altaprop, bajaprop = :bajaprop, dirprop = :dirprop, provprop = :provprop, muniprop = :muniprop, tipoprop = :tipoprop, habprop = :habprop, banoprop = :banoprop, superprop = :superprop, precioventaprop = :precioventaprop, precioalquilerprop = :precioalquilerprop, cpprop = :cpprop, descriprop = :descriprop, tipoperprop = :tipoperprop, estadoprop = :estadoprop, nomeprop = :nomeprop, movilprop = :movilprop WHERE codigo = :codigo")
-
-                    # Asociar los valores del array 'registro' a los parámetros de la consulta SQL
-                    query.bindValue(':codigo', str(registro[0]))
-                    query.bindValue(':altaprop', str(registro[1]))
-                    query.bindValue(':dirprop', str(registro[3]))
-                    query.bindValue(':provprop', str(registro[4]))
-                    query.bindValue(':muniprop', str(registro[5]))
-                    query.bindValue(':tipoprop', str(registro[6]))
-                    query.bindValue(':habprop', int(registro[7]))  # Se espera un valor entero
-                    query.bindValue(':banoprop', int(registro[8]))  # Se espera un valor entero
-                    query.bindValue(':superprop', str(registro[9]))
-                    query.bindValue(':precioventaprop', str(registro[10]))
-                    query.bindValue(':precioalquilerprop', str(registro[11]))
-                    query.bindValue(':cpprop', str(registro[12]))
-                    query.bindValue(':descriprop', str(registro[13]))
-                    query.bindValue(':tipoperprop', ",".join(registro[14]))  # Unir lista de tipos de operación
-                    query.bindValue(':estadoprop', str(registro[15]))
-                    query.bindValue(':nomeprop', str(registro[16]))
-                    query.bindValue(':movilprop', str(registro[17]))
-
-                    # Comprobar si la fecha de baja está vacía, si lo está, no se asigna valor
-                    if registro[2] == "":
-                        query.bindValue(":bajaprop", QtCore.QVariant())
-                    else:
-                        query.bindValue(":bajaprop", str(registro[2]))
-
-                    # Ejecutar la actualización y devolver True si la operación fue exitosa
-                    if query.exec():
-                        return True
-            # Si no se encontró la propiedad, o si ocurre un error en la consulta, no se realiza la actualización
-        except Exception as error:
-            # Capturar y mostrar cualquier error que ocurra durante la ejecución
-            print("error modificar propiedad", error)
-
-    def bajaCliente(datos):
-        """
-        :param datos: array con los datos del cliente, incluyendo el DNI
-        :type datos: lista
-        :return: True si la baja fue exitosa, False si ocurrió un error
-        :rtype: booleano
-
-        Método que marca a un cliente como dado de baja en la base de datos, asignando la fecha actual a su campo 'bajacli'.
-        """
-        try:
-            # Crear un objeto QSqlQuery para realizar la consulta SQL de actualización
-            query = QtSql.QSqlQuery()
-
-            # Preparar la consulta SQL para actualizar la fecha de baja del cliente
-            query.prepare('UPDATE clientes SET bajacli = :bajacli WHERE dnicli = :dnicli')
-
-            # Asociar la fecha actual a la columna 'bajacli' usando el formato dd/mm/yyyy
-            query.bindValue(':bajacli', datetime.now().strftime("%d/%m/%Y"))
-
-            # Asociar el DNI del cliente al parámetro correspondiente de la consulta SQL
-            query.bindValue(':dnicli', str(datos[1]))
-
-            # Ejecutar la consulta de actualización y devolver True si fue exitosa
-            if query.exec():
-                return True
-            else:
-                # Si la ejecución de la consulta falla, retornar False
-                return False
-        except Exception as error:
-            # Capturar y mostrar cualquier error que ocurra durante la ejecución
-            print("error en bajaCliente ", error)
-
-    def bajaVendedor(datos):
-        """
-        :param datos: array con los datos del vendedor, incluyendo el ID del vendedor
-        :type datos: lista
-        :return: True si la baja fue exitosa, False si ocurrió un error
-        :rtype: booleano
-
-        Método que marca a un vendedor como dado de baja en la base de datos, asignando la fecha actual a su campo 'bajaVendedor'.
-        """
-        try:
-            # Crear un objeto QSqlQuery para realizar la consulta SQL de actualización
-            query = QtSql.QSqlQuery()
-
-            # Preparar la consulta SQL para actualizar la fecha de baja del vendedor
-            query.prepare('UPDATE vendedores SET bajaVendedor = :bajaVendedor WHERE idVendedor = :idVend')
-
-            # Asociar la fecha actual a la columna 'bajaVendedor' usando el formato dd/mm/yyyy
-            query.bindValue(':bajaVendedor', datetime.now().strftime("%d/%m/%Y"))
-
-            # Asociar el ID del vendedor al parámetro correspondiente de la consulta SQL
-            query.bindValue(':idVend', str(datos[1]))
-
-            # Ejecutar la consulta de actualización y devolver True si fue exitosa
-            if query.exec():
-                return True
-            else:
-                # Si la ejecución de la consulta falla, retornar False
-                return False
-        except Exception as error:
-            # Capturar y mostrar cualquier error que ocurra durante la ejecución
-            print("error en bajaCliente ", error)
-
-    def checkUserInDb(dni):
-        """
-        :param dni: El DNI del cliente que se va a buscar en la base de datos
-        :type dni: str
-        :return: True si el cliente existe en la base de datos, False si no existe o ocurrió un error
-        :rtype: booleano
-
-        Método que verifica si un cliente con el DNI especificado ya existe en la base de datos.
-        """
-        try:
-            # Crear un objeto QSqlQuery para realizar la consulta SQL
-            query = QtSql.QSqlQuery()
-
-            # Preparar la consulta SQL para buscar un cliente con el DNI especificado
-            query.prepare('SELECT * FROM clientes WHERE dnicli = :dnicli')
-
-            # Asociar el DNI proporcionado al parámetro correspondiente de la consulta SQL
-            query.bindValue(':dnicli', str(dni))
-
-            # Ejecutar la consulta y verificar si hay algún resultado
-            if query.exec():
-                # Si hay un registro que coincide, devolver True
-                if query.next():
-                    return True
-                else:
-                    # Si no se encuentra ningún cliente con el DNI dado, devolver False
-                    return False
-        except Exception as error:
-            # Capturar y mostrar cualquier error que ocurra durante la ejecución
-            print("error en checkUserInDb ", error)
-
-    def checkVendedorinDb(id):
-        """
-        :param id: El ID del vendedor que se va a buscar en la base de datos
-        :type id: str
-        :return: True si el vendedor existe en la base de datos, False si no existe o ocurrió un error
-        :rtype: booleano
-
-        Método que verifica si un vendedor con el ID especificado ya existe en la base de datos.
-        """
-        try:
-            # Crear un objeto QSqlQuery para realizar la consulta SQL
-            query = QtSql.QSqlQuery()
-
-            # Preparar la consulta SQL para buscar un vendedor con el ID especificado
-            query.prepare('SELECT * FROM Vendedores WHERE idVendedor = :idVend')
-
-            # Asociar el ID proporcionado al parámetro correspondiente de la consulta SQL
-            query.bindValue(':idVend', str(id))
-
-            # Ejecutar la consulta y verificar si hay algún resultado
-            if query.exec():
-                # Si hay un registro que coincide, devolver True
-                if query.next():
-                    return True
-                else:
-                    # Si no se encuentra ningún vendedor con el ID dado, devolver False
-                    return False
-        except Exception as error:
-            # Capturar y mostrar cualquier error que ocurra durante la ejecución
-            print("error en checkVendedorinDb ", error)
-
-    def checkDNIinDb(dni):
-        """
-        :param dni: El DNI o ID del vendedor que se va a buscar en la base de datos
-        :type dni: str
-        :return: True si el vendedor con ese DNI existe en la base de datos, False si no existe o ocurrió un error
-        :rtype: booleano
-
-        Método que verifica si un vendedor con el DNI especificado ya existe en la base de datos.
-        """
-        try:
-            # Crear un objeto QSqlQuery para realizar la consulta SQL
-            query = QtSql.QSqlQuery()
-
-            # Preparar la consulta SQL para buscar un vendedor con el ID especificado
-            query.prepare('SELECT * FROM Vendedores WHERE idVendedor = :idVend')
-
-            # Asociar el DNI proporcionado al parámetro correspondiente de la consulta SQL
-            query.bindValue(':idVend', str(dni))
-
-            # Ejecutar la consulta y verificar si hay algún resultado
-            if query.exec():
-                # Si hay un registro que coincide, devolver True
-                if query.next():
-                    return True
-                else:
-                    # Si no se encuentra ningún vendedor con el DNI dado, devolver False
-                    return False
-        except Exception as error:
-            # Capturar y mostrar cualquier error que ocurra durante la ejecución
-            print("error en checkVendedorinDb ", error)
-
-    def altaTipoProp(tipo):
-        """
-        :param tipo: El tipo de propiedad que se va a insertar en la base de datos
-        :type tipo: str
-        :return: Una lista con todos los tipos de propiedad ordenados alfabéticamente si la inserción es exitosa,
-                 False si ocurre un error al insertar
-        :rtype: lista o booleano
-
-        Método que inserta un nuevo tipo de propiedad en la base de datos y devuelve la lista de tipos de propiedad ordenada.
-        """
-        try:
-            # Crear un objeto QSqlQuery para realizar la consulta SQL de inserción
-            query = QtSql.QSqlQuery()
-
-            # Preparar la consulta SQL para insertar el nuevo tipo de propiedad en la base de datos
-            query.prepare("INSERT INTO tipopropiedad (tipo) VALUES (:tipo)")
-
-            # Asociar el valor del parámetro 'tipo' a la consulta SQL
-            query.bindValue(":tipo", tipo)
-
-            # Ejecutar la consulta de inserción
-            if query.exec():
-                # Si la inserción es exitosa, realizar otra consulta para obtener todos los tipos de propiedad
-                query = QtSql.QSqlQuery()
-                query.prepare("SELECT tipo FROM tipopropiedad ORDER BY tipo ASC")
-
-                # Ejecutar la consulta de selección
-                if query.exec():
-                    registro = []
-                    # Iterar sobre los resultados y añadirlos a la lista 'registro'
-                    while query.next():
-                        registro.append(str(query.value(0)))
-                    # Devolver la lista de tipos de propiedad ordenados alfabéticamente
-                    return registro
-            else:
-                # Si la inserción falla, devolver False
-                return False
         except Exception as e:
-            # Capturar y mostrar cualquier error que ocurra durante la ejecución
-            print("error altaTipoProp", e)
+            print("Error al cargar UNA propiedad en conexion.", e)
 
-    def cargarTipoProp(self):
+    @staticmethod
+    def cargarAllPropiedadesBD():
         """
-        :return: Una lista con todos los tipos de propiedad ordenados alfabéticamente, o None si ocurre un error
-        :rtype: lista o None
 
-        Método que carga y devuelve todos los tipos de propiedad desde la base de datos, ordenados alfabéticamente.
+        :return: datos de todas las propiedades
+        :rtype: list
+
+        Método que devuelve los datos de todas las propiedades almacenadasen la BD
+
         """
         try:
-            # Crear un objeto QSqlQuery para realizar la consulta SQL de selección
+            listado = []
+
+            base_query = "SELECT * FROM propiedades ORDER BY municipio ASC"
+
             query = QtSql.QSqlQuery()
+            query.prepare(base_query)
 
-            # Preparar la consulta SQL para obtener los tipos de propiedad ordenados alfabéticamente
-            query.prepare("SELECT tipo FROM tipopropiedad ORDER BY tipo ASC")
-
-            # Ejecutar la consulta SQL
             if query.exec():
-                registro = []
-                # Iterar sobre los resultados de la consulta y agregarlos a la lista 'registro'
                 while query.next():
-                    registro.append(str(query.value(0)))
-                # Devolver la lista de tipos de propiedad
-                return registro
+                    fila = [query.value(i) for i in range(query.record().count())]
+                    listado.append(fila)
+
+            return listado
+
         except Exception as e:
-            # Capturar y mostrar cualquier error que ocurra durante la ejecución
-            print("error cargarTipoProp", e)
+            print("Error al listar propiedades en cargarAllpropiedades", e)
 
-    def bajaTipoProp(tipo):
+    '''
+    GESTION DE VENDEDORES
+    '''
+
+    @staticmethod
+    def altaVendedor(nuevoVendedor):
         """
-        :param tipo: El tipo de propiedad que se desea eliminar de la base de datos
-        :type tipo: str
-        :return: True si el tipo de propiedad fue eliminado correctamente, False si no se encontró o ocurrió un error
-        :rtype: booleano
 
-        Método que elimina un tipo de propiedad de la base de datos si existe.
+        :param nuevoVendedor: datos de un vendedor
+        :type nuevoVendedor: list
+        :return: éxito en añadir a un vendedor a la base de datos
+        :rtype: bool
+
+        Método que añade un nuevo vendedor a la base de datos
+
         """
         try:
-            # Crear un objeto QSqlQuery para realizar la consulta SQL de verificación
             query = QtSql.QSqlQuery()
+            query.prepare("INSERT into vendedores (dniVendedor,nombreVendedor,altaVendedor,movilVendedor,mailVendedor,delegacionVendedor) values (:dniVendedor, :nombreVendedor, :altaVendedor, :movilVendedor, :mailVendedor, :delegacionVendedor)")
+            query.bindValue(":dniVendedor", str(nuevoVendedor[0]))
+            query.bindValue(":nombreVendedor", str(nuevoVendedor[1]))
+            query.bindValue(":altaVendedor", str(nuevoVendedor[2]))
+            query.bindValue(":movilVendedor", str(nuevoVendedor[3]))
+            query.bindValue(":mailVendedor", str(nuevoVendedor[4]))
+            query.bindValue(":delegacionVendedor", str(nuevoVendedor[5]))
 
-            # Preparar la consulta SQL para verificar si el tipo de propiedad existe en la base de datos
-            query.prepare("SELECT COUNT(*) FROM tipopropiedad WHERE tipo = :tipo")
+            if query.exec():
+                return True
+            else:
+                return False
 
-            # Asociar el valor del parámetro 'tipo' a la consulta SQL
-            query.bindValue(":tipo", tipo)
+        except Exception as e:
+            print("Error alta vendedor en conexion", e)
 
-            # Ejecutar la consulta de verificación
-            if query.exec() and query.next() and query.value(0) > 0:
-                # Si el tipo de propiedad existe, preparar la consulta para eliminarlo
-                query.prepare("DELETE FROM tipopropiedad WHERE tipo = :tipo")
+    @staticmethod
+    def datosOneVendedor(valor, tipo_busqueda = "idVendedor"):
+        """
 
-                # Volver a asociar el valor del parámetro 'tipo'
-                query.bindValue(":tipo", tipo)
+        :param valor: valor del tipo de búsqueda que se introduzca introducida
+        :type valor: object
+        :param tipo_busqueda: nombre de la columna de bd por la que se va a realizar la búsqueda
+        :type tipo_busqueda: str
+        :return: datos de un vendedor
+        :rtype: list
 
-                # Ejecutar la consulta de eliminación
+        Método que devuelve los datos de un vendedor en función de un parámetro de búsqueda, siendo su id el predeterminado
+
+        """
+        try:
+            registro = []
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT * FROM vendedores WHERE "+tipo_busqueda+" = :valor")
+            query.bindValue(":valor", str(valor))
+            if query.exec():
+                while query.next():
+                    for i in range(query.record().count()):
+                        registro.append(str(query.value(i)))
+            return registro
+        except Exception as e:
+            print("Error al cargar UN cliente en la tabla.", e)
+
+    @staticmethod
+    def listadoVendedores():
+        """
+
+        :return: datos de vendedores
+        :rtype: list
+
+        Método que devuelve la lista de vendedores
+
+        """
+        try:
+            listado = []
+            historico = var.ui.chkHistoriaVen.isChecked()
+            if historico:
+                query = QtSql.QSqlQuery()
+                query.prepare("SELECT * FROM vendedores ORDER BY idVendedor ASC")
                 if query.exec():
-                    # Si la eliminación es exitosa, recargar los tipos de propiedad y devolver True
-                    eventos.Eventos.cargarTipoProp(tipo)
-                    return True
+                    while query.next():
+                        fila = [query.value(i) for i in range(query.record().count())]
+                        listado.append(fila)
+
+            else:
+                query = QtSql.QSqlQuery()
+                query.prepare("SELECT * FROM vendedores WHERE bajaVendedor is null ORDER BY idVendedor ASC")
+                if query.exec():
+                    while query.next():
+                        fila = [query.value(i) for i in range(query.record().count())]
+                        listado.append(fila)
+            return listado
+        except Exception as e:
+            print("Error al listar vendedores")
+
+    @staticmethod
+    def bajaVendedor(dni):
+        """
+
+        :param dni: dni de un vendedor
+        :type dni: str
+        :return: éxito al dar de baja a un vendedor en la base de datos
+        :rtype: bool
+
+        Método que añade una fecha de baja al vendedor
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT COUNT(*) from vendedores where dniVendedor = :dni")
+            query.bindValue(":dni", str(dni))
+            if query.exec() and query.next():
+                count = query.value(0)
+                if count == 1:
+                    query.prepare("UPDATE vendedores SET bajaVendedor = :bajaVendedor WHERE dniVendedor = :dni")
+                    query.bindValue(":bajaVendedor", datetime.now().strftime("%d/%m/%Y"))
+                    query.bindValue(":dni", str(dni))
+                    if query.exec():
+                        return True
+                    else:
+                        return False
                 else:
-                    # Si ocurre un error en la eliminación, recargar los tipos de propiedad y devolver False
-                    eventos.Eventos.cargarTipoProp(tipo)
                     return False
             else:
-                # Si el tipo no existe, devolver False
                 return False
         except Exception as e:
-            # Capturar y mostrar cualquier error que ocurra durante la ejecución
-            print("error bajaTipoProp", e)
-            return False
+            print("Error en la conexión al dar de baja vendedor", e)
 
     @staticmethod
-    def altaPropiedad(propiedad):
+    def modifVendedor(registro):
         """
-        :param propiedad: Una lista que contiene los datos de la propiedad a insertar en la base de datos
-        :type propiedad: lista
-        :return: True si la propiedad se inserta correctamente, False si ocurre un error
-        :rtype: booleano
 
-        Método que inserta una nueva propiedad en la base de datos.
-        """
-        try:
-            # Crear un objeto QSqlQuery para realizar la consulta SQL de inserción
-            query = QtSql.QSqlQuery()
+        :param registro: datos de vendedor
+        :type registro: list
+        :return: éxito al modificar datos de vendedor en la base de datos
+        :rtype: bool
 
-            # Preparar la consulta SQL para insertar los valores de la propiedad en la tabla 'propiedades'
-            query.prepare(
-                "INSERT INTO propiedades (altaprop, dirprop, provprop, muniprop, tipoprop, habprop,"
-                " banoprop, superprop, precioventaprop, precioalquilerprop, cpprop,"
-                " descriprop, tipoperprop, estadoprop, nomeprop, movilprop ) "
-                "VALUES (:altaprop, :dirprop, :provprop, :muniprop, :tipoprop, :habprop,"
-                " :banoprop, :superprop, :precioventaprop, :precioalquilerprop, :cpprop,"
-                " :descriprop, :tipoperprop, :estadoprop, :nomeprop, :movilprop)"
-            )
+        Método que modifica los datos de un vendedor en la base de datos
 
-            # Asociar cada parámetro de la consulta con los valores proporcionados en la lista 'propiedad'
-            query.bindValue(":altaprop", str(propiedad[0]))
-            query.bindValue(":dirprop", str(propiedad[1]))
-            query.bindValue(":provprop", str(propiedad[2]))
-            query.bindValue(":muniprop", str(propiedad[3]))
-            query.bindValue(":tipoprop", str(propiedad[4]))
-            query.bindValue(":habprop", int(propiedad[5]))
-            query.bindValue(":banoprop", int(propiedad[6]))
-            query.bindValue(":superprop", str(propiedad[7]))
-            query.bindValue(":precioventaprop", str(propiedad[8]))
-            query.bindValue(":precioalquilerprop", str(propiedad[9]))
-            query.bindValue(":cpprop", str(propiedad[10]))
-            query.bindValue(":descriprop", str(propiedad[11]))
-            query.bindValue(":tipoperprop", ",".join((propiedad[12])))  # Convertir lista a string separada por comas
-            query.bindValue(":estadoprop", str(propiedad[13]))
-            query.bindValue(":nomeprop", str(propiedad[14]))
-            query.bindValue(":movilprop", str(propiedad[15]))
-
-            # Ejecutar la consulta para insertar los datos en la base de datos
-            if query.exec():
-                return True  # Si la inserción es exitosa, devolver True
-            else:
-                # Si ocurre un error, imprimir el mensaje de error y devolver False
-                print(query.lastError().text())
-                return False
-        except Exception as e:
-            # Capturar cualquier excepción y mostrar el error
-            print("error altaProp", e)
-            return False
-
-    @staticmethod
-    def bajaProp(propiedad):
-        """
-        :param propiedad: Lista que contiene los datos necesarios para dar de baja una propiedad
-        :type propiedad: lista
-        :return: True si la propiedad se da de baja correctamente, False en caso contrario
-        :rtype: booleano
-
-        Método que marca una propiedad como dada de baja en la base de datos.
-        Actualiza los campos 'bajaprop' (fecha de baja) y 'estadoprop' (estado de la propiedad).
         """
         try:
-            # Crear un objeto QSqlQuery para realizar la consulta SQL
             query = QtSql.QSqlQuery()
-
-            # Comprobar si la propiedad existe en la base de datos mediante el código
-            query.prepare("select count(*) from Propiedades where codigo = :codigo")
-            query.bindValue(":codigo", propiedad[0])  # Se asume que el primer valor en 'propiedad' es el código
-            if query.exec() and query.next():  # Ejecuta la consulta y comprueba si hay resultados
+            query.prepare("select count(*) from vendedores where idVendedor = :id")
+            query.bindValue(":id", str(registro[0]))
+            if query.exec() and query.next():
                 count = query.value(0)
-                if count == 1:  # Si solo se encuentra una propiedad con ese código, significa que existe
-                    # Preparar la consulta para actualizar la propiedad (marcar como dada de baja)
-                    query.prepare(
-                        "update Propiedades set bajaprop =:baja, estadoprop =:estadoprop where codigo = :codigo")
-                    query.bindValue(":codigo", str(propiedad[0]))  # Código de la propiedad
-                    query.bindValue(":baja", str(
-                        propiedad[2]))  # Fecha de baja (proporcionada en el tercer espacio del array 'propiedad')
-                    query.bindValue(":estadoprop",
-                                    str(propiedad[3]))  # Estado de la propiedad (proporcionado en el cuarto espacio)
+                if count == 1: #verificamos que solo nos devuelve un resultado, la fila para el dni que buscamos
 
-                    # Ejecutar la consulta para actualizar la propiedad
-                    if query.exec():
-                        return True  # Si la consulta se ejecuta correctamente, la propiedad fue dada de baja
+                    query.prepare("UPDATE vendedores set nombreVendedor= :nombreVendedor, altaVendedor = :altaVendedor, bajaVendedor= :bajaVendedor, movilVendedor = :movilVendedor, mailVendedor = :mailVendedor, delegacionVendedor = :delegacionVendedor WHERE idVendedor = :id")
+                    query.bindValue(":id", str(registro[0]))
+                    query.bindValue(":nombreVendedor", str(registro[1]))
+                    query.bindValue(":altaVendedor", str(registro[2]))
+                    query.bindValue(":movilVendedor", str(registro[3]))
+                    query.bindValue(":mailVendedor", str(registro[4]))
+                    query.bindValue(":delegacionVendedor", str(registro[5]))
+                    if registro[6] == "":
+                        query.bindValue(":bajaVendedor",QtCore.QVariant()) #QVariant añade un null a la BD
                     else:
-                        return False  # Si no se puede ejecutar la consulta, devolver False
+                        query.bindValue(":bajaVendedor", str(registro[6]))
+
+                    if query.exec():
+                        return True
                 else:
-                    return False  # Si la propiedad no existe en la base de datos, devolver False
+                    return False
             else:
-                return False  # Si la consulta no se puede ejecutar, devolver False
+                return False
+        except Exception as e:
+            print("Error al modificar un vendedor en conexion.", e)
+
+    @staticmethod
+    def cargarAllVendedoresBD():
+        """
+
+        :return: datos de todos los vendedores
+        :rtype: list
+
+        Método que devuelve todos los datos de los vendedores en la base de datos
+
+        """
+        try:
+            listado = []
+
+            base_query = "SELECT * FROM vendedores ORDER BY idVendedor ASC"
+
+            query = QtSql.QSqlQuery()
+            query.prepare(base_query)
+
+            if query.exec():
+                while query.next():
+                    fila = [query.value(i) for i in range(query.record().count())]
+                    listado.append(fila)
+
+            return listado
 
         except Exception as e:
-            # Capturar cualquier excepción que ocurra durante el proceso y mostrar el error
-            print("Error al dar de baja propiedad en conexión.", e)
-            return False  # En caso de error, devolver False
+            print("Error al listar vendedores en cargarAllpropiedades", e)
 
-    def listadoPropiedadesExport(self):
-        """
-        :return: Una lista con todos los registros de propiedades de la base de datos, ordenados por municipio
-        :rtype: list
 
-        Método que obtiene un listado de todas las propiedades de la base de datos, sin filtrar por baja
-        (es decir, incluirá tanto las propiedades dadas de baja como las activas) y las ordena por municipio.
-        """
-        listado = []  # Inicializa una lista vacía para almacenar los resultados de la consulta
-
-        # Crear un objeto QSqlQuery para realizar la consulta SQL
-        query = QtSql.QSqlQuery()
-
-        # Preparar la consulta SQL para seleccionar todas las propiedades, tanto activas como dadas de baja
-        query.prepare(
-            "SELECT * FROM PROPIEDADES where bajaprop is null or bajaprop is not null order by muniprop asc")
-
-        # Ejecutar la consulta
-        if query.exec():
-            # Si la consulta se ejecuta correctamente, recorrer todos los resultados
-            while query.next():
-                # Para cada fila, crear una lista de los valores de las columnas y agregarla a 'listado'
-                fila = [query.value(i) for i in range(query.record().count())]
-                listado.append(fila)
-
-        # Devolver la lista con los resultados
-        return listado
-
-    def listadoClientesExport(self):
-        """
-        :return: Una lista con todos los registros de clientes de la base de datos, ordenados por apellido.
-        :rtype: list
-
-        Método que obtiene un listado de todos los clientes de la base de datos, sin filtrar por baja
-        (es decir, incluirá tanto los clientes dados de baja como los activos) y los ordena por apellido.
-        """
-        listado = []  # Inicializa una lista vacía para almacenar los resultados de la consulta.
-
-        # Crear un objeto QSqlQuery para realizar la consulta SQL.
-        query = QtSql.QSqlQuery()
-
-        # Preparar la consulta SQL para seleccionar todos los clientes, tanto activos como dados de baja.
-        query.prepare(
-            "SELECT * FROM CLIENTES where bajacli is null or bajacli is not null order by apelcli asc")
-
-        # Ejecutar la consulta.
-        if query.exec():
-            # Si la consulta se ejecuta correctamente, recorrer todos los resultados.
-            while query.next():
-                # Para cada fila, crear una lista de los valores de las columnas y agregarla a 'listado'.
-                fila = [query.value(i) for i in range(query.record().count())]
-                listado.append(fila)
-
-        # Devolver la lista con los resultados.
-        return listado
-
-    def listadoVendedoresExport(self):
-        """
-        :return: Una lista con todos los registros de vendedores de la base de datos, ordenados por ID de vendedor.
-        :rtype: list
-
-        Método que obtiene un listado de todos los vendedores de la base de datos, sin filtrar por baja
-        (es decir, incluirá tanto los vendedores dados de baja como los activos) y los ordena por el ID de vendedor.
-        """
-        listado = []  # Inicializa una lista vacía para almacenar los resultados de la consulta.
-
-        # Crear un objeto QSqlQuery para realizar la consulta SQL.
-        query = QtSql.QSqlQuery()
-
-        # Preparar la consulta SQL para seleccionar todos los vendedores, tanto activos como dados de baja.
-        query.prepare(
-            "SELECT * FROM vendedores where bajaVendedor is null or bajaVendedor is not null order by idVendedor asc")
-
-        # Ejecutar la consulta.
-        if query.exec():
-            # Si la consulta se ejecuta correctamente, recorrer todos los resultados.
-            while query.next():
-                # Para cada fila, crear una lista de los valores de las columnas y agregarla a 'listado'.
-                fila = [query.value(i) for i in range(query.record().count())]
-                listado.append(fila)
-
-        # Devolver la lista con los resultados.
-        return listado
+    '''
+    GESTION DE FACTURAS
+    '''
 
     @staticmethod
     def altaFactura(registro):
         """
-        :param registro: Una lista con los datos necesarios para crear una nueva factura.
+
+        :param registro: contiene la fecha de creacion de la factura y el dni del cliente
         :type registro: list
-        :return: True si la factura se inserta correctamente, False en caso contrario.
+        :return: éxito al dar de alta una factura en la base de datos
         :rtype: bool
 
-        Método que da de alta una nueva factura en la base de datos. La factura contiene la fecha y el DNI del cliente.
+        Método que da de alta una nueva factura en la base de datos
+
         """
         try:
-            # Crear un objeto QSqlQuery para ejecutar la consulta SQL.
             query = QtSql.QSqlQuery()
+            query.prepare("INSERT INTO FACTURAS (fechafac, dnicli) values (:fechafac,:dnicli)")
+            query.bindValue(":fechafac", str(registro[0]))
+            query.bindValue(":dnicli", str(registro[1]))
 
-            # Preparar la consulta SQL para insertar una nueva factura en la tabla FACTURAS.
-            query.prepare("INSERT INTO FACTURAS (fechafac, dnifac) VALUES (:fechafac, :dnifac)")
-
-            # Vincular los valores de los parámetros de la consulta con los valores del registro.
-            query.bindValue(":fechafac", registro[0])  # Fecha de la factura.
-            query.bindValue(":dnifac", registro[1])  # DNI del cliente.
-
-            # Ejecutar la consulta.
             if query.exec():
-                # Si la consulta se ejecuta correctamente, devolver True.
                 return True
             else:
-                # Si hubo un error al ejecutar la consulta, devolver False.
                 return False
+
         except Exception as e:
-            # Si ocurre una excepción (error en la ejecución), imprimir el error y devolver False.
-            print("Error al dar de alta factura en conexion:", e)
-            return False
+            print("Error al dar de alta factura en conexion.", e)
 
     @staticmethod
     def listadoFacturas():
         """
-        :return: Una lista con los registros de las facturas, donde cada factura es representada
-                 por una lista que contiene el id, el DNI del cliente y la fecha de la factura.
+
+        :return: datos de las facturas
         :rtype: list
 
-        Método que consulta todas las facturas en la base de datos y devuelve una lista con los resultados.
-        Cada factura en la lista estará representada por el id, el dni del cliente y la fecha de la factura.
+        Método que devuelve todas las facturas de la base de datos
+
         """
         try:
-            # Inicializamos la lista donde almacenaremos las facturas.
             listado = []
-
-            # Creamos un objeto QSqlQuery para ejecutar la consulta SQL.
             query = QtSql.QSqlQuery()
-
-            # Preparamos la consulta SQL para seleccionar el id, dnifac y fechafac de todas las facturas.
-            query.prepare("SELECT id, dnifac, fechafac FROM facturas")
-
-            # Ejecutamos la consulta SQL.
+            query.prepare("SELECT id, dnicli, fechafac FROM facturas")
             if query.exec():
-                # Si la consulta se ejecuta correctamente, iteramos sobre los resultados.
                 while query.next():
-                    # Para cada registro de la consulta, agregamos los valores de cada campo en una lista.
                     fila = [query.value(i) for i in range(query.record().count())]
-                    # Añadimos la fila con los datos a la lista de resultados.
                     listado.append(fila)
-
-            # Devolvemos la lista con todas las facturas obtenidas de la base de datos.
             return listado
         except Exception as e:
-            # Si ocurre un error en la ejecución de la consulta, lo capturamos y lo imprimimos.
-            print("Error listando facturas en listadoFacturas - conexión", e)
+            print("Error listando facturas en listadoFacturas - conexión",e)
 
+    '''
     @staticmethod
-    def bajaFactura(idFactura):
+    def deleteFactura(idFactura):
         """
-        :param idFactura: El ID de la factura que se desea eliminar.
-        :type idFactura: str
 
-        :return: True si la factura fue eliminada correctamente, False si hubo algún error.
+        :param idFactura: id de una factura
+        :type idFactura: int
+        :return: éxito en la eliminación de una factura, eliminación de las ventas y actualización de estado disponible para las propiedades
         :rtype: bool
 
-        Método para dar de baja una factura de la base de datos. Si la factura no está asociada
-        a ninguna venta, se elimina. Si está asociada a ventas, no se elimina y se muestra un mensaje de error.
+        Método que modifica el estado de una propiedad, elimina las ventas relacionadas con una factura y la propia factura en cascada, haciendo rollback si algo falla
+
         """
         try:
-            # Creamos una consulta para comprobar si la factura está asociada a alguna venta.
-            query1 = QtSql.QSqlQuery()
-            query1.prepare("Select count(*) from ventas where facventa = :facventa")
-            query1.bindValue(":facventa", str(idFactura))
+            db = QtSql.QSqlDatabase.database()
+            if not db.transaction():
+                print("No se pudo iniciar la transacción.")
+                return False
 
-            # Ejecutamos la consulta.
-            if query1.exec() and query1.next() and query1.value(0) == 0:
-                # Si la factura no está asociada a ninguna venta, procedemos a eliminarla.
-                query = QtSql.QSqlQuery()
-                query.prepare("DELETE FROM facturas WHERE id = :id")
-                query.bindValue(":id", str(idFactura))
+            query_propiedades = QtSql.QSqlQuery()
+            query_propiedades.prepare("SELECT codprop FROM ventas WHERE facventa = :idFactura")
+            query_propiedades.bindValue(":idFactura", str(idFactura))
+            if query_propiedades.exec():
+                while query_propiedades.next():
+                    idPropiedad = query_propiedades.value(0)
+                    query_update_prop = QtSql.QSqlQuery()
+                    query_update_prop.prepare("UPDATE propiedades SET estado = 'Disponible', baja = null WHERE codigo = :idPropiedad")
+                    query_update_prop.bindValue(":idPropiedad", str(idPropiedad))
+                    if not query_update_prop.exec():
+                        db.rollback()
+                        return False
 
-                # Ejecutamos la eliminación de la factura.
-                if query.exec():
-                    return True  # La factura fue eliminada exitosamente.
-                else:
-                    # Si hubo un error en la ejecución de la eliminación, mostramos el error.
-                    error = query.lastError()
-                    if error is not None:
-                        print("Error en la ejecución de la consulta:", error.text())
-                    return False  # La eliminación falló.
-            else:
-                # Si la factura está asociada a una venta, mostramos un mensaje de error.
-                eventos.Eventos.crearMensajeError("Error baja factura",
-                                                  "No se puede eliminar la factura porque tiene ventas asociadas")
+            query_venta = QtSql.QSqlQuery()
+            query_venta.prepare("DELETE FROM ventas WHERE facventa = :idFactura")
+            query_venta.bindValue(":idFactura", str(idFactura))
+            if not query_venta.exec():
+                db.rollback()
+                print("Error al eliminar las ventas asociadas:", query_venta.lastError().text())
+                return False
+
+
+            query_factura = QtSql.QSqlQuery()
+            query_factura.prepare("DELETE FROM facturas WHERE id = :id")
+            query_factura.bindValue(":id", str(idFactura))
+            if not query_factura.exec():
+                db.rollback()
+                print("Error al eliminar la factura:", query_factura.lastError().text())
+                return False
+
+
+            if not db.commit():
+                print("Error al confirmar la transacción.")
+                return False
+
+            return True
+
         except Exception as e:
-            # Si ocurre un error durante la ejecución de la función, lo capturamos y lo imprimimos.
-            print("Error eliminando factura en bajaFactura - conexión:", e)
+            print("Error al eliminar factura en conexion",str(e))
+            if db.isOpen():
+                db.rollback()  # Asegúrate de revertir en caso de excepción
             return False
+    '''
 
     @staticmethod
-    def cargaOneFactura(idFactura):
+    def deleteFactura(idFactura):
         """
-        :param idFactura: El ID de la factura que se desea cargar.
-        :type idFactura: str
 
-        :return: Una lista con los datos de la factura si la consulta es exitosa, o una lista vacía si no se encuentra la factura.
-        :rtype: list
+        :param idFactura: identificador de facturas
+        :type idFactura: int
+        :return: éxito en la eliminación de una factura
+        :rtype: bool
 
-        Método para cargar los detalles de una factura de la base de datos según el ID. Si se encuentra la factura,
-        devuelve los detalles en una lista. En caso de error o si no se encuentra la factura, retorna una lista vacía.
+        Método para eliminar una factura de la base de datos
+
         """
         try:
-            # Inicializamos la lista que almacenará los datos de la factura.
-            registro = []
+            query = QtSql.QSqlQuery()
+            query.prepare("DELETE FROM facturas WHERE id = :idFactura")
+            query.bindValue(":idFactura", str(idFactura))
+            if query.exec():
+                return True
+            else:
+                return False
 
-            # Preparamos la consulta SQL para obtener los detalles de la factura.
+        except Exception as e:
+            print("Error al borrar factura en conexion",e)
+
+    @staticmethod
+    def facturaHasVentas(idFactura):
+        """
+
+        :param idFactura: identificador de factura
+        :type idFactura: int
+        :return: si existen ventas asociadas a la factura o no
+        :rtype: bool
+
+        Método que comprueba si una factura tiene ventas asociadas en la base de datos
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT count(*) FROM ventas WHERE facventa = :idFactura")
+            query.bindValue(":idFactura", str(idFactura))
+            if query.exec() and query.first():
+                count = query.value(0)
+                return count > 0
+            else:
+                return False
+        except Exception as e:
+            print("Error al comprobar si factura tiene ventas en conexion",str(e))
+
+    @staticmethod
+    def deleteVenta(idVenta,codProp):
+        """
+
+        :param idVenta: identificador de venta
+        :type idVenta: int
+        :param codProp: código de identificador de propiedad
+        :type codProp: str
+        :return: éxito en la eliminación de la venta o no
+        :rtype: bool
+
+        Método para eliminar una venta y cambiar el estado de la propiedad a disponible
+
+        """
+        try:
+            db = QtSql.QSqlDatabase.database()
+            if not db.transaction():
+                print("No se pudo iniciar la transacción.")
+                return False
+
+            query_prop = QtSql.QSqlQuery()
+            query_prop.prepare("""
+                                UPDATE propiedades 
+                                SET estado = 'Disponible', baja = NULL
+                                WHERE codigo = :codProp
+                                """)
+            query_prop.bindValue(":codProp", str(codProp))
+            if not query_prop.exec():
+                db.rollback()
+                print("Error al cambiar estado de propiedad")
+                print(query_prop.lastError().text())
+                return False
+
+            query = QtSql.QSqlQuery()
+            query.prepare("DELETE FROM ventas WHERE idventa = :idVenta")
+            query.bindValue(":idVenta", str(idVenta))
+            if not query.exec():
+                db.rollback()
+                print("Error al eliminar venta")
+                return False
+
+            if not db.commit():
+                print("Error al confirmar la transacción.")
+                return False
+
+            return True
+        except Exception as e:
+            print("Error al eliminar venta en conexion", str(e))
+
+
+    @staticmethod
+    def datosOneFactura(idFactura):
+        """
+
+        :param idFactura: id de la factura
+        :type idFactura: int
+        :return: datos de la factura buscada
+        :rtype: list
+
+        Método que devuelve los datos de la factura seleccionada
+
+        """
+        try:
+            registro = []
             query = QtSql.QSqlQuery()
             query.prepare("SELECT * FROM facturas WHERE id = :id")
-            query.bindValue(":id", idFactura)  # Vinculamos el parámetro idFactura a la consulta.
-
-            # Ejecutamos la consulta.
+            query.bindValue(":id", str(idFactura))
             if query.exec():
-                # Si la consulta se ejecuta correctamente, recorremos los resultados.
                 while query.next():
-                    # Añadimos los valores de cada columna en la fila actual a la lista 'registro'.
                     for i in range(query.record().count()):
-                        registro.append(str(query.value(i)))  # Guardamos cada valor de columna como string.
-
-            # Retornamos la lista de resultados.
+                        registro.append(query.value(i))
             return registro
         except Exception as e:
-            # Si ocurre un error, lo capturamos y mostramos el mensaje de error.
-            print("Error cargando factura en cargaOneFactura - conexión", e)
-            return []  # Retornamos una lista vacía en caso de error.
+            print("Error al cargar one factura en conexion.", e)
 
     @staticmethod
     def altaVenta(registro):
         """
-        :param registro: Lista con los valores necesarios para registrar una venta.
-                        [facventa, codprop, agente]
-        :type registro: list
 
-        :return: True si la venta se inserta correctamente en la base de datos, False si hay algún error.
+        :param registro: datos de la venta: id de la factura, codigo de propiedad e id del vendedor
+        :type registro: list
+        :return: éxito al dar de alta una venta
         :rtype: bool
 
-        Método para insertar un nuevo registro de venta en la base de datos. Si la consulta es exitosa, retorna True.
-        Si ocurre algún error, imprime un mensaje y retorna False.
+        Método que da de alta una nueva venta en la base de datos
+
         """
         try:
-            # Preparamos la consulta SQL para insertar una nueva venta.
             query = QtSql.QSqlQuery()
-            query.prepare("INSERT INTO ventas (facventa, codprop, agente) VALUES (:facventa, :codprop, :agente)")
+            query.prepare("INSERT INTO VENTAS (facventa,codprop,agente) values (:facventa,:codprop,:agente)")
+            query.bindValue(":facventa", str(registro[0]))
+            query.bindValue(":codprop", str(registro[1]))
+            query.bindValue(":agente", str(registro[2]))
 
-            # Vinculamos los valores de la venta con los parámetros de la consulta.
-            query.bindValue(":facventa", str(registro[0]))  # ID de la factura
-            query.bindValue(":codprop", str(registro[1]))  # Código de la propiedad
-            query.bindValue(":agente", str(registro[2]))  # Agente asociado a la venta
-
-            # Ejecutamos la consulta.
             if query.exec():
                 return True
             else:
-                # Si hay un error, mostramos el mensaje de error de la consulta.
-                print("Error en la ejecución de la consulta:", query.lastError().text())
                 return False
+
         except Exception as e:
-            # Si ocurre una excepción, la capturamos y mostramos el mensaje de error.
-            print("Error al dar de alta venta en conexión:", e)
-            return False
+            print("Error al dar de alta factura en conexion.", e)
+
+    @staticmethod
+    def venderPropiedad(codigoPropiedad):
+        """
+
+        :param codigoPropiedad: id de la propiedad
+        :type codigoPropiedad: int
+        :return: éxito al cambiar el estado de la propiedad a vendida
+        :rtype: bool
+
+        Método que actualiza el estado de una propiedad a vendido y actualiza la fecha de baja
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("UPDATE propiedades SET estado = 'Vendido', baja = :fechaBaja WHERE codigo = :codigo")
+            query.bindValue(":codigo", str(codigoPropiedad))
+            query.bindValue(":fechaBaja", datetime.now().strftime("%d/%m/%Y"))
+
+            if query.exec():
+                return True
+            else:
+                return False
+
+        except Exception as e:
+            print("Error al vender una Propiedad en conexion.", e)
 
     @staticmethod
     def listadoVentas(idFactura):
         """
-        :param idFactura: ID de la factura para la cual se desean listar las ventas asociadas.
-        :type idFactura: str
 
-        :return: Una lista de ventas asociadas a la factura. Cada venta incluye información de la propiedad.
+        :param idFactura: id de la factura que contiene las ventas
+        :type idFactura: int
+        :return: datos de todas las ventas relacionadas con la factura
         :rtype: list
 
-        Método para obtener el listado de ventas asociadas a una factura. Realiza una consulta SQL para obtener la información
-        de las ventas junto con los detalles de la propiedad (dirección, municipio, tipo, precio de venta).
+        Método que devuelve todos los datos de las ventas relacionadas con una factura
+
         """
         try:
-            # Inicializamos una lista vacía para almacenar los resultados de la consulta.
             listado = []
-
-            # Preparamos la consulta SQL que obtiene las ventas y la información de la propiedad asociada.
             query = QtSql.QSqlQuery()
-            query.prepare(
-                "SELECT v.idven, v.codprop, p.dirprop, p.muniprop, p.tipoprop, "
-                "p.precioventaprop FROM ventas AS v "
-                "INNER JOIN propiedades AS p ON v.codprop = p.codigo "
-                "WHERE v.facventa = :facventa"
-            )
-
-            # Vinculamos el valor de la factura al parámetro de la consulta SQL.
+            query.prepare("SELECT v.idventa, v.codprop, p.direccion, p.municipio, p.tipo_propiedad, p.precio_venta FROM ventas AS v INNER JOIN propiedades as p on v.codprop = p.codigo WHERE v.facventa = :facventa")
             query.bindValue(":facventa", str(idFactura))
-
-            # Ejecutamos la consulta.
             if query.exec():
-                # Si la consulta se ejecuta con éxito, recorremos los resultados.
                 while query.next():
-                    # Creamos una lista de resultados de la fila actual.
                     fila = [query.value(i) for i in range(query.record().count())]
-                    # Añadimos la fila al listado de resultados.
                     listado.append(fila)
-
-            # Retornamos el listado de resultados.
             return listado
-
         except Exception as e:
-            # Si ocurre un error, imprimimos el mensaje de error.
-            print("Error listando ventas en listadoVentas - conexión", e)
-            return []
+            print("Error listando facturas en listadoFacturas - conexión",e)
 
     @staticmethod
     def datosOneVenta(idVenta):
         """
-        :param idVenta: ID de la venta de la cual se desean obtener los detalles.
-        :type idVenta: str
 
-        :return: Una lista con los detalles de la venta, incluyendo el agente, el código de la propiedad,
-                 tipo de propiedad, precio de venta, municipio y dirección.
+        :param idVenta: id de la venta seleccioanda
+        :type idVenta: int
+        :return: datos de la venta buscada
         :rtype: list
 
-        Método para obtener los detalles de una venta específica, incluyendo la información de la propiedad asociada.
-        Realiza una consulta SQL con un INNER JOIN entre las tablas `ventas` y `propiedades`.
+        Método que devuelve los datos de una venta seleccionada
+
         """
         try:
-            # Inicializamos una lista vacía para almacenar los resultados.
             registro = []
-
-            # Preparamos la consulta SQL que obtiene los detalles de la venta junto con la información de la propiedad.
             query = QtSql.QSqlQuery()
-            query.prepare(
-                "SELECT v.agente, v.codprop, p.tipoprop, p.precioventaprop, "
-                "p.muniprop, p.dirprop FROM ventas AS v "
-                "INNER JOIN propiedades AS p ON v.codprop = p.codigo WHERE v.idven = :idventa"
-            )
-
-            # Vinculamos el valor de la venta al parámetro de la consulta SQL.
+            query.prepare("SELECT v.agente, v.codprop, p.tipo_propiedad, p.precio_venta, p.municipio, p.direccion  FROM ventas as v INNER JOIN propiedades as p ON v.codprop = p.codigo WHERE v.idventa = :idventa")
             query.bindValue(":idventa", str(idVenta))
-
-            # Ejecutamos la consulta.
             if query.exec():
-                # Si la consulta se ejecuta con éxito, recorremos los resultados.
                 while query.next():
-                    # Para cada fila, agregamos los valores de las columnas a la lista `registro`.
                     for i in range(query.record().count()):
                         registro.append(query.value(i))
-            else:
-                print("Error en la ejecución de la consulta:", query.lastError().text())
-
-            # Retornamos la lista con los detalles de la venta.
             return registro
-
         except Exception as e:
-            # Si ocurre un error, imprimimos el mensaje de error.
-            print("Error en datosOneVenta en conexión", e)
-            return []
+            print("Error en datosOneVenta en conexion", e)
 
     @staticmethod
-    def actualizaPropiedadVenta(codigoPropiedad):
+    def propiedadIsVendida(codigo):
         """
-        :param codigoPropiedad: Código de la propiedad que se va a marcar como vendida.
-        :type codigoPropiedad: str
 
-        :return: True si la propiedad fue actualizada correctamente, False en caso de error.
+        :param codigo: codigo identificador de propiedad
+        :type codigo: str
+        :return: si la propiedad se encuentra vendida o no
         :rtype: bool
 
-        Método para actualizar el estado de una propiedad, cambiando su estado a "Vendido" y registrando la fecha de baja.
+        Método de conexión a la base de datos para comprobar si una propiedad se encuentra vendida o no
+
         """
         try:
-            # Inicializamos la consulta SQL.
             query = QtSql.QSqlQuery()
-
-            # Preparamos la consulta para actualizar el estado de la propiedad a "Vendido" y establecer la fecha de baja.
-            query.prepare(
-                "UPDATE propiedades SET estadoprop = 'Vendido', bajaprop = :fechaBaja WHERE codigo = :codigo"
-            )
-
-            # Vinculamos el código de la propiedad y la fecha de baja (fecha actual) a los parámetros de la consulta.
-            query.bindValue(":codigo", str(codigoPropiedad))
-            query.bindValue(":fechaBaja", datetime.now().strftime("%d/%m/%Y"))  # Fecha en formato dd/mm/yyyy
-
-            # Ejecutamos la consulta.
-            if query.exec():
-                return True  # Si la consulta se ejecuta con éxito, retornamos True.
+            query.prepare("SELECT estado FROM propiedades WHERE codigo = :codigo")
+            query.bindValue(":codigo", str(codigo))
+            if query.exec() and query.next():
+                estado = query.value(0)
+                return estado == "Vendido"
             else:
-                return False  # Si la consulta falla, retornamos False.
-
+                return False
         except Exception as e:
-            # Si ocurre un error, imprimimos el mensaje de error.
-            print("Error al vender una Propiedad en conexion.", e)
-            return False
+            print("Error en propiedadIsVendida en conexion", str(e))
 
-    def bajaVenta(idVenta):
-        """
-        :param idVenta: ID de la venta que se va a eliminar.
-        :type idVenta: str
-
-        :return: True si la venta fue eliminada correctamente, False en caso de error.
-        :rtype: bool
-
-        Método para eliminar una venta de la base de datos.
-        Realiza una consulta SQL para eliminar el registro de la venta con el ID especificado.
-        """
-        try:
-            # Inicializamos la consulta SQL para eliminar una venta.
-            query = QtSql.QSqlQuery()
-            query.prepare("DELETE FROM ventas WHERE idven = :idventa")
-
-            # Vinculamos el valor del ID de la venta a eliminar.
-            query.bindValue(":idventa", str(idVenta))
-
-            # Ejecutamos la consulta SQL.
-            if query.exec():
-                return True  # Si la consulta se ejecuta con éxito, retornamos True.
-            else:
-                return False  # Si la consulta falla, retornamos False.
-
-        except Exception as e:
-            # Si ocurre un error, imprimimos el mensaje de error.
-            print("Error al eliminar una venta en conexion.", e)
-            return False
-
-            return False
+    '''
+    GESTIÓN DE ALQUILERES
+    '''
 
     @staticmethod
-    def altaPropiedadVenta(codigoPropiedad):
+    def altaAlquiler(registro):
         """
-        Actualiza el estado de una propiedad a 'Disponible' y borra la fecha de baja.
 
-        :param codigoPropiedad: Código de la propiedad que se va a actualizar.
-        :type codigoPropiedad: str
+        :param registro: datos de un nuevo contrato de alquiler
+        :type registro: list
+        :return: éxito al insertar un nuevo contrato de alquiler
+        :rtype:bool
 
-        :return: True si la propiedad fue actualizada correctamente, False en caso de error.
-        :rtype: bool
+        Método para insertar un nuevo contrato de alquiler en la base de datos
+
         """
         try:
-            # Inicializamos la consulta SQL para actualizar la propiedad.
             query = QtSql.QSqlQuery()
+            query.prepare("INSERT INTO alquileres(propiedad_id,cliente_dni,fecha_inicio,fecha_fin,vendedor) values (:codigoprop,:dnicli,:fecha_inicio,:fecha_fin,:vendedor)")
+            query.bindValue(":codigoprop", str(registro[0]))
+            query.bindValue(":dnicli", str(registro[1]))
+            query.bindValue(":fecha_inicio", str(registro[2]))
+            query.bindValue(":fecha_fin", str(registro[3]))
+            query.bindValue(":vendedor", str(registro[4]))
+            if query.exec():
+                query_propiedad = QtSql.QSqlQuery()
+                query_propiedad.prepare("UPDATE propiedades SET estado = 'Alquilado', baja = :fecha_baja WHERE  codigo = :codigo")
+                query_propiedad.bindValue(":codigo", str(registro[0]))
+                query_propiedad.bindValue(":fecha_baja", str(registro[2]))
+                if query_propiedad.exec():
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        except Exception as e:
+            print("Error en altaAlquiler en conexion", e)
 
-            # Preparamos la consulta SQL con los valores a actualizar.
-            query.prepare(
-                "UPDATE propiedades SET estadoprop = 'Disponible', bajaprop = :fechaBaja WHERE codigo = :codigo"
-            )
+    @staticmethod
+    def propiedadIsAlquilada(codigo):
+        """
 
-            # Vinculamos los valores: el código de la propiedad y la fecha de baja (vacía).
-            query.bindValue(":codigo", str(codigoPropiedad))
+        :param codigo: codigo identificador de propiedad
+        :type codigo: str
+        :return: si la propiedad se encuentra alquilada o no
+        :rtype: bool
 
-            # Aquí asignamos None si queremos limpiar la fecha de baja.
-            # `QtCore.QVariant()` no es adecuado para vaciar campos de fecha, ya que esto no se reconoce como una fecha nula.
-            query.bindValue(":fechaBaja", None)
+        Método de conexión a la base de datos para comprobar si una propiedad se encuentra alquilada o no
 
-            # Ejecutamos la consulta SQL.
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT estado FROM propiedades WHERE codigo = :codigo")
+            query.bindValue(":codigo", str(codigo))
+            if query.exec() and query.next():
+                estado = query.value(0)
+                return estado == "Alquilado"
+            else:
+                return False
+        except Exception as e:
+            print("Error en propiedadIsVendida en conexion", str(e))
+
+    @staticmethod
+    def listadoAlquileres():
+        """
+
+        :return: identificador y cliente de todos los contratos de alquiler
+        :rtype: list
+
+        Método que devuelve el identificador y el cliente de todos los contratos de alquiler que tengamos registrados
+
+        """
+        try:
+            listado = []
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT id, cliente_dni FROM alquileres")
+            if query.exec():
+                while query.next():
+                    fila = [query.value(i) for i in range(query.record().count())]
+                    listado.append(fila)
+            return listado
+        except Exception as e:
+            print("Error listando alquileres en listadoAlquileres - conexión",str(e))
+
+    @staticmethod
+    def datosOneAlquiler(idAlquiler):
+        """
+
+        :param idAlquiler: identificador del contrato de alquiler
+        :type idAlquiler: int
+        :return: todos los datos de un contrato de alquiler (sin mensualidades)
+        :rtype: list
+
+        Método para obtener los datos de un contrato de alquiler a partir de su identificador
+
+        """
+        try:
+            registro = []
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT a.id, a.fecha_inicio, a.fecha_fin, a.vendedor, c.dnicli, c.nomecli, c.apelcli, p.codigo, p.tipo_propiedad, p.precio_alquiler, p.municipio, p.direccion FROM alquileres as a INNER JOIN propiedades as p ON a.propiedad_id = p.codigo INNER JOIN clientes as c ON a.cliente_dni = c.dnicli WHERE a.id = :idAlquiler")
+            query.bindValue(":idAlquiler", str(idAlquiler))
+            if query.exec():
+                while query.next():
+                    for i in range(query.record().count()):
+                        registro.append(query.value(i))
+            return registro
+        except Exception as e:
+            print("Error en datosOneAlquiler en conexion", str(e))
+
+    @staticmethod
+    def idOneAlquiler(codPropiedad,dniCliente):
+        """
+
+        :param codPropiedad: identificador de propiedad
+        :type codPropiedad: int
+        :param dniCliente: el identificador de un cliente, su DNI
+        :type dniCliente: str
+        :return: el identificador de un contrato de alquiler
+        :rtype: id
+
+        Método para obtener el id de un contrato de alquiler en función del id de la propiedad y el id del cliente
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT id FROM alquileres WHERE cliente_dni = :dniCliente AND propiedad_id = :codPropiedad")
+            query.bindValue(":dniCliente", str(dniCliente))
+            query.bindValue(":codPropiedad", str(codPropiedad))
+            if query.exec():
+                while query.next():
+                    return query.value(0)
+        except Exception as e:
+            print("Error en datosOneAlquiler dnicli codprop en conexion", str(e))
+
+    @staticmethod
+    def altaMensualidad(registro):
+        """
+
+        :param registro: datos de una mensualidad
+        :type registro: list
+        :return: éxito al insertar una nueva mensualidad
+        :rtype: bool
+
+        Método para registrar una nueva mensualidad respecto de un contrato de alquiler
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("INSERT INTO mensualidades(idalquiler, mes, pagado) VALUES (:idalquiler,:mes,:pagado)")
+            query.bindValue(":idalquiler", str(registro[0]))
+            query.bindValue(":mes", str(registro[1]))
+            query.bindValue(":pagado", str(registro[2]))
             if query.exec():
                 return True
             else:
                 return False
         except Exception as e:
-            # Si ocurre un error, imprimimos el mensaje de error.
-            print("Error al vender una Propiedad en conexion.", e)
-            return False
+            print("Error al grabar nueva mensualidad en conexion", str(e))
+
+    @staticmethod
+    def listadoMensualidades(idAlquiler):
+        """
+
+        :param idAlquiler: identificador de un contrato de alquiler
+        :type idAlquiler: int
+        :return: todos los datos las mensualidades de un contrato de alquiler
+        :rtype: list
+
+        Método para obtener todos los datos de las mensualidades relacionadas con un contrato de alquiler
+
+        """
+        try:
+            listado = []
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT idmensualidad, mes, pagado FROM mensualidades WHERE idalquiler = :idalquiler")
+            query.bindValue(":idalquiler", str(idAlquiler))
+            if query.exec():
+                while query.next():
+                    fila = [query.value(i) for i in range(query.record().count())]
+                    listado.append(fila)
+            return listado
+        except Exception as e:
+            print("Error en listadoMensualidades - conexion", str(e))
+
+    @staticmethod
+    def pagarMensualidad(idMensualidad):
+        """
+
+        :param idMensualidad: identificador de mensualidad
+        :type idMensualidad: int
+        :return: éxito al marcar como pagada una mensualidad
+        :rtype: bool
+
+        Método para registrar en la base de datos el pago de una mensualidad
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("UPDATE mensualidades SET pagado = 1 WHERE idmensualidad = :idMensualidad")
+            query.bindValue(":idMensualidad", idMensualidad)
+            if query.exec():
+                return True
+            else:
+                return False
+        except Exception as e:
+            print("Error en pagar mensualidad",str(e))
+
+    @staticmethod
+    def datosOneMensualidad(idMensualidad):
+        """
+
+        :param idMensualidad: identificador de la mensualidad
+        :type idMensualidad: int
+        :return: todos los datos de la mensualidad
+        :rtype: list
+
+        Método para obtener todos los datos de una mensualidad dado su identificador
+
+        """
+        try:
+            registro = []
+            query = QtSql.QSqlQuery()
+            query.prepare("SELECT idalquiler, mes, pagado FROM mensualidades WHERE idmensualidad = :idMensualidad")
+            query.bindValue(":idMensualidad", idMensualidad)
+            if query.exec():
+                while query.next():
+                    for i in range(query.record().count()):
+                        registro.append(query.value(i))
+            return registro
+
+        except Exception as e:
+            print("Error al cargar datos de una mensualidad en conexcion",str(e))
+
+    @staticmethod
+    def modificarFechaFinContrato(idAlquiler, nuevaFechaFin):
+        """
+
+        :param idAlquiler: identificador de un contrato de alquiler
+        :type idAlquiler: int
+        :param nuevaFechaFin: fecha de finalización de contrato nueva
+        :type nuevaFechaFin: datetime
+        :return: éxito al modificar la fecha de finalización de un contrato de alquiler
+        :rtype: bool
+
+        Método para modificar la fecha de finalización de un contrato en la base de datos
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("UPDATE alquileres set fecha_fin = :nuevaFechaFin WHERE id = :idAlquiler")
+            query.bindValue(":nuevaFechaFin", str(nuevaFechaFin))
+            query.bindValue(":idAlquiler", idAlquiler)
+            if query.exec():
+                return True
+            else:
+                return False
+
+        except Exception as e:
+            print("Error modifcando fecha de alquiler en conexion", str(e))
+
+    @staticmethod
+    def eliminarMensualidad(idMensualidad):
+        """
+
+        :param idMensualidad: identificador de la mensualidad
+        :type idMensualidad: int
+        :return: éxito al eliminar una mensualidad
+        :rtype: bool
+
+        Método para eliminar una mensualidad de la base de datos
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("DELETE FROM mensualidades WHERE idmensualidad = :idMensualidad")
+            query.bindValue(":idMensualidad", idMensualidad)
+            if query.exec():
+                return True
+            else:
+                return False
+        except Exception as e:
+            print("Error eliminando mensualidad",str(e))
 
 
+    @staticmethod
+    def eliminarContratoAlquiler(idAlquiler):
+        """
 
+        :param idAlquiler: identificador del contrato de alquiler
+        :type idAlquiler: int
+        :return: éxito al eliminar el contrato, eliminar sus mensualidades y restablecer la propiedad a disponible
+        :rtype: bool
 
+        Método que elimina un contrato de alquiler de la base de datos, eliminando sus mensualidades relacionadas y restableciendo a disponible la propiedad del contrato
+
+        """
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare("DELETE FROM mensualidades WHERE idalquiler = :idAlquiler")
+            query.bindValue(":idAlquiler", idAlquiler)
+            if not query.exec():
+                return False
+
+            query_prop = QtSql.QSqlQuery()
+            query_prop.prepare("UPDATE propiedades SET estado = 'Disponible', baja = NULL WHERE codigo = ( SELECT propiedad_id FROM alquileres WHERE id = :idAlquiler) ")
+            query_prop.bindValue(":idAlquiler", idAlquiler)
+            if not query_prop.exec():
+                return False
+
+            query_alq = QtSql.QSqlQuery()
+            query_alq.prepare("DELETE FROM alquileres WHERE id = :idAlquiler")
+            query_alq.bindValue(":idAlquiler", idAlquiler)
+            if query_alq.exec():
+                return True
+            else:
+                return False
+        except Exception as e:
+            print("Error al eliminar un contrato de alquiler en conexion", str(e))
