@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1383</width>
-    <height>793</height>
+    <height>809</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -52,7 +52,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pesClientes">
        <attribute name="title">
@@ -1313,8 +1313,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>18</width>
-              <height>18</height>
+              <width>36</width>
+              <height>36</height>
              </size>
             </property>
            </widget>
@@ -1336,8 +1336,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>18</width>
-              <height>18</height>
+              <width>36</width>
+              <height>36</height>
              </size>
             </property>
            </widget>
@@ -3915,8 +3915,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>18</width>
-              <height>18</height>
+              <width>36</width>
+              <height>36</height>
              </size>
             </property>
            </widget>
@@ -3938,8 +3938,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>18</width>
-              <height>18</height>
+              <width>36</width>
+              <height>36</height>
              </size>
             </property>
            </widget>
@@ -5377,7 +5377,7 @@
                <x>20</x>
                <y>70</y>
                <width>771</width>
-               <height>124</height>
+               <height>128</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_18">
@@ -5798,7 +5798,7 @@
                <x>20</x>
                <y>10</y>
                <width>771</width>
-               <height>52</height>
+               <height>53</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_17">
@@ -7712,7 +7712,7 @@
      <x>0</x>
      <y>0</y>
      <width>1383</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuArchivo">
@@ -7807,7 +7807,7 @@
    <property name="icon">
     <iconset>
      <normaloff>../img/salir.ico</normaloff>
-     <normalon>C:/Users/a23yelkovq/.designer/img/salir.svg</normalon>../img/salir.ico</iconset>
+     <normalon>../../../../../../a23yelkovq/.designer/img/salir.svg</normalon>../img/salir.ico</iconset>
    </property>
    <property name="text">
     <string>Salir</string>
@@ -7817,7 +7817,7 @@
    <property name="icon">
     <iconset>
      <normaloff>../img/reload.ico</normaloff>
-     <normalon>C:/Users/a23yelkovq/.designer/img/reload.ico</normalon>../img/reload.ico</iconset>
+     <normalon>../../../../../../a23yelkovq/.designer/img/reload.ico</normalon>../img/reload.ico</iconset>
    </property>
    <property name="text">
     <string>Limpiar</string>
