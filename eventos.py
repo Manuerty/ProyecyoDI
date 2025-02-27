@@ -832,32 +832,6 @@ class Eventos():
             var.paginaActualProp -= 1
             propiedades.Propiedades.cargarTablaPropiedades()
 
-    @staticmethod
-    def cambiarCliMaxpPagina():
-        """
-
-        Método que se encarga de que el número máximo de clientes por página que se establece no pase de 15
-
-        """
-        var.paginaActualCli = 0
-        var.maxClientesPagina = int(var.ui.spinClipPag.text())
-        if var.maxClientesPagina > 15:
-            var.maxClientesPagina = 15
-        clientes.Clientes.cargaTablaClientes()
-
-    @staticmethod
-    def cambiarPropMaxpPagina():
-        """
-
-        Método que se encarga de que el número máximo de propiedades por página que se establece no pase de 10
-
-        """
-        import propiedades
-        var.paginaActualProp = 0
-        var.maxPropPagina = int(var.ui.spinProppPag.text())
-        if var.maxPropPagina > 10:
-            var.maxPropPagina = 10
-        propiedades.Propiedades.cargarTablaPropiedades()
 
 
     @staticmethod

@@ -120,7 +120,6 @@ class Clientes:
             listado = var.claseConexion.listadoClientes()
             var.lenClientes = len(listado)
 
-            var.ui.spinClipPag.setValue(var.maxClientesPagina)
 
             inicioListado = var.paginaActualCli * var.maxClientesPagina
             sublistado = listado[inicioListado: inicioListado + var.maxClientesPagina]

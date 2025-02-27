@@ -1097,7 +1097,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Dar de baja</string>
+             <string>Eliminar</string>
             </property>
            </widget>
           </item>
@@ -1223,26 +1223,6 @@
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_26">
-          <item>
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>Clientes por página</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="spinClipPag">
-            <property name="minimumSize">
-             <size>
-              <width>80</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
           <item>
            <spacer name="horizontalSpacer_37">
             <property name="orientation">
@@ -3720,7 +3700,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Dar de baja</string>
+             <string>Eliminar</string>
             </property>
            </widget>
           </item>
@@ -3825,26 +3805,6 @@
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_29">
-          <item>
-           <widget class="QLabel" name="lblProppPag">
-            <property name="text">
-             <string>Propiedades por página</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="spinProppPag">
-            <property name="minimumSize">
-             <size>
-              <width>80</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
           <item>
            <spacer name="horizontalSpacer_43">
             <property name="orientation">
@@ -4964,7 +4924,7 @@
                </size>
               </property>
               <property name="text">
-               <string>Dar de baja</string>
+               <string>Eliminar</string>
               </property>
              </widget>
             </item>

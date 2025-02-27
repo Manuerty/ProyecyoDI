@@ -224,11 +224,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.chkHistoriacli.stateChanged.connect(clientes.Clientes.historicoCli)
         var.ui.chkHistoriaprop.stateChanged.connect(propiedades.Propiedades.historicoProp)
         var.ui.chkHistoriaVen.stateChanged.connect(vendedores.Vendedores.historicoVendedores)
-        '''
-        zona eventos spinbox
-        '''
-        var.ui.spinClipPag.valueChanged.connect(eventos.Eventos.cambiarCliMaxpPagina)
-        var.ui.spinProppPag.valueChanged.connect(eventos.Eventos.cambiarPropMaxpPagina)
+
 
 
 

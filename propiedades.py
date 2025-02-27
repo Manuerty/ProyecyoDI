@@ -117,8 +117,6 @@ class Propiedades():
             listado = var.claseConexion.listadoPropiedades()
             var.lenPropiedades = len(listado)
 
-            var.ui.spinProppPag.setValue(var.maxPropPagina)
-
             if len(listado) == 0:
                 var.ui.btnSiguienteProp.setDisabled(True)
                 var.ui.btnAnteriorProp.setDisabled(True)
