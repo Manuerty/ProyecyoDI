@@ -280,12 +280,17 @@ class Alquileres:
 
         """
         if not checked:
-            eventos.Eventos.crearMensajeError("Error","No se puede modificar un recibo ya pagado.")
+            eventos.Eventos.crearMensajeError("Error", "No se puede modificar un recibo ya pagado.")
             checkbox.setChecked(True)
-        elif var.claseConexion.pagarMensualidad(idMensualidad):
-            eventos.Eventos.crearMensajeInfo("Aviso","Se ha registrado el pago mensual.")
         else:
-            eventos.Eventos.crearMensajeError("Error","Se ha producido un error.")
+            mbox = eventos.Eventos.crearMensajeConfirmacion("Aviso","Se va a pagar un recibo. Esta acción es irreversible. ¿Desea realizarla?")
+            if mbox.exec() == QtWidgets.QMessageBox.StandardButton.Yes:
+                if var.claseConexion.pagarMensualidad(idMensualidad):
+                    eventos.Eventos.crearMensajeInfo("Aviso","Se ha registrado el pago mensual.")
+                else:
+                    eventos.Eventos.crearMensajeError("Error","Se ha producido un error.")
+            else:
+                checkbox.setChecked(False)
 
     @staticmethod
     def modificarContrato():
@@ -408,16 +413,25 @@ class Alquileres:
 
         """
         try:
+            codProp = var.ui.txtcodpropalq.text()
+            precio = var.ui.txtprecioalq.text()
+            hasMensualidadesPagadas = False
             mensualidades = var.claseConexion.listadoMensualidades(idAlquiler)
             for mensualidad in mensualidades:
                 isPagado = mensualidad[2]
                 if isPagado:
-                    eventos.Eventos.crearMensajeError("Error","No es posible eliminar un contrato que tenga mensualidades ya pagadas.")
-                    return
+                    hasMensualidadesPagadas = True
+                    break
 
-            mbox = eventos.Eventos.crearMensajeConfirmacion('Eliminar factura', "¿Desea eliminar el contrato de alquiler seleccionado? Tenga en cuenta que la acción es irreversible.")
+            mbox = eventos.Eventos.crearMensajeConfirmacion('Eliminar contrato', "¿Desea eliminar el contrato de alquiler seleccionado? Tenga en cuenta que la acción es irreversible.")
             if mbox.exec() == QtWidgets.QMessageBox.StandardButton.Yes:
-                if var.claseConexion.eliminarContratoAlquiler(idAlquiler):
+                if hasMensualidadesPagadas:
+                    Alquileres.eliminarMensualidades(idAlquiler, datetime.datetime.now())
+                    fecha_hoy = datetime.datetime.now().strftime("%d/%m/%Y")
+                    var.claseConexion.finalizarContrato(idAlquiler,codProp,fecha_hoy)
+                    Alquileres.cargarTablaMensualidades(idAlquiler,codProp,precio)
+                    eventos.Eventos.crearMensajeInfo("Aviso","Se han eliminado las mensualidades pendientes. El contrato no se puede eliminar, ya existen mensualidades pagadas.")
+                elif not hasMensualidadesPagadas and var.claseConexion.eliminarContratoAlquiler(idAlquiler):
                     eventos.Eventos.crearMensajeInfo("Aviso","Se ha eliminado el contrato de alquiler.")
                     Alquileres.cargarTablaContratos()
                     Alquileres.cargarTablaMensualidades(0,0,0)
