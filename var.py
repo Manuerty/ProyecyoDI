@@ -26,5 +26,5 @@ global paginaActualCli
 global paginaActualProp
 global maxClientesPagina
 global maxPropPagina
-maxClientesPagina = 11
-maxPropPagina = 7
+maxClientesPagina =17
+maxPropPagina = 13
